@@ -113,72 +113,20 @@ namespace TimeRobbers.BaseComponents
         {
             if (direction.X < 0)
             {
-                switch (direction.X / direction.Y + float.Epsilon)
-                {
-                    case float n when (Math.Abs(n) > 2):
-                        return MovementDirection.LEFT;
-                    case float n when (Math.Abs(n) > 0.5):
-                        if (direction.Y >= 0)
-                        {
-                            return MovementDirection.DOWNLEFT;
-                        }
-                        else
-                        {
-                            return MovementDirection.UPLEFT;
-                        }
-                    default:
-                        if (direction.Y >= 0)
-                        {
-                            return MovementDirection.DOWN;
-                        }
-                        else
-                        {
-                            return MovementDirection.UP;
-                        }
-                }
+                return MovementDirection.LEFT;
+            }
+            else if (direction.X > 0)
+            {
+                return MovementDirection.RIGHT;
+            }
+            else if (direction.Y < 0)
+            {
+                return MovementDirection.UP;
             }
             else
             {
-                switch (direction.X / direction.Y + float.Epsilon)
-                {
-                    case float n when (Math.Abs(n) > 2):
-                        return MovementDirection.RIGHT;
-                    case float n when (Math.Abs(n) > 0.5):
-                        if (direction.Y >= 0)
-                        {
-                            return MovementDirection.DOWNRIGHT;
-                        }
-                        else
-                        {
-                            return MovementDirection.UPRIGHT;
-                        }
-                    default:
-                        if (direction.Y >= 0)
-                        {
-                            return MovementDirection.DOWN;
-                        }
-                        else
-                        {
-                            return MovementDirection.UP;
-                        }
-                }
+                return MovementDirection.DOWN;
             }
-            //if (direction.X < 0)
-            //{
-            //    return MovementDirection.LEFT;
-            //}
-            //else if (direction.X > 0)
-            //{
-            //    return MovementDirection.RIGHT;
-            //}
-            //else if (direction.Y < 0)
-            //{
-            //    return MovementDirection.UP;
-            //}
-            //else
-            //{
-            //    return MovementDirection.DOWN;
-            //}
         }
         public static string GetFaceDirectionString(MovementDirection direction)
         {

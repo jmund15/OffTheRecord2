@@ -200,17 +200,17 @@ public partial class BreakableComponent : Node2D
     #region SIGNAL_LISTENERS
     protected virtual void OnHurtboxAttacked(HitboxAttack attack)
     {
-        //if (!(area.GetParent() is Robber)) //should always be true but check anyway
+        //if (!(area.GetParent() is Player)) //should always be true but check anyway
         //{
         //    GD.Print("area groups: ", area.GetParent().GetGroups());
-        //    //GD.PrintErr(nameof(OnAreaEntered) + " ERROR || Robber bag wasn't what hit pot?");
+        //    //GD.PrintErr(nameof(OnAreaEntered) + " ERROR || Player bag wasn't what hit pot?");
         //    return;
         //}
-        //var robber = area.GetParent() as Robber;
+        //var robber = area.GetParent() as Player;
 
         //Vector2 hitDirection;
         //if (robber.Velocity.Length() <= robber.IdleVelocity)
-        //{ hitDirection = Robber.GetVectorFromDirection(robber.FaceDirection) * 0.5f; }
+        //{ hitDirection = Player.GetVectorFromDirection(robber.FaceDirection) * 0.5f; }
         //else
         //{ hitDirection = robber.Velocity.Normalized(); }
         //GD.Print("robber direction on hit breakable: ", robber.Direction, "\nhitDirection: ", hitDirection, "\nFaceDirection: ", robber.FaceDirection);

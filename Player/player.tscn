@@ -1,7 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://b6kfo2gv2y5gu"]
+[gd_scene load_steps=9 format=3 uid="uid://b6kfo2gv2y5gu"]
 
 [ext_resource type="Script" path="res://Player/Player.cs" id="1_rfa52"]
 [ext_resource type="Script" path="res://Player/StateMachine/PlayerStateMachine.cs" id="1_xs2pe"]
+[ext_resource type="Script" path="res://Player/StateMachine/IdleState.cs" id="3_umjcd"]
+[ext_resource type="Script" path="res://Player/StateMachine/WalkState.cs" id="4_hkwsj"]
+[ext_resource type="Script" path="res://Player/StateMachine/InjectState.cs" id="5_ftf0r"]
+[ext_resource type="Script" path="res://Player/StateMachine/InteractState.cs" id="6_qxw57"]
+[ext_resource type="Script" path="res://BaseComponents/HealthComponent.cs" id="7_hjnu7"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p81xc"]
 radius = 50.0
@@ -19,3 +24,17 @@ shape = SubResource("CircleShape2D_p81xc")
 script = ExtResource("1_xs2pe")
 
 [node name="Idle" type="Node2D" parent="PlayerStateMachine"]
+script = ExtResource("3_umjcd")
+
+[node name="Walk" type="Node2D" parent="PlayerStateMachine"]
+script = ExtResource("4_hkwsj")
+
+[node name="Inject" type="Node2D" parent="PlayerStateMachine"]
+script = ExtResource("5_ftf0r")
+
+[node name="Interact" type="Node2D" parent="PlayerStateMachine"]
+script = ExtResource("6_qxw57")
+
+[node name="HealthComponent" type="Node2D" parent="."]
+script = ExtResource("7_hjnu7")
+MaxHealth = 100.0
