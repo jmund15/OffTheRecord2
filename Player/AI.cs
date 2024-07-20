@@ -44,9 +44,9 @@ public partial class AI : Player
 
 	enum AI_SUB_STAND_THERE_MENICINGLY_STATE
 	{
-		MOVE_TO_SPOT, //Nav to stand spot
-		BE_SPOOKY //Stand menicingly
-	}
+		BE_SPOOKY, //Stand menicingly
+        MOVE_TO_SPOT //Nav to stand spot
+    }
 
 	enum AI_SUB_IMPEDE_STATE
 	{
@@ -68,8 +68,87 @@ public partial class AI : Player
 		PATROL_GOAL_AREA, //Move near player goal
 		CATCH //Move to catch caught player
 	}
-    #endregion
-    #endregion
+	#endregion
+	#endregion
+
+	private AI_MAIN_BEHAVIOR_STATE currentMainState = AI_MAIN_BEHAVIOR_STATE.STAND_THERE_MENICINGLY; //Current AI State, start as do nothing 
+	private int currentSubState = 0; //Current AI Substate, start as do nothing. This is an int so I can cheat and use different enum types. ALWAYS CAST SUB STATE TO INT WHEN CHANGING IT
+
+	//Teleport Function
+
+	private void AI_chaseState()
+	{
+		//TODO, Handle State
+	}
+
+    private void AI_guardState()
+    {
+        //TODO, Handle State
+    }
+
+    private void AI_impedeState()
+    {
+        //TODO, Handle State
+    }
+
+    private void AI_pounceState()
+    {
+        //TODO, Handle State
+    }
+
+    private void AI_standThereMenicinglyState()
+    {
+        //TODO, Handle State
+    }
+
+    private void AI_toyWithState()
+    {
+        //TODO, Handle State
+    }
+
+    private void AI_wanderState()
+    {
+        //TODO, Handle State
+    }
+
+    private void handleMainAIState() //Run every frame to handle the main state and handle the current input of the AI Player
+	{
+		switch (currentMainState)
+		{
+			case AI_MAIN_BEHAVIOR_STATE.CHASE:
+				AI_chaseState();
+				break;
+			
+			case AI_MAIN_BEHAVIOR_STATE.GUARD:
+				AI_guardState();
+                break;
+
+            case AI_MAIN_BEHAVIOR_STATE.IMPEDE:
+				AI_impedeState();
+                break;
+
+            case AI_MAIN_BEHAVIOR_STATE.POUNCE:
+				AI_pounceState();
+                break;
+
+            case AI_MAIN_BEHAVIOR_STATE.STAND_THERE_MENICINGLY:
+				AI_standThereMenicinglyState();
+                break;
+
+            case AI_MAIN_BEHAVIOR_STATE.TOY_WITH:
+				AI_toyWithState();
+                break;
+
+            case AI_MAIN_BEHAVIOR_STATE.WANDER:
+				AI_wanderState();
+                break;
+
+			default:
+				//DO AN ERROR THING
+				break;
+
+        }
+    }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
