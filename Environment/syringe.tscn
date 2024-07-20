@@ -1,0 +1,95 @@
+[gd_scene load_steps=14 format=3 uid="uid://cor37yh614dua"]
+
+[ext_resource type="Script" path="res://Environment/Syringe.cs" id="1_fsf63"]
+[ext_resource type="Texture2D" uid="uid://gvgee80oljv5" path="res://Player/cure.png" id="2_4cg4j"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ernl0"]
+size = Vector2(10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k2or8"]
+atlas = ExtResource("2_4cg4j")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5tdhy"]
+atlas = ExtResource("2_4cg4j")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b3ifd"]
+atlas = ExtResource("2_4cg4j")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dngol"]
+atlas = ExtResource("2_4cg4j")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1rpa7"]
+atlas = ExtResource("2_4cg4j")
+region = Rect2(96, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f5h2y"]
+atlas = ExtResource("2_4cg4j")
+region = Rect2(120, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5o7hb"]
+atlas = ExtResource("2_4cg4j")
+region = Rect2(144, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bbcwi"]
+atlas = ExtResource("2_4cg4j")
+region = Rect2(168, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5eebm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k2or8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5tdhy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b3ifd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dngol")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1rpa7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f5h2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5o7hb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bbcwi")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1pl4j"]
+radius = 20.0
+
+[node name="Syringe" type="StaticBody2D"]
+y_sort_enabled = true
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_fsf63")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ernl0")
+
+[node name="PickupSprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_5eebm")
+autoplay = "default"
+frame = 2
+frame_progress = 0.754494
+
+[node name="PickupArea" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea"]
+shape = SubResource("CircleShape2D_1pl4j")

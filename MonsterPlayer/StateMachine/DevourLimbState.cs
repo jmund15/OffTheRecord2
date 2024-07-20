@@ -1,30 +1,34 @@
 using Godot;
 using Godot.Collections;
 
-public partial class InteractState : State
+public partial class DevourLimbState : State
 {
 	//TEMPLATE FOR STATES
 	#region STATE_VARIABLES
-	private Player _player;
+	private Monster _monster;
+
 	[Export(PropertyHint.NodeType, "State")]
-	private IdleState _idleState;
+	private State _idleState;
 	#endregion
 	#region STATE_UPDATES
 	public override void Init(CharacterBody2D body, AnimatedSprite2D animPlayer)
 	{
 		base.Init(body, animPlayer);
-		_player = Body as Player;
-	}
+		_monster = Body as Monster;
+    }
 	public override void Enter(Dictionary<State, bool> parallelStates)
 	{
 		base.Enter(parallelStates);
-        _player.CanMove = false;
+        AnimSprite.Play(AnimName + _monster.LimbCount);
+        AnimSprite.AnimationFinished += OnAnimationFinished;
     }
 	public override void Exit()
 	{
 		base.Exit();
+        _monster.LimbCount++;
+        AnimSprite.AnimationFinished -= OnAnimationFinished;
 	}
-	public override void ProcessFrame(float delta)
+    public override void ProcessFrame(float delta)
 	{
 		base.ProcessFrame(delta);
 	}
@@ -36,7 +40,11 @@ public partial class InteractState : State
 	{
 		base.HandleInput(@event);
 	}
-	#endregion
-	#region STATE_HELPER
-	#endregion
+    #endregion
+    #region STATE_HELPER
+    private void OnAnimationFinished()
+    {
+        EmitSignal(SignalName.TransitionState, this, _idleState);
+    }
+    #endregion
 }

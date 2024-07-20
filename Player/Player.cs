@@ -3,7 +3,7 @@ using Godot.Collections;
 using System;
 using TimeRobbers.BaseComponents;
 
-public partial class Player : CharacterBody2D, IDirectionComponent
+public partial class Player : BasePlayer, IDirectionComponent
 {
     #region CLASS_VARIALBLES
     public enum LimbHealthState
@@ -11,70 +11,83 @@ public partial class Player : CharacterBody2D, IDirectionComponent
         Full,
         Oof,
         Uhoh,
-        Joever
+        Joever,
+        Monster
     }
-    public int LimbCount { get; private set; } = 4;
-    public float LimbHealthAmt { get; private set; }
-    public float CurrLimbHealth { get; private set; }
-    public float LimbHealthStateAmt { get; private set; }
-    public LimbHealthState CurrLimbHealthState { get; private set; } = LimbHealthState.Full;
-    public Dictionary<LimbHealthState, string> LimbHealthAnimString = new Dictionary<LimbHealthState, string>()
+    public int LimbCount { get; set; } = 4;
+    public float LimbHealthAmt { get; protected set; }
+    public float CurrLimbHealth { get; protected set; }
+    public float LimbHealthStateAmt { get; protected set; }
+    public LimbHealthState CurrLimbHealthState { get; protected set; } = LimbHealthState.Full;
+    public Dictionary<LimbHealthState, string> LimbHealthAnimString { get; protected set; } = new Dictionary<LimbHealthState, string>()
     {
         { LimbHealthState.Full, "Full" },
         { LimbHealthState.Oof, "Oof" },
         { LimbHealthState.Uhoh, "Uhoh" },
-        { LimbHealthState.Joever, "Joever" }
+        { LimbHealthState.Joever, "Joever" },
+        { LimbHealthState.Monster, "" }
     };
-    private PlayerStateMachine _stateMachine;
-    private Dictionary<State, bool> _parallelStateMachines = new Dictionary<State, bool>();
-    public State PrimaryState { get; private set; }
-    public Dictionary<State, bool> ParallelStates { get; private set; }
-
-    public AnimatedSprite2D AnimSprite { get; private set; }
-    public MovementDirection FaceDirection { get; private set; }
-    public Sprite2D Shadow { get; private set; }
-    public Vector2 BaseShadowPos { get; private set; } = new Vector2();
-
-    public HealthComponent HealthComponent { get; private set; }
-    public HurtboxComponent HurtboxComponent { get; private set; }
-    public HitboxComponent HitboxComponent { get; private set; }
 
     [Export]
-    public float AfflictionRate { get; private set; } = 25f;
+    public float AfflictionRate { get; protected set; } = 25f;
 
-	public const float WalkSpeed = 2500f;
-
-	public const float MovementTransitionBufferTime = 0.1f;
-
-    public int CuresHeld = 1;
+    private int _curesHeld = 1;
+    public int CuresHeld {
+        get { return _curesHeld; }
+        set
+        {
+            if (value == _curesHeld) return;
+            else
+            {
+                _curesHeld = value;
+                EmitSignal(SignalName.NumCuresChanged, _curesHeld);
+            }
+        }
+    }
+    private bool _healing = false;
+    public bool Healing
+    {
+        get => _healing;
+        set
+        {
+            if (_healing == value) return;
+            else
+            {
+                _healing = value;
+                EmitSignal(SignalName.HealingStateChange, _healing);
+            }
+        }
+    }
     [Export]
-    public float CureSpeed { get; private set; } = 50f;
-    public AnimatedSprite2D CureFlare { get; private set; }
-    public AnimatedSprite2D CureFlareMask { get; private set; }
+    public float CureSpeed { get; protected set; } = 50f;
+    public AnimatedSprite2D CureFlare { get; protected set; }
+    public AnimatedSprite2D CureFlareMask { get; protected set; }
     //public const float WalkMinInput = 0.1f;
-    public string LeftInput { get; private set; } = "Left";
-    public string RightInput { get; private set; } = "Right";
-    public string UpInput { get; private set; } = "Up";
-    public string DownInput { get; private set; } = "Down";
-    public string InjectInput { get; private set; } = "Inject";
-    public string InteractInput { get; private set; } = "Interact";
-
+    public string LeftInput { get; protected set; } = "Left";
+    public string RightInput { get; protected set; } = "Right";
+    public string UpInput { get; protected set; } = "Up";
+    public string DownInput { get; protected set; } = "Down";
+    public string InjectInput { get; protected set; } = "Inject";
+    public string InteractInput { get; protected set; } = "Interact";
+    [Export]
+    public PackedScene SeveredLimbScene { get; protected set; }
     [Signal]
     public delegate void LoseLimbEventHandler(int newLimbCount);
     [Signal]
+    public delegate void LimbDetachedEventHandler();
+    [Signal]
     public delegate void LimbHealthStateChangeEventHandler(LimbHealthState newLimbHealthState);
+    [Signal]
+    public delegate void NumCuresChangedEventHandler(int curesHeld);
+    [Signal]
+    public delegate void HealingStateChangeEventHandler(bool isHealing);
     #endregion
 
     #region BASE_OVERRIDDEN_GODOT_FUNCTIONS
     public override void _Ready()
     {
         base._Ready();
-        AnimSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-        HealthComponent = GetNode<HealthComponent>("HealthComponent");
-        HurtboxComponent = GetNode<HurtboxComponent>("HurtboxComponent");
-        //_hurtboxCapsuleShape = HurtboxComponent.CollisionShape.Shape as CapsuleShape2D;
-        HitboxComponent = GetNode<HitboxComponent>("HitboxComponent");
-        //_bagHitboxCapsuleShape = HitboxComponent.CollisionShape.Shape as CapsuleShape2D;
+        HurtboxComponent.HitboxEntered += OnHitboxEntered;
 
         CureFlare = GetNode<AnimatedSprite2D>("CureFlare");
         CureFlareMask = CureFlare.GetNode<AnimatedSprite2D>("CureFlareMask");
@@ -87,34 +100,20 @@ public partial class Player : CharacterBody2D, IDirectionComponent
         LimbHealthStateAmt = LimbHealthAmt / 4;
         CurrLimbHealthState = LimbHealthState.Full;
 
-        _stateMachine = GetNode<PlayerStateMachine>("StateMachine");
-        _stateMachine.Init(this, AnimSprite);
-        PrimaryState = _stateMachine.InitialSubState;
-        ParallelStates = _stateMachine.ParallelSubStates;
-        _stateMachine.TransitionedState += OnTransitionedState;
-        _stateMachine.Enter(_parallelStateMachines);
+        InitStateMachine();
     }
-
     public override void _Process(double delta)
     {
         base._Process(delta);
-        HealthComponent.Damage(AfflictionRate * (float)delta);
-        if (GetDesiredDirection().X < 0)
+        if (CanMove)
         {
-            AnimSprite.FlipH = true;
+            HealthComponent.Damage(AfflictionRate * (float)delta);
         }
-        else
-        {
-            AnimSprite.FlipH = false;
-        }
-
-        _stateMachine.ProcessFrame((float)delta);
     }
     public override void _PhysicsProcess(double delta)
 	{
 		base._PhysicsProcess(delta);
 		
-        _stateMachine.ProcessPhysics((float)delta);
 	}
     public override void _UnhandledInput(InputEvent @event)
     {
@@ -166,10 +165,22 @@ public partial class Player : CharacterBody2D, IDirectionComponent
             }
             FlashRed();
             EmitSignal(SignalName.LimbHealthStateChange, Variant.From(CurrLimbHealthState));
-
         }
     }
-    private void OnTransitionedState(State oldState, State newState)
+    private void OnHitboxEntered(HitboxComponent hitbox)
+    {
+        LimbCount--;
+        if (LimbCount == 0)
+        {
+            GameOver();
+        }
+        //GD.Print("before set max health");
+        //HealthComponent.SetHea(healthUpdate.MaxHealth - LimbHealthAmt);
+        HealthComponent.SetMaxHealth(HealthComponent.MaxHealth - LimbHealthAmt);
+        //GD.Print("set max health");
+        EmitSignal(SignalName.LoseLimb, LimbCount);
+    }
+    public override void OnTransitionedState(State oldState, State newState)
     {
         //throw new NotImplementedException();
     }
@@ -177,31 +188,31 @@ public partial class Player : CharacterBody2D, IDirectionComponent
     #region HELPER_FUNCTIONS
     private void PlayerLoseLimb()
     {
-
     }
     private void FlashRed()
     {
 
     }
-    public float CalcMovementSpeed()
+    public override float CalcMovementSpeed()
     {
-        switch (LimbCount)
-        {
-            case 4:
-                return 1;
-            case 3:
-                return 0.8f;
-            case 2:
-                return 0.6f;
-            case 1:
-                return 0.4f;
-            default:
-                throw new Exception("LIMB COUNT ERROR");
-        }
+        return base.CalcMovementSpeed();
+        //switch (LimbCount)
+        //{
+        //    case 4:
+        //        return 1;
+        //    case 3:
+        //        return 0.8f;
+        //    case 2:
+        //        return 0.6f;
+        //    case 1:
+        //        return 0.4f;
+        //    default:
+        //        throw new Exception("LIMB COUNT ERROR");
+        //}
     }
     public void GameOver()
     {
-
+        QueueFree();
     }
     public void UpdateShadowPos()
     {
@@ -227,24 +238,13 @@ public partial class Player : CharacterBody2D, IDirectionComponent
         //        GD.PrintErr("ERROR || non-standard current y framecoord: " + Sprite.FrameCoords.Y); break;
         //}
     }
-    public MovementDirection GetMovementDirection()
-    {
-        if (AnimSprite.FlipH)
-        {
-            return MovementDirection.LEFT;
-        } 
-        else
-        {
-            return MovementDirection.RIGHT;
-        }
-    }
     //TODO: CHANGE TO RETURN VARIABLE INSTEAD OF CALCULATING EACH TIME FOR OPTIMIZING????
-    public Vector2 GetDesiredDirection()
+    public override Vector2 GetDesiredDirection()
     {
         //GD.Print(Input.GetVector(LeftInput, RightInput, UpInput, DownInput));
         return Input.GetVector(LeftInput, RightInput, UpInput, DownInput);
     }
-    public Vector2 GetDesiredDirectionNormalized()
+    public override Vector2 GetDesiredDirectionNormalized()
     {
         return GetDesiredDirection().Normalized();
     }

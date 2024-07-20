@@ -56,13 +56,13 @@ public partial class PlayerStateMachine : CompoundState
         var animPlaying = AnimSprite.IsPlaying();
         int currAnimFrame = 0;
         float currAnimFrameProg = 0.0f;
-        if (animPlaying)
-        {
+        //if (animPlaying)
+        //{
             currAnimFrame = AnimSprite.Frame;
             currAnimFrameProg = AnimSprite.FrameProgress;
-        }
+        //}
 
-        if (!animPlaying) { return; }
+        //if (!animPlaying) { return; }
         AnimSprite.Play(PrimarySubState.AnimName + _player.LimbCount + _player.LimbHealthAnimString[newLimbHealthState]);
         AnimSprite.SetFrameAndProgress(currAnimFrame, currAnimFrameProg);
     }

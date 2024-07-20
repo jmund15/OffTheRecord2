@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2bpc6avlved2"]
+
+[ext_resource type="Texture2D" uid="uid://gvgee80oljv5" path="res://Player/cure.png" id="1_rv4dm"]
+
+[node name="SyringeUI" type="TextureRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_rv4dm")
+expand_mode = 3
+stretch_mode = 4

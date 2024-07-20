@@ -8,7 +8,10 @@ using System.Linq;
  */
 public partial class Global : Node
 {
-    private MainScene _mainScene;
+    public MainScene MainScene { get; private set; }
+    public Player Player { get; private set; }
+    public Monster Monster { get; private set; }
+
     public Events SignalBus { get; private set; }
     public readonly Random Rnd = new Random(Guid.NewGuid().GetHashCode());
 
@@ -29,14 +32,16 @@ public partial class Global : Node
 	{
         //GD.Print("roll force range: ", RollForceRange);
         SignalBus = GetNode<Events>("/root/Events");
-        _mainScene = GetNode<MainScene>("/root/MainScene");
+        MainScene = GetNode<MainScene>("/root/MainScene");
+        Player = MainScene.GetNode<Player>("Player");
+        //Monster = MainScene.GetNode<Monster>("Monster");
     }
     public void FreezeEffect(float freezeTime)
     {
-        _mainScene.GetTree().Paused = true;
+        MainScene.GetTree().Paused = true;
         GetTree().CreateTimer(freezeTime).Timeout += () =>
         {
-            _mainScene.GetTree().Paused = false;
+            MainScene.GetTree().Paused = false;
         };
     }
     public void AddCameraTrauma(float trauma)

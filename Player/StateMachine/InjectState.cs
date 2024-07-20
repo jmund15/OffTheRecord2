@@ -9,6 +9,8 @@ public partial class InjectState : State
 
 	[Export(PropertyHint.NodeType, "State")]
 	private IdleState _idleState;
+
+    private bool _isHealing = false;
 	#endregion
 	#region STATE_UPDATES
 	public override void Init(CharacterBody2D body, AnimatedSprite2D animPlayer)
@@ -20,24 +22,25 @@ public partial class InjectState : State
     public override void Enter(Dictionary<State, bool> parallelStates)
 	{
 		base.Enter(parallelStates);
+		_player.CanMove = false;
 
-		_player.CureFlare.Play("flareIntro");
-		_player.CureFlareMask.Play("mask");
-		_player.CureFlare.Show();
-		_player.CureFlareMask.Show();
-
-	}
+        AnimSprite.Play(AnimName + _player.LimbCount + _player.LimbHealthAnimString[_player.CurrLimbHealthState]);
+		AnimSprite.AnimationFinished += OnAnimationFinished;
+    }
     public override void Exit()
 	{
 		base.Exit();
+        _player.Healing = false;
         _player.CureFlare.Play("flareEnd");
-		_player.CuresHeld--;
 	}
     public override void ProcessFrame(float delta)
 	{
 		base.ProcessFrame(delta);
-		_player.HealthComponent.Heal(_player.CureSpeed * delta);
-	}
+        if (_player.Healing)
+        {
+            _player.HealthComponent.Heal(_player.CureSpeed * delta);
+        }
+    }
 	public override void ProcessPhysics(float delta)
 	{
 		base.ProcessPhysics(delta);
@@ -52,7 +55,18 @@ public partial class InjectState : State
     }
     #endregion
     #region STATE_HELPER
+    private void OnAnimationFinished()
+    {
+        _player.CureFlare.Play("flareIntro");
+        _player.CureFlareMask.Play("mask");
+        _player.CureFlare.Show();
+        _player.CureFlareMask.Show();
 
+        _player.Healing = true;
+        _player.CuresHeld--;
+
+        AnimSprite.AnimationFinished -= OnAnimationFinished;
+    }
     private void OnFlareAnimationFinished()
     {
         if (_player.CureFlare.Animation == "flareIntro")

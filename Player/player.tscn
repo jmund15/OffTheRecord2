@@ -1,9 +1,9 @@
-[gd_scene load_steps=56 format=3 uid="uid://b6kfo2gv2y5gu"]
+[gd_scene load_steps=49 format=3 uid="uid://b6kfo2gv2y5gu"]
 
 [ext_resource type="Script" path="res://Player/Player.cs" id="1_rfa52"]
 [ext_resource type="Script" path="res://Player/StateMachine/PlayerStateMachine.cs" id="1_xs2pe"]
 [ext_resource type="SpriteFrames" uid="uid://d36xhlln23gcg" path="res://Player/player.tres" id="2_cnby8"]
-[ext_resource type="Texture2D" uid="uid://gvgee80oljv5" path="res://Player/cure.png" id="3_pmyuc"]
+[ext_resource type="PackedScene" uid="uid://bq0xwc8ndrrl7" path="res://Player/severed_limb.tscn" id="2_o7ou7"]
 [ext_resource type="Script" path="res://Player/StateMachine/IdleState.cs" id="3_umjcd"]
 [ext_resource type="Texture2D" uid="uid://bam6lecvseas" path="res://Player/cure_flame.png" id="4_gmf7r"]
 [ext_resource type="Script" path="res://Player/StateMachine/WalkState.cs" id="4_hkwsj"]
@@ -17,70 +17,6 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cfjgy"]
 size = Vector2(15, 25)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_k2or8"]
-atlas = ExtResource("3_pmyuc")
-region = Rect2(0, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5tdhy"]
-atlas = ExtResource("3_pmyuc")
-region = Rect2(24, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b3ifd"]
-atlas = ExtResource("3_pmyuc")
-region = Rect2(48, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_dngol"]
-atlas = ExtResource("3_pmyuc")
-region = Rect2(72, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1rpa7"]
-atlas = ExtResource("3_pmyuc")
-region = Rect2(96, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_f5h2y"]
-atlas = ExtResource("3_pmyuc")
-region = Rect2(120, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5o7hb"]
-atlas = ExtResource("3_pmyuc")
-region = Rect2(144, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bbcwi"]
-atlas = ExtResource("3_pmyuc")
-region = Rect2(168, 0, 24, 24)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_0nuli"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_k2or8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5tdhy")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_b3ifd")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dngol")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1rpa7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_f5h2y")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5o7hb")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bbcwi")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jskeu"]
 atlas = ExtResource("4_gmf7r")
@@ -311,34 +247,37 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8udwh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f1ptl"]
+
 [node name="Player" type="CharacterBody2D"]
 y_sort_enabled = true
+collision_mask = 31
 motion_mode = 1
 script = ExtResource("1_rfa52")
 AfflictionRate = 50.0
-CureSpeed = 100.0
+SeveredLimbScene = ExtResource("2_o7ou7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, 5)
 shape = SubResource("RectangleShape2D_cfjgy")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 y_sort_enabled = true
 sprite_frames = ExtResource("2_cnby8")
-animation = &"walk1Full"
-
-[node name="Cure" type="AnimatedSprite2D" parent="."]
-visible = false
-sprite_frames = SubResource("SpriteFrames_0nuli")
-autoplay = "default"
+animation = &"cure1Joever"
 
 [node name="CureFlare" type="AnimatedSprite2D" parent="."]
+visible = false
 clip_children = 1
 z_index = -1
 sprite_frames = SubResource("SpriteFrames_bkhua")
-animation = &"flareEnd"
+animation = &"flareIntro"
 
 [node name="CureFlareMask" type="AnimatedSprite2D" parent="CureFlare"]
+visible = false
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_y6i55")
 animation = &"mask"
@@ -357,16 +296,17 @@ _injectState = NodePath("../Inject")
 _interactState = NodePath("../Interact")
 AnimName = "idle"
 
-[node name="Walk" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_idleState", "_injectState")]
+[node name="Walk" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_idleState", "_injectState", "_interactState")]
 script = ExtResource("4_hkwsj")
 _idleState = NodePath("../Idle")
 _injectState = NodePath("../Inject")
+_interactState = NodePath("../Interact")
 AnimName = "walk"
 
 [node name="Inject" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_idleState")]
 script = ExtResource("5_ftf0r")
 _idleState = NodePath("../Idle")
-AnimName = "idle"
+AnimName = "cure"
 
 [node name="Interact" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_idleState")]
 script = ExtResource("6_qxw57")
@@ -376,7 +316,7 @@ AnimName = "Interact"
 [node name="LoseLimb" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_idleState")]
 script = ExtResource("8_3aiic")
 _idleState = NodePath("../Idle")
-AnimName = "idle"
+AnimName = "loseLimb"
 
 [node name="HealthComponent" type="Node2D" parent="."]
 script = ExtResource("7_hjnu7")
@@ -384,7 +324,16 @@ MaxHealth = 1000.0
 ChangeHealthOnMaxChange = false
 
 [node name="HurtboxComponent" type="Area2D" parent="."]
+collision_mask = 2
 script = ExtResource("9_wp6xo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+visible = false
+shape = SubResource("RectangleShape2D_8udwh")
 
 [node name="HitboxComponent" type="Area2D" parent="."]
 script = ExtResource("10_nba4w")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+visible = false
+shape = SubResource("RectangleShape2D_f1ptl")

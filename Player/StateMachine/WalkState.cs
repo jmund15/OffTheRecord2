@@ -35,6 +35,8 @@ public partial class WalkState : State
     public override void Enter(Dictionary<State, bool> parallelStates)
     {
         base.Enter(parallelStates);
+        _player.CanMove = true;
+
         _inputDirection = DirectionComponent.GetDesiredDirectionNormalized();
         _faceDirection = IDirectionComponent.GetDirectionFromVector(_inputDirection);
       

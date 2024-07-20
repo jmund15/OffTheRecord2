@@ -30,6 +30,7 @@ public partial class IdleState : State
     public override void Enter(Dictionary<State, bool> parallelStates)
     {
         base.Enter(parallelStates);
+        _player.CanMove = true;
         //AnimSprite = _player.AnimSprite;
         AnimSprite.Play(AnimName + _player.LimbCount + _player.LimbHealthAnimString[_player.CurrLimbHealthState]);
         _bufferingMovementTransition = false;

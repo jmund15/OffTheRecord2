@@ -1,0 +1,61 @@
+[gd_scene load_steps=8 format=3 uid="uid://bq0xwc8ndrrl7"]
+
+[ext_resource type="Script" path="res://Player/SeveredLimb.cs" id="1_q5f8r"]
+[ext_resource type="Texture2D" uid="uid://bfs8u6xcon188" path="res://Player/severed_limbs.png" id="2_bpllr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mm5ua"]
+atlas = ExtResource("2_bpllr")
+region = Rect2(0, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8teii"]
+atlas = ExtResource("2_bpllr")
+region = Rect2(36, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w3wc3"]
+atlas = ExtResource("2_bpllr")
+region = Rect2(72, 0, 36, 36)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xysbl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mm5ua")
+}],
+"loop": false,
+"name": &"arm",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8teii")
+}],
+"loop": false,
+"name": &"leg1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w3wc3")
+}],
+"loop": false,
+"name": &"leg2",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h6j0l"]
+size = Vector2(20, 9)
+
+[node name="SeveredLimb" type="StaticBody2D"]
+y_sort_enabled = true
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_q5f8r")
+
+[node name="Limb" type="AnimatedSprite2D" parent="."]
+y_sort_enabled = true
+sprite_frames = SubResource("SpriteFrames_xysbl")
+animation = &"leg2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 13.5)
+shape = SubResource("RectangleShape2D_h6j0l")
