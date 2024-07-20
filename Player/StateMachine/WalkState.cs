@@ -1,18 +1,23 @@
 using Godot;
 using Godot.Collections;
 using System;
+using System.Text;
 using TimeRobbers.BaseComponents;
 
-public partial class WalkState : CompoundState
+public partial class WalkState : State
 {
     #region STATE_VARIABLES
-    [Export]
-    private string _animName;
+    //[Export]
+    //private string _animName;
 
     private Player _player;
 
     [Export]
-    private State _idleState;
+    private IdleState _idleState;
+    [Export]
+    private InjectState _injectState;
+    [Export]
+    private InteractState _interactState;
 
     private Vector2 _inputDirection = new Vector2();
     private MovementDirection _faceDirection;
@@ -21,7 +26,7 @@ public partial class WalkState : CompoundState
     private bool _bufferingMovementTransition = false;
     #endregion
     #region STATE_UPDATES
-    public override void Init(CharacterBody2D body, AnimationPlayer animPlayer)
+    public override void Init(CharacterBody2D body, AnimatedSprite2D animPlayer)
     {
         base.Init(body, animPlayer);
         _player = Body as Player;
@@ -30,20 +35,16 @@ public partial class WalkState : CompoundState
     public override void Enter(Dictionary<State, bool> parallelStates)
     {
         base.Enter(parallelStates);
-        AnimPlayer = _player.AnimPlayer;
-
         _inputDirection = DirectionComponent.GetDesiredDirectionNormalized();
         _faceDirection = IDirectionComponent.GetDirectionFromVector(_inputDirection);
       
-        AnimPlayer.Play(_animName + IDirectionComponent.GetFaceDirectionString(_faceDirection));
-        AnimPlayer.Advance(0);
-
+        AnimSprite.Play(AnimName + _player.LimbCount + _player.LimbHealthAnimString[_player.CurrLimbHealthState]);
         _walled = true; // precaution
     }
     public override void Exit()
     {
         base.Exit();
-        AnimPlayer.SpeedScale = 1.0f;
+        AnimSprite.SpeedScale = 1.0f;
     }
     public override void ProcessFrame(float delta)
     {
@@ -52,27 +53,18 @@ public partial class WalkState : CompoundState
 
         if (_inputDirection.IsZeroApprox())
         { //BUFFER AFTER MOVEMENT CHANGES
-            GetTree().CreateTimer(Player.MovementTransitionBufferTime).Timeout += ChangeMovementState;
-            _bufferingMovementTransition = true;
+            EmitSignal(SignalName.TransitionState, this, _idleState);
+            //GetTree().CreateTimer(Player.MovementTransitionBufferTime).Timeout += ChangeMovementState;
+            //_bufferingMovementTransition = true;
         }
     }
     public override void ProcessPhysics(float delta)
     {
         base.ProcessPhysics(delta);
-        Body.Velocity = _inputDirection.Normalized() * Player.WalkSpeed * delta;
+        Body.Velocity = _inputDirection.Normalized() * _player.CalcMovementSpeed() * Player.WalkSpeed * delta;
         Body.MoveAndSlide();
 
-        var newDir = IDirectionComponent.GetDirectionFromVector(_inputDirection);
-        if (_faceDirection != newDir)
-        {
-            var animPos = AnimPlayer.CurrentAnimationPosition;
-            _faceDirection = IDirectionComponent.GetDirectionFromVector(_inputDirection);
-            var animString = IDirectionComponent.GetFaceDirectionString(_faceDirection);
-            AnimPlayer.Play(_animName + animString);
-            AnimPlayer.Seek(animPos, true);
-        }
-
-        //var currRunPos = AnimPlayer.CurrentAnimation == string.Empty ? 0.0 : AnimPlayer.CurrentAnimationPosition;
+        //var currRunPos = AnimSprite.CurrentAnimation == string.Empty ? 0.0 : AnimSprite.CurrentAnimationPosition;
         if (Body.IsOnWall())
         {
             //EmitSignal(SignalName.TransitionState, this, _wallState);
@@ -81,7 +73,7 @@ public partial class WalkState : CompoundState
         {
             //var coll = Body.GetLastSlideCollision();
             //var collAngle = coll.GetAngle(_inputDirection.Normalized());
-            //GD.Print("robber jsut collided @ normal: ", coll.GetNormal(), " and angle: ", collAngle,
+            //GD.Print("player jsut collided @ normal: ", coll.GetNormal(), " and angle: ", collAngle,
             //    ", wall min slide angle: ", Body.WallMinSlideAngle);
             //if (collAngle > (Mathf.Pi / 2) + RobberHelper.HugWallAngle)
             //{
@@ -104,9 +96,13 @@ public partial class WalkState : CompoundState
     }
     public override void HandleInput(InputEvent @event)
     {
-        if (@event.IsActionPressed(_player.InjectInput))
+        if (@event.IsActionPressed(_player.InjectInput) && _player.CuresHeld > 0)
         {
-            EmitSignal(SignalName.TransitionState, this, _attackState);
+            EmitSignal(SignalName.TransitionState, this, _injectState);
+        }
+        else if (@event.IsActionPressed(_player.InteractInput))
+        {
+            EmitSignal(SignalName.TransitionState, this, _interactState);
         }
     }
     #endregion
@@ -117,6 +113,7 @@ public partial class WalkState : CompoundState
         {
             EmitSignal(SignalName.TransitionState, this, _idleState);
         }
+
         _bufferingMovementTransition = false;
     }
     #endregion

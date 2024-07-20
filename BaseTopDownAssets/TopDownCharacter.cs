@@ -25,7 +25,7 @@ public partial class TopDownCharacter : CharacterBody2D
 	protected Global Global { get; private set; }
 	protected Events SignalBus { get; private set; }
 	public Sprite2D Sprite { get; protected set; }
-	public AnimationPlayer AnimPlayer { get; protected set; }
+	public AnimatedSprite2D AnimSprite { get; protected set; }
     protected Sprite2D Shadow { get; set; }
 	protected Vector2 BaseShadowPos { get; private set; }
 	//protected float WalkSpeed { get; set; }

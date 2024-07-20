@@ -6,23 +6,23 @@ using TimeRobbers.BaseComponents;
 public partial class IdleState : State
 {
     #region STATE_VARIABLES
-    [Export]
-    private string _animName;
+    //[Export]
+    //private string _animName;
 
     private Player _player;
     [Export]
-    private State _walkState;
+    private WalkState _walkState;
     [Export]
-    private State _injectState;
+    private InjectState _injectState;
     [Export]
-    private State _interactState;
+    private InteractState _interactState;
 
     private Vector2 _inputDirection = new Vector2();
 
     private bool _bufferingMovementTransition = false;
     #endregion
     #region STATE_UPDATES
-    public override void Init(CharacterBody2D body, AnimationPlayer animPlayer)
+    public override void Init(CharacterBody2D body, AnimatedSprite2D animPlayer)
     {
         base.Init(body, animPlayer);
         _player = Body as Player;
@@ -30,8 +30,8 @@ public partial class IdleState : State
     public override void Enter(Dictionary<State, bool> parallelStates)
     {
         base.Enter(parallelStates);
-        //AnimPlayer = _player.AnimPlayer;
-        AnimPlayer.Play(_animName + IDirectionComponent.GetFaceDirectionString(_player.FaceDirection));
+        //AnimSprite = _player.AnimSprite;
+        AnimSprite.Play(AnimName + _player.LimbCount + _player.LimbHealthAnimString[_player.CurrLimbHealthState]);
         _bufferingMovementTransition = false;
     }
     public override void Exit()
@@ -42,25 +42,28 @@ public partial class IdleState : State
     {
         base.ProcessFrame(delta);
         _inputDirection = DirectionComponent.GetDesiredDirection();
-
-        if (!_inputDirection.IsZeroApprox() &&
-             !_bufferingMovementTransition)
-        { //BUFFER AFTER MOVEMENT CHANGES
-            GetTree().CreateTimer(Player.MovementTransitionBufferTime).Timeout += ChangeMovementState;
-            _bufferingMovementTransition = true;
+        if (!_inputDirection.IsZeroApprox())
+        {
+            EmitSignal(SignalName.TransitionState, this, _walkState);
+            //GetTree().CreateTimer(Player.MovementTransitionBufferTime).Timeout += ChangeMovementState;
+            //_bufferingMovementTransition = true;
         }
     }
     public override void ProcessPhysics(float delta)
     {   
         base.ProcessPhysics(delta);
-        //var currRunPos = AnimPlayer.CurrentAnimation == string.Empty ? 0.0 : AnimPlayer.CurrentAnimationPosition;
-        //AnimPlayer.Seek(currRunPos, true);
+        //var currRunPos = AnimSprite.CurrentAnimation == string.Empty ? 0.0 : AnimSprite.CurrentAnimationPosition;
+        //AnimSprite.Seek(currRunPos, true);
     }
     public override void HandleInput(InputEvent @event)
     {
-        if (@event.IsActionPressed(_player.InjectInput))
+        if (@event.IsActionPressed(_player.InjectInput) && _player.CuresHeld > 0)
         {
-            EmitSignal(SignalName.TransitionState, this, _attackState);
+            EmitSignal(SignalName.TransitionState, this, _injectState);
+        }
+        else if (@event.IsActionPressed(_player.InteractInput))
+        {
+            EmitSignal(SignalName.TransitionState, this, _interactState);
         }
     }
     #endregion
@@ -76,6 +79,7 @@ public partial class IdleState : State
         //    EmitSignal(SignalName.TransitionState, this, _walkState);
         //}
         //else
+        GD.Print("changing movement?");
         if (!_inputDirection.IsZeroApprox())
         {
             EmitSignal(SignalName.TransitionState, this, _walkState);
@@ -112,10 +116,10 @@ public partial class IdleState : State
 
     //        //SetDeferred(PropertyName.FaceDirection, Variant.From(newFaceDir)); // MAYBE DON'T USE TEST FIRST
 
-    //        AnimPlayer.CallDeferred(AnimationPlayer.MethodName.Play, "hit" + IDirectionComponent.GetFaceDirectionString(nextFaceDir));
+    //        AnimSprite.CallDeferred(AnimatedSprite2D.MethodName.Play, "hit" + IDirectionComponent.GetFaceDirectionString(nextFaceDir));
     //        EmitSignal(SignalName.TransitionState, this, _popState);
     //    }
-    //    else //non robber attacker
+    //    else //non player attacker
     //    {
     //        if (_hurtboxComponent.LatestAttack.Force >= _player.BagForce)
     //        {

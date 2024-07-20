@@ -23,7 +23,7 @@ public abstract partial class CompoundState : State
     #endregion
 
     #region STATE_UPDATES
-    public override void Init(CharacterBody2D body, AnimationPlayer animPlayer)
+    public override void Init(CharacterBody2D body, AnimatedSprite2D animPlayer)
     {
         if (body is not IDirectionComponent dirComponent)
         {
@@ -129,6 +129,7 @@ public abstract partial class CompoundState : State
             PrimarySubState.Exit();
             FiniteSubStates[PrimarySubState] = false;
         }
+
         PrimarySubState = newSubState;
         PrimarySubState.Enter(ParallelSubStates);
         FiniteSubStates[PrimarySubState] = true;

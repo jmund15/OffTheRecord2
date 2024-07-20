@@ -206,14 +206,14 @@ public partial class BreakableComponent : Node2D
         //    //GD.PrintErr(nameof(OnAreaEntered) + " ERROR || Player bag wasn't what hit pot?");
         //    return;
         //}
-        //var robber = area.GetParent() as Player;
+        //var player = area.GetParent() as Player;
 
         //Vector2 hitDirection;
-        //if (robber.Velocity.Length() <= robber.IdleVelocity)
-        //{ hitDirection = Player.GetVectorFromDirection(robber.FaceDirection) * 0.5f; }
+        //if (player.Velocity.Length() <= player.IdleVelocity)
+        //{ hitDirection = Player.GetVectorFromDirection(player.FaceDirection) * 0.5f; }
         //else
-        //{ hitDirection = robber.Velocity.Normalized(); }
-        //GD.Print("robber direction on hit breakable: ", robber.Direction, "\nhitDirection: ", hitDirection, "\nFaceDirection: ", robber.FaceDirection);
+        //{ hitDirection = player.Velocity.Normalized(); }
+        //GD.Print("player direction on hit breakable: ", player.Direction, "\nhitDirection: ", hitDirection, "\nFaceDirection: ", player.FaceDirection);
 
 
         Damage(attack.Damage, attack.Direction);

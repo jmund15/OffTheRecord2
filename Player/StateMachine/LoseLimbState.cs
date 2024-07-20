@@ -1,7 +1,7 @@
 using Godot;
 using Godot.Collections;
 
-public partial class InteractState : State
+public partial class LoseLimbState : State
 {
 	//TEMPLATE FOR STATES
 	#region STATE_VARIABLES
@@ -16,6 +16,7 @@ public partial class InteractState : State
 	public override void Enter(Dictionary<State, bool> parallelStates)
 	{
 		base.Enter(parallelStates);
+		EmitSignal(SignalName.TransitionState, this, _idleState);
 	}
 	public override void Exit()
 	{
@@ -28,8 +29,8 @@ public partial class InteractState : State
 	public override void ProcessPhysics(float delta)
 	{
 		base.ProcessPhysics(delta);
-	}
-	public override void HandleInput(InputEvent @event)
+    }
+    public override void HandleInput(InputEvent @event)
 	{
 		base.HandleInput(@event);
 	}

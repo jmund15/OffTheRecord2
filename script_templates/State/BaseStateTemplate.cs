@@ -13,7 +13,7 @@ public partial class _CLASS_ : _BASE_
     private State _transitionState;
     #endregion
     #region STATE_UPDATES
-    public override void Init(CharacterBody2D body, AnimationPlayer animPlayer)
+    public override void Init(CharacterBody2D body, AnimatedSprite2D animPlayer)
     {
         base.Init(body, animPlayer);
     }

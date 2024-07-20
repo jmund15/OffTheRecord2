@@ -7,9 +7,11 @@ using TimeRobbers.BaseComponents;
 public abstract partial class State : Node2D
 {
     #region STATE_VARIABLES
+    [Export]
+    public string AnimName { get; private set; }
     public CharacterBody2D Body { get; set; }
     public IDirectionComponent DirectionComponent { get; set; }
-    public AnimationPlayer AnimPlayer { get; set; }
+    public AnimatedSprite2D AnimSprite { get; set; }
 
     protected Dictionary<State, bool> ParallelStates = new Dictionary<State, bool>();
 
@@ -21,10 +23,10 @@ public abstract partial class State : Node2D
     public delegate void RemoveParallelStateEventHandler(State parallelState);
     #endregion
     #region STATE_UPDATES
-    public virtual void Init(CharacterBody2D body, AnimationPlayer animPlayer)
+    public virtual void Init(CharacterBody2D body, AnimatedSprite2D animPlayer)
     {
         Body = body;
-        AnimPlayer = animPlayer;
+        AnimSprite = animPlayer;
         DirectionComponent = (Body as IDirectionComponent);
     }
 

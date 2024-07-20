@@ -1,29 +1,42 @@
 using Godot;
 using Godot.Collections;
+using System;
 
 public partial class InjectState : State
 {
-	//TEMPLATE FOR STATES
 	#region STATE_VARIABLES
+	private Player _player;
+
 	[Export(PropertyHint.NodeType, "State")]
-	private State _transitionState;
+	private IdleState _idleState;
 	#endregion
 	#region STATE_UPDATES
-	public override void Init(CharacterBody2D body, AnimationPlayer animPlayer)
+	public override void Init(CharacterBody2D body, AnimatedSprite2D animPlayer)
 	{
 		base.Init(body, animPlayer);
-	}
-	public override void Enter(Dictionary<State, bool> parallelStates)
+		_player = Body as Player;
+        _player.CureFlare.AnimationFinished += OnFlareAnimationFinished;
+    }
+    public override void Enter(Dictionary<State, bool> parallelStates)
 	{
 		base.Enter(parallelStates);
+
+		_player.CureFlare.Play("flareIntro");
+		_player.CureFlareMask.Play("mask");
+		_player.CureFlare.Show();
+		_player.CureFlareMask.Show();
+
 	}
-	public override void Exit()
+    public override void Exit()
 	{
 		base.Exit();
+        _player.CureFlare.Play("flareEnd");
+		_player.CuresHeld--;
 	}
-	public override void ProcessFrame(float delta)
+    public override void ProcessFrame(float delta)
 	{
 		base.ProcessFrame(delta);
+		_player.HealthComponent.Heal(_player.CureSpeed * delta);
 	}
 	public override void ProcessPhysics(float delta)
 	{
@@ -32,8 +45,27 @@ public partial class InjectState : State
 	public override void HandleInput(InputEvent @event)
 	{
 		base.HandleInput(@event);
-	}
-	#endregion
-	#region STATE_HELPER
-	#endregion
+        if (@event.IsActionReleased(_player.InjectInput))
+        {
+            EmitSignal(SignalName.TransitionState, this, _idleState);
+        }
+    }
+    #endregion
+    #region STATE_HELPER
+
+    private void OnFlareAnimationFinished()
+    {
+        if (_player.CureFlare.Animation == "flareIntro")
+        {
+            _player.CureFlare.Play("flareLoop");
+        }
+        else if (_player.CureFlare.Animation == "flareEnd")
+        {
+            _player.CureFlare.Hide();
+            _player.CureFlareMask.Hide();
+			_player.CureFlare.Hide();
+            _player.CureFlareMask.Stop();
+        }
+    }
+    #endregion
 }
