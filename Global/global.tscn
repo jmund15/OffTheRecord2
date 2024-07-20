@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://dv3lw76rotapx"]
+
+[ext_resource type="Script" path="res://Global/Global.cs" id="1_5csow"]
+
+[node name="Global" type="Node"]
+script = ExtResource("1_5csow")
+CurrentBagMax = 1000000
+LightBagMaxPercentage = 0.1
+MediumBagMaxPercentage = 0.75
+MinCoinAmt = 1000
+OutsideBoundsAllowedTime = 5.0
+MaxCameraSize = Vector2(1000, 1000)
+UsePopFrames = true
+BasePopFrameLength = 0.25
+BasePostPopFrameLag = 0.05
+RollTimeRange = Vector2(0.5, 3)
+RollForceRange = Vector2(20000, 60000)
+RollDirAdjRange = Vector2(0.25, 1)
+FallTimeRange = Vector2(0.5, 1)
+FallForceRange = Vector2(5000, 15000)
+HitTimeRange = Vector2(0.25, 0.5)
+HitForceRange = Vector2(2500, 5000)
+CoinForceRange = Vector2(500, 750)

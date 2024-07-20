@@ -1,3 +1,21 @@
-[gd_scene format=3 uid="uid://b6kfo2gv2y5gu"]
+[gd_scene load_steps=4 format=3 uid="uid://b6kfo2gv2y5gu"]
 
-[node name="player" type="Node2D"]
+[ext_resource type="Script" path="res://Player/Player.cs" id="1_rfa52"]
+[ext_resource type="Script" path="res://Player/StateMachine/PlayerStateMachine.cs" id="1_xs2pe"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_p81xc"]
+radius = 50.0
+
+[node name="Player" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_rfa52")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_p81xc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="PlayerStateMachine" type="Node2D" parent="."]
+script = ExtResource("1_xs2pe")
+
+[node name="Idle" type="Node2D" parent="PlayerStateMachine"]
