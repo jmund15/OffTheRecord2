@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bsg4hbrhubdcx"]
+
+[ext_resource type="Script" path="res://BaseComponents/BreakableComponent.cs" id="1_7dnpm"]
+
+[node name="BreakableComponent" type="Node2D" node_paths=PackedStringArray("_nodesToShakeOnDamage")]
+script = ExtResource("1_7dnpm")
+_nodesToShakeOnDamage = []

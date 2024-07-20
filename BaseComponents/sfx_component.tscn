@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://0t30bwn4bwvo"]
+
+[ext_resource type="Script" path="res://BaseTopDownAssets/SfxComponent.cs" id="1_w6nm6"]
+
+[sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_7nh3x"]
+
+[node name="SfxComponent" type="AudioStreamPlayer2D"]
+stream = SubResource("AudioStreamPolyphonic_7nh3x")
+script = ExtResource("1_w6nm6")
