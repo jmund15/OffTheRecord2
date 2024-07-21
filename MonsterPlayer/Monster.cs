@@ -628,7 +628,7 @@ public partial class Monster : BasePlayer
 	{
         base._Process(delta);
         lastDeltaTime=delta;
-        GD.Print("current AI state: ", currentMainState, "\ntargetpos: ", AI_navAgent.TargetPosition);
+        GD.Print("current AI state: ", currentMainState, " \ntargetpos: ", AI_navAgent.TargetPosition);
         handleMainAIState();
         //AI_navAgent.TargetPosition = ProtagRef.Position; //Nav to Player
         //AI_makePath(ProtagRef.Position);
