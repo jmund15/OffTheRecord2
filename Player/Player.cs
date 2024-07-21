@@ -170,6 +170,8 @@ public partial class Player : BasePlayer, IDirectionComponent
 
     private void OnHealthChanged(HealthUpdate healthUpdate)
     {
+        //TODO: MAKE SOUND, DOES NOT CURRENTLY MAKE DAMAGE SOUNDS
+
         CurrLimbHealth = LimbHealthAmt - (healthUpdate.MaxHealth - healthUpdate.NewHealth);
         if (CurrLimbHealth <= 0)
         {
@@ -178,12 +180,18 @@ public partial class Player : BasePlayer, IDirectionComponent
             LimbCount--;
             if (LimbCount == 0)
             {
+                GD.Print("Tried to game over sound");
+                AudioStreamPlayer audioPlayer = GetParent().GetNode("Sound").GetNode("SFXDude").GetNode<AudioStreamPlayer>("sfx1");
+                audioPlayer.Play();
                 GameOver();
             }
             //GD.Print("before set max health");
             //HealthComponent.SetHea(healthUpdate.MaxHealth - LimbHealthAmt);
             HealthComponent.SetMaxHealth(healthUpdate.MaxHealth - LimbHealthAmt);
             //GD.Print("set max health");
+            AudioStreamPlayer audioPlayerover = GetParent().GetNode("Sound").GetNode("SFXDude").GetNode<AudioStreamPlayer>("sfx4");
+            audioPlayerover.Play();
+            GD.Print("Tried tp play damage sound");
             EmitSignal(SignalName.LoseLimb, LimbCount);
         }
         else

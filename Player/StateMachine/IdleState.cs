@@ -34,6 +34,8 @@ public partial class IdleState : State
         //AnimSprite = _player.AnimSprite;
         AnimSprite.Play(AnimName + _player.LimbCount + _player.LimbHealthAnimString[_player.CurrLimbHealthState]);
         _bufferingMovementTransition = false;
+        
+        
     }
     public override void Exit()
     {

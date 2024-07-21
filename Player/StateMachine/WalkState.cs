@@ -47,6 +47,8 @@ public partial class WalkState : State
     {
         base.Exit();
         AnimSprite.SpeedScale = 1.0f;
+        AudioStreamPlayer player = GetTree().Root.GetNode("MainScene").GetNode("Sound").GetNode("SFXDude").GetNode<AudioStreamPlayer>("sfx5");
+        player.Stop();
     }
     public override void ProcessFrame(float delta)
     {
@@ -64,6 +66,20 @@ public partial class WalkState : State
     {
         base.ProcessPhysics(delta);
         Body.Velocity = _inputDirection.Normalized() * _player.CalcMovementSpeed() * _player.CurrentSpeed * delta;
+
+        AudioStreamPlayer player = GetTree().Root.GetNode("MainScene").GetNode("Sound").GetNode("SFXDude").GetNode<AudioStreamPlayer>("sfx5");
+        
+
+        if (Body.Velocity.X != 0 || Body.Velocity.Y != 0)
+        {
+            if (!player.Playing) {
+                player.Play();
+            }
+        }
+        else if (player.Playing)
+        {
+            player.Stop();
+        }
         Body.MoveAndSlide();
 
         //var currRunPos = AnimSprite.CurrentAnimation == string.Empty ? 0.0 : AnimSprite.CurrentAnimationPosition;

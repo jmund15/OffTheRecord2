@@ -60,6 +60,9 @@ public partial class MainScene : Node2D
 
 		_finalCutscene = GetNode<AnimatedSprite2D>("FinalCutscene");
 		_finalCutscene.Hide();
+        AudioStreamPlayer player = GetNode("Sound").GetNode("Title").GetNode<AudioStreamPlayer>("TitleMusic");
+		player.Play();
+
     }
 
     private void OnAreaEntered(Area2D area)
@@ -90,7 +93,19 @@ public partial class MainScene : Node2D
 	}
 	private void TitlePlay()
 	{
-		var startTween = CreateTween();
+        AudioStreamPlayer playerTitle = GetNode("Sound").GetNode("Title").GetNode<AudioStreamPlayer>("TitleMusic");
+        playerTitle.Stop();
+
+        AudioStreamPlayer player = GetNode("Sound").GetNode("Music").GetNode<AudioStreamPlayer>("Area3");
+        player.Play();
+
+        AudioStreamPlayer playerAmb = GetNode("Sound").GetNode("SFXAmbient").GetNode<AudioStreamPlayer>("sfx3");
+        playerAmb.Play();
+
+        AudioStreamPlayer playerAmb2 = GetNode("Sound").GetNode("SFXAmbient").GetNode<AudioStreamPlayer>("sfx1");
+        playerAmb2.Play();
+
+        var startTween = CreateTween();
 		startTween.TweenProperty(_playButton, "modulate:a", 0.0f, 2.0f);
 		startTween.Parallel().TweenProperty(_titleScreen, "modulate:a", 0.0f, 2.0f);
 		startTween.Parallel().TweenProperty(_titleMonster, "modulate:a", 0.0f, 2.0f);

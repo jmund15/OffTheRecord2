@@ -1,6 +1,7 @@
-[gd_scene load_steps=94 format=3 uid="uid://cojv8vhqfb1ng"]
+[gd_scene load_steps=95 format=3 uid="uid://cojv8vhqfb1ng"]
 
 [ext_resource type="Script" path="res://Maps/MainScene.cs" id="1_n4sgp"]
+[ext_resource type="PackedScene" uid="uid://d1rek7wpult63" path="res://Sound/Sound.tscn" id="2_3ek6a"]
 [ext_resource type="PackedScene" uid="uid://b6kfo2gv2y5gu" path="res://Player/player.tscn" id="2_c5ctq"]
 [ext_resource type="PackedScene" uid="uid://bqm6beatqerf" path="res://UI/ui_main.tscn" id="3_jvd76"]
 [ext_resource type="PackedScene" uid="uid://cor37yh614dua" path="res://Environment/syringe.tscn" id="3_qvigc"]
@@ -551,6 +552,8 @@ size = Vector2(75, 50)
 [node name="MainScene" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_n4sgp")
+
+[node name="Sound" parent="." instance=ExtResource("2_3ek6a")]
 
 [node name="Player" parent="." instance=ExtResource("2_c5ctq")]
 position = Vector2(570, 230)
