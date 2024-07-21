@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3 uid="uid://cojv8vhqfb1ng"]
+[gd_scene load_steps=79 format=3 uid="uid://cojv8vhqfb1ng"]
 
 [ext_resource type="Script" path="res://Maps/MainScene.cs" id="1_n4sgp"]
 [ext_resource type="PackedScene" uid="uid://b6kfo2gv2y5gu" path="res://Player/player.tscn" id="2_c5ctq"]
@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://dv2dj0iabjbbe" path="res://Environment/map_path4.png" id="14_v1ahi"]
 [ext_resource type="PackedScene" uid="uid://cee77v5xttuxy" path="res://Environment/spec_candle.tscn" id="15_eufbt"]
 [ext_resource type="PackedScene" uid="uid://dpnqgboxxulsc" path="res://Environment/eye_flame.tscn" id="16_g1i6e"]
+[ext_resource type="PackedScene" uid="uid://d1rek7wpult63" path="res://Sound/Sound.tscn" id="23_h0ntk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g5ggo"]
 atlas = ExtResource("5_nro0c")
@@ -703,3 +704,5 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FinalArea"]
 position = Vector2(0, 5)
 shape = SubResource("RectangleShape2D_sqkpe")
+
+[node name="Sound" parent="." instance=ExtResource("23_h0ntk")]
