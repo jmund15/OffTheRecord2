@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dhttw5jj3nhmg"
+path="res://.godot/imported/Synthesized Insect, Bugs, Tinnitus, Loop 11 (AmbiX).wav-93f93d3b53565639fb82336d53b4197a.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Monster/Synthesized Insect, Bugs, Tinnitus, Loop 11 (AmbiX).wav"
+dest_files=["res://.godot/imported/Synthesized Insect, Bugs, Tinnitus, Loop 11 (AmbiX).wav-93f93d3b53565639fb82336d53b4197a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

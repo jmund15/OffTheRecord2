@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c3c7m8q7g8m5y"
+path="res://.godot/imported/Dumb Bro, Sad, Crying Vocalizations Quiet.wav-81368c7e38eb5afb1b5c613fa2d4785d.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Dude/Dumb Bro, Sad, Crying Vocalizations Quiet.wav"
+dest_files=["res://.godot/imported/Dumb Bro, Sad, Crying Vocalizations Quiet.wav-81368c7e38eb5afb1b5c613fa2d4785d.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

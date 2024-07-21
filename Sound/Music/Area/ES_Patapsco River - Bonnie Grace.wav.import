@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://caghlkr2j88re"
+path="res://.godot/imported/ES_Patapsco River - Bonnie Grace.wav-d5d4e51095d4da88b32ad0c856328aed.sample"
+
+[deps]
+
+source_file="res://Sound/Music/Area/ES_Patapsco River - Bonnie Grace.wav"
+dest_files=["res://.godot/imported/ES_Patapsco River - Bonnie Grace.wav-d5d4e51095d4da88b32ad0c856328aed.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

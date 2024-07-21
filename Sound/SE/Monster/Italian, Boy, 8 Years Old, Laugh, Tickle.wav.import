@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c3krlemyg0e3r"
+path="res://.godot/imported/Italian, Boy, 8 Years Old, Laugh, Tickle.wav-d0b4dbc73f8db02472fb04bb914cbbcd.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Monster/Italian, Boy, 8 Years Old, Laugh, Tickle.wav"
+dest_files=["res://.godot/imported/Italian, Boy, 8 Years Old, Laugh, Tickle.wav-d0b4dbc73f8db02472fb04bb914cbbcd.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

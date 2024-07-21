@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cpms40tpol62"
+path="res://.godot/imported/Harsh Tone.wav-0c7aaf330b325086a36505ceb23cc230.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Monster/Harsh Tone.wav"
+dest_files=["res://.godot/imported/Harsh Tone.wav-0c7aaf330b325086a36505ceb23cc230.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

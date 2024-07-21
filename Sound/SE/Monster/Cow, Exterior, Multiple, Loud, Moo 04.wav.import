@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://hrhwhx51j52e"
+path="res://.godot/imported/Cow, Exterior, Multiple, Loud, Moo 04.wav-b5764f29a14a59b8c49f06333c677d8c.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Monster/Cow, Exterior, Multiple, Loud, Moo 04.wav"
+dest_files=["res://.godot/imported/Cow, Exterior, Multiple, Loud, Moo 04.wav-b5764f29a14a59b8c49f06333c677d8c.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

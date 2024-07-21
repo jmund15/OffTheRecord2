@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cpuhdqia1g657"
+path="res://.godot/imported/Opel Combo C 2002, Panel Van, Key Into Door.wav-1bd834266e9634d3366414a851d274e6.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Monster/Opel Combo C 2002, Panel Van, Key Into Door.wav"
+dest_files=["res://.godot/imported/Opel Combo C 2002, Panel Van, Key Into Door.wav-1bd834266e9634d3366414a851d274e6.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

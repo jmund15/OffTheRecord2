@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://3efyx13wso1f"
+path="res://.godot/imported/ES_Story Is She Left Without a Trace - Trevor Kowalski.wav-da6e33fd02fcd72e4dc9ea17d107f7b3.sample"
+
+[deps]
+
+source_file="res://Sound/Music/Title/ES_Story Is She Left Without a Trace - Trevor Kowalski.wav"
+dest_files=["res://.godot/imported/ES_Story Is She Left Without a Trace - Trevor Kowalski.wav-da6e33fd02fcd72e4dc9ea17d107f7b3.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

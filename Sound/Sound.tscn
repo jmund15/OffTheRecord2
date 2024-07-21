@@ -1,0 +1,169 @@
+[gd_scene load_steps=39 format=3 uid="uid://d1rek7wpult63"]
+
+[ext_resource type="AudioStream" uid="uid://c6f6svopbxme" path="res://Sound/Music/Area/ES_Light-Footed - Bonnie Grace.wav" id="1_ex3ft"]
+[ext_resource type="AudioStream" uid="uid://caghlkr2j88re" path="res://Sound/Music/Area/ES_Patapsco River - Bonnie Grace.wav" id="2_rltpc"]
+[ext_resource type="AudioStream" uid="uid://cuec06fg1jk2l" path="res://Sound/Music/Area/ES_Tragedy Unfolds - Dream Cave.wav" id="3_npvet"]
+[ext_resource type="AudioStream" uid="uid://5lkwodvswaxt" path="res://Sound/Music/Area/ES_What Happened in the Lake House - Christian Andersen.wav" id="4_udfsk"]
+[ext_resource type="AudioStream" uid="uid://3efyx13wso1f" path="res://Sound/Music/Title/ES_Story Is She Left Without a Trace - Trevor Kowalski.wav" id="5_8c2vo"]
+[ext_resource type="AudioStream" uid="uid://dqbt8mcu6aerf" path="res://Sound/SE/Monster/Animal, Sheep, Group Heavy Breathing.wav" id="5_qmhkj"]
+[ext_resource type="AudioStream" uid="uid://bcj8pjt0ka8k2" path="res://Sound/SE/Monster/Cartoon, Toy, Evil Laugh, Speaker.wav" id="6_7d186"]
+[ext_resource type="AudioStream" uid="uid://chbi5oeoj5gg5" path="res://Sound/Music/End/ES_Ancient Spells - Ruiqi Zhao.wav" id="6_okjtu"]
+[ext_resource type="AudioStream" uid="uid://cjo8j043xwud1" path="res://Sound/Music/End/ES_Dark Dealings - Phoenix Tail.wav" id="7_ll6dq"]
+[ext_resource type="AudioStream" uid="uid://6sfw2xd6761a" path="res://Sound/SE/Monster/Cash Register, Kaching, Bell, Metallic, Variations 01.wav" id="7_xpfup"]
+[ext_resource type="AudioStream" uid="uid://hrhwhx51j52e" path="res://Sound/SE/Monster/Cow, Exterior, Multiple, Loud, Moo 04.wav" id="8_pmw4m"]
+[ext_resource type="AudioStream" uid="uid://dvk1yn2f0nhve" path="res://Sound/SE/Monster/Crying, Whimper, Squeal, Groans.wav" id="9_qlq47"]
+[ext_resource type="AudioStream" uid="uid://n78nu3ndmu5" path="res://Sound/SE/Monster/Female Scream, Perspective, Frightened 01.wav" id="10_x8ar7"]
+[ext_resource type="AudioStream" uid="uid://bth58maof6m4x" path="res://Sound/SE/Monster/Gorilla, Vocalizations 03.wav" id="11_83w1p"]
+[ext_resource type="AudioStream" uid="uid://dot7ktjh52qtk" path="res://Sound/SE/Monster/Handwriting, Pen On Notebook, Letter K.wav" id="12_2oyck"]
+[ext_resource type="AudioStream" uid="uid://cpms40tpol62" path="res://Sound/SE/Monster/Harsh Tone.wav" id="13_gsymf"]
+[ext_resource type="AudioStream" uid="uid://carn1g1hq6676" path="res://Sound/SE/Monster/Hit, Strings, Granular Madness, Long, Creepy, Horror 04.wav" id="14_067fc"]
+[ext_resource type="AudioStream" uid="uid://bb7k1fykkb5d1" path="res://Sound/SE/Monster/Horror Howl, Siren, Freaky, Reverb 02.wav" id="15_60uoa"]
+[ext_resource type="AudioStream" uid="uid://s347x174abwl" path="res://Sound/SE/Monster/Humanoid Insect, Stuttery, Neutral Expressions, Variations.wav" id="16_4llfs"]
+[ext_resource type="AudioStream" uid="uid://c3krlemyg0e3r" path="res://Sound/SE/Monster/Italian, Boy, 8 Years Old, Laugh, Tickle.wav" id="17_ervyr"]
+[ext_resource type="AudioStream" uid="uid://bd00py27g7re" path="res://Sound/SE/Monster/Jittery, Granular, Distorted, Experimental 01.wav" id="18_xvb3q"]
+[ext_resource type="AudioStream" uid="uid://ds06erv4b0qdh" path="res://Sound/SE/Monster/Male In Pain, Squeezing.wav" id="19_3rr7s"]
+[ext_resource type="AudioStream" uid="uid://baifv5sukc63y" path="res://Sound/SE/Monster/Male, Type 04, Amused, Happy, Mocking 03.wav" id="20_n8k2t"]
+[ext_resource type="AudioStream" uid="uid://cpuhdqia1g657" path="res://Sound/SE/Monster/Opel Combo C 2002, Panel Van, Key Into Door.wav" id="21_lrhoi"]
+[ext_resource type="AudioStream" uid="uid://dsk8hcyi6xx37" path="res://Sound/SE/Monster/PA Speaker Norwegian, Announce Of Test Alarm, Oil Rig, Perspective 2.wav" id="22_4n5rr"]
+[ext_resource type="AudioStream" uid="uid://djfyyo51ogc2b" path="res://Sound/SE/Monster/Sharp, Evil, Reverberant.wav" id="23_fi2kt"]
+[ext_resource type="AudioStream" uid="uid://dhttw5jj3nhmg" path="res://Sound/SE/Monster/Synthesized Insect, Bugs, Tinnitus, Loop 11 (AmbiX).wav" id="24_l1aax"]
+[ext_resource type="AudioStream" uid="uid://c6btrg4yqpsou" path="res://Sound/SE/Monster/T Rex, Low Roar, Designed.wav" id="25_bhygs"]
+[ext_resource type="AudioStream" uid="uid://b1yg6dwx1caj1" path="res://Sound/SE/Monster/Type 03, Female, Mocking, Happy 04.wav" id="26_ihq36"]
+[ext_resource type="AudioStream" uid="uid://dxudf8gbaq7a3" path="res://Sound/SE/Monster/Whispering, Male, Close Up, Many Voices.wav" id="27_2rmje"]
+[ext_resource type="AudioStream" uid="uid://cht4vmsi52siy" path="res://Sound/SE/Monster/Wood Chair, Drag, Scuff, Screech, Squeak, Argentina.wav" id="28_515b0"]
+[ext_resource type="AudioStream" uid="uid://diptduh34vir2" path="res://Sound/SE/Ambient/Force, Eerie, Space, Evolving.wav" id="29_sbu1a"]
+[ext_resource type="AudioStream" uid="uid://pgaq75eh04wn" path="res://Sound/SE/Ambient/Toads, Crickets, Water Drip & Movement, Night, Argentina.wav" id="30_satpc"]
+[ext_resource type="AudioStream" uid="uid://2hnaym65e1jg" path="res://Sound/SE/Ambient/Underground, Hits, Behind Wall, Longer Reverb, Loop.wav" id="31_265rf"]
+[ext_resource type="AudioStream" uid="uid://bmheyfvhcgsic" path="res://Sound/SE/Dude/Damage, Strangling, Choking, Dying 04.wav" id="32_p8qe6"]
+[ext_resource type="AudioStream" uid="uid://c3c7m8q7g8m5y" path="res://Sound/SE/Dude/Dumb Bro, Sad, Crying Vocalizations Quiet.wav" id="33_koo6q"]
+[ext_resource type="AudioStream" uid="uid://bldfy5lry0fsy" path="res://Sound/SE/Dude/Male, Loud Screams.wav" id="34_17rlt"]
+[ext_resource type="AudioStream" uid="uid://bxeo766xd2ajs" path="res://Sound/SE/Dude/Type 03, Damaged, Combat, Pain, Short, Video Game 03.wav" id="35_t0l8a"]
+
+[node name="Sound" type="Node"]
+
+[node name="Music" type="Node" parent="."]
+
+[node name="Area1" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource("1_ex3ft")
+
+[node name="Area2" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource("2_rltpc")
+
+[node name="Area3" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource("3_npvet")
+
+[node name="Area4" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource("4_udfsk")
+
+[node name="SFXMonster" type="Node" parent="."]
+
+[node name="sfx1" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("5_qmhkj")
+
+[node name="sfx2" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("6_7d186")
+
+[node name="sfx3" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("7_xpfup")
+
+[node name="sfx4" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("8_pmw4m")
+
+[node name="sfx5" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("9_qlq47")
+
+[node name="sfx6" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("10_x8ar7")
+
+[node name="sfx7" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("11_83w1p")
+
+[node name="sfx8" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("12_2oyck")
+
+[node name="sfx9" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("13_gsymf")
+
+[node name="sfx10" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("14_067fc")
+
+[node name="sfx11" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("15_60uoa")
+
+[node name="sfx12" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("16_4llfs")
+
+[node name="sfx13" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("17_ervyr")
+
+[node name="sfx14" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("18_xvb3q")
+
+[node name="sfx15" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("19_3rr7s")
+
+[node name="sfx16" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("20_n8k2t")
+
+[node name="sfx17" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("21_lrhoi")
+
+[node name="sfx18" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("22_4n5rr")
+
+[node name="sfx19" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("23_fi2kt")
+
+[node name="sfx20" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("24_l1aax")
+
+[node name="sfx21" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("25_bhygs")
+
+[node name="sfx22" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("26_ihq36")
+
+[node name="sfx23" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("27_2rmje")
+
+[node name="sfx24" type="AudioStreamPlayer" parent="SFXMonster"]
+stream = ExtResource("28_515b0")
+
+[node name="SFXAmbient" type="Node" parent="."]
+
+[node name="sfx1" type="AudioStreamPlayer" parent="SFXAmbient"]
+stream = ExtResource("29_sbu1a")
+
+[node name="sfx2" type="AudioStreamPlayer" parent="SFXAmbient"]
+stream = ExtResource("30_satpc")
+
+[node name="sfx3" type="AudioStreamPlayer" parent="SFXAmbient"]
+stream = ExtResource("31_265rf")
+
+[node name="SFXDude" type="Node" parent="."]
+
+[node name="sfx1" type="AudioStreamPlayer" parent="SFXDude"]
+stream = ExtResource("32_p8qe6")
+volume_db = -18.916
+
+[node name="sfx2" type="AudioStreamPlayer" parent="SFXDude"]
+stream = ExtResource("33_koo6q")
+
+[node name="sfx3" type="AudioStreamPlayer" parent="SFXDude"]
+stream = ExtResource("34_17rlt")
+
+[node name="sfx4" type="AudioStreamPlayer" parent="SFXDude"]
+stream = ExtResource("35_t0l8a")
+
+[node name="Title" type="Node" parent="."]
+
+[node name="TitleMusic" type="AudioStreamPlayer" parent="Title"]
+stream = ExtResource("5_8c2vo")
+
+[node name="End" type="Node" parent="."]
+
+[node name="EndMusic1" type="AudioStreamPlayer" parent="End"]
+stream = ExtResource("6_okjtu")
+
+[node name="EndMusic2" type="AudioStreamPlayer" parent="End"]
+stream = ExtResource("7_ll6dq")

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cjo8j043xwud1"
+path="res://.godot/imported/ES_Dark Dealings - Phoenix Tail.wav-d9232748c1882f0b295e9d02461e1089.sample"
+
+[deps]
+
+source_file="res://Sound/Music/End/ES_Dark Dealings - Phoenix Tail.wav"
+dest_files=["res://.godot/imported/ES_Dark Dealings - Phoenix Tail.wav-d9232748c1882f0b295e9d02461e1089.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

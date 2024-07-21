@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bxeo766xd2ajs"
+path="res://.godot/imported/Type 03, Damaged, Combat, Pain, Short, Video Game 03.wav-f64a0c9511479c4c3e05082a1241eda7.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Dude/Type 03, Damaged, Combat, Pain, Short, Video Game 03.wav"
+dest_files=["res://.godot/imported/Type 03, Damaged, Combat, Pain, Short, Video Game 03.wav-f64a0c9511479c4c3e05082a1241eda7.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

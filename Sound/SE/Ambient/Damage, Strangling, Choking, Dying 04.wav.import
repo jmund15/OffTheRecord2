@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://lxa35jjq3ila"
+path="res://.godot/imported/Damage, Strangling, Choking, Dying 04.wav-c9f81702b3be8a6a5410f48527e1b9f2.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Ambient/Damage, Strangling, Choking, Dying 04.wav"
+dest_files=["res://.godot/imported/Damage, Strangling, Choking, Dying 04.wav-c9f81702b3be8a6a5410f48527e1b9f2.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

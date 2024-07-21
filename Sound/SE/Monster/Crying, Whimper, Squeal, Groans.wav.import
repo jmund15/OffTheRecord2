@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dvk1yn2f0nhve"
+path="res://.godot/imported/Crying, Whimper, Squeal, Groans.wav-563d7678bc6508e58e205125f8267cbf.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Monster/Crying, Whimper, Squeal, Groans.wav"
+dest_files=["res://.godot/imported/Crying, Whimper, Squeal, Groans.wav-563d7678bc6508e58e205125f8267cbf.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

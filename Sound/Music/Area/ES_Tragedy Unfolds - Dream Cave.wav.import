@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cuec06fg1jk2l"
+path="res://.godot/imported/ES_Tragedy Unfolds - Dream Cave.wav-633e0ff25aedb23c2f9b13f4892367a5.sample"
+
+[deps]
+
+source_file="res://Sound/Music/Area/ES_Tragedy Unfolds - Dream Cave.wav"
+dest_files=["res://.godot/imported/ES_Tragedy Unfolds - Dream Cave.wav-633e0ff25aedb23c2f9b13f4892367a5.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

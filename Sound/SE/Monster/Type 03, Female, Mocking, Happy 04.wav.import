@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b1yg6dwx1caj1"
+path="res://.godot/imported/Type 03, Female, Mocking, Happy 04.wav-ca4ce617db79799bb597364e80570d57.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Monster/Type 03, Female, Mocking, Happy 04.wav"
+dest_files=["res://.godot/imported/Type 03, Female, Mocking, Happy 04.wav-ca4ce617db79799bb597364e80570d57.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
