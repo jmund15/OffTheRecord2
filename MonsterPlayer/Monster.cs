@@ -168,6 +168,8 @@ public partial class Monster : BasePlayer
     //Distance to charge from
     private const double CHARGE_DIST = 50; //TODO: Find distance to charge from.
 
+   
+
 
     #region AI_SUB_FUNC
     private void AI_chaseState()
@@ -464,18 +466,9 @@ public partial class Monster : BasePlayer
         bool toyDone = false;
         switch (currentSubState)
         {
-            case (int)AI_SUB_TOY_WITH_STATE.BE_IN_FRONT_OF:
-                //Teleport to point infront of player offscreen
-                toyDone = true; //Set ToyDone since effect is good
-                break;
-
-            case (int)AI_SUB_TOY_WITH_STATE.SHAPE_FLICKER:
-                //Change Sprite for a frame or two while on screen
-                toyDone = true; //Set ToyDone since effect is good
-                break;
-
             case (int)AI_SUB_TOY_WITH_STATE.MAKE_SOUND:
                 //Play Audio clip
+                AI_Audio(Rnd.Next(1,25));
                 toyDone = true; //Set ToyDone since effect is good
                 break;
         }
@@ -640,7 +633,7 @@ public partial class Monster : BasePlayer
             storeSubState = currentSubState;
 
             //Change to a toy state
-            changeMainState(AI_MAIN_BEHAVIOR_STATE.TOY_WITH, (int)Rnd.Next(0, Enum.GetNames(typeof(AI_SUB_TOY_WITH_STATE)).Length));
+            changeMainState(AI_MAIN_BEHAVIOR_STATE.TOY_WITH, 2);
 
         }
         switch (CurrentMainState)
@@ -694,7 +687,7 @@ public partial class Monster : BasePlayer
     private void rollAIState()
     {
         AI_MAIN_BEHAVIOR_STATE main = (AI_MAIN_BEHAVIOR_STATE)Rnd.Next(0, 6);
-        int subState = (int)main == 2 ? Rnd.Next(0, 3) : 0; //Randomize if toy with
+        int subState = (int)main == 2 ? 2 : 0; //Randomize if toy with
         if (main == AI_MAIN_BEHAVIOR_STATE.TOY_WITH) { lastMainState = main; }
         changeMainState(main, subState);
     }
@@ -789,6 +782,13 @@ public partial class Monster : BasePlayer
         _pathCalcTimer.Start();
     }
 
+    private void AI_Audio(int audioID)
+    {
+        GD.Print("Trying to play audio");
+        AudioStreamPlayer player = GetParent().GetNode("Sound").GetNode("SFXMonster").GetNode<AudioStreamPlayer>("sfx"+audioID);
+        GD.Print(player.Name);
+        player.Play();
+    }
 
     private double randInRange(double min, double max)
     {

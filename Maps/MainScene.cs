@@ -54,6 +54,9 @@ public partial class MainScene : Node2D
         _player.InCutscene = true;
 		_monster.Hide();
 		_player.Hide();
+
+        AudioStreamPlayer player = GetNode("Sound").GetNode("Title").GetNode<AudioStreamPlayer>("TitleMusic");
+		player.Play();
     }
 
     private void OnAreaEntered(Area2D area)
@@ -80,7 +83,13 @@ public partial class MainScene : Node2D
 	}
 	private void TitlePlay()
 	{
-		var startTween = CreateTween();
+        AudioStreamPlayer playerTitle = GetNode("Sound").GetNode("Title").GetNode<AudioStreamPlayer>("TitleMusic");
+        playerTitle.Stop();
+
+        AudioStreamPlayer player = GetNode("Sound").GetNode("Music").GetNode<AudioStreamPlayer>("Area3");
+        player.Play();
+
+        var startTween = CreateTween();
 		startTween.TweenProperty(_playButton, "modulate:a", 0.0f, 2.0f);
 		startTween.Parallel().TweenProperty(_titleScreen, "modulate:a", 0.0f, 2.0f);
 		startTween.Parallel().TweenProperty(_titleMonster, "modulate:a", 0.0f, 2.0f);

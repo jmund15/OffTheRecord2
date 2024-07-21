@@ -51,6 +51,7 @@ stream = ExtResource("2_rltpc")
 
 [node name="Area3" type="AudioStreamPlayer" parent="Music"]
 stream = ExtResource("3_npvet")
+volume_db = -13.117
 
 [node name="Area4" type="AudioStreamPlayer" parent="Music"]
 stream = ExtResource("4_udfsk")
