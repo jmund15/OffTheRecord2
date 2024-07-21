@@ -13,7 +13,6 @@ public partial class PlayerStateMachine : CompoundState
     private LoseLimbState _loseLimbState;
     public override void Init(CharacterBody2D body, AnimatedSprite2D animPlayer)
     {
-        base._Ready();
         if (body is not Player player) 
         {
             GD.PrintErr("ROBBER STATE MACHINE INIT ERROR || Body MUST be of type Player!");

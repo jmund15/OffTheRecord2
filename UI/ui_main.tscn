@@ -145,24 +145,29 @@ offset_bottom = 40.0
 scale = Vector2(2, 2)
 
 [node name="Syringe1" parent="SyringeUI" instance=ExtResource("2_wacw6")]
+layout_mode = 0
 texture = SubResource("AtlasTexture_yxml8")
 
 [node name="Syringe2" parent="SyringeUI" instance=ExtResource("2_wacw6")]
+layout_mode = 0
 offset_left = 40.0
 offset_right = 80.0
 texture = SubResource("AtlasTexture_grsnb")
 
 [node name="Syringe3" parent="SyringeUI" instance=ExtResource("2_wacw6")]
+layout_mode = 0
 offset_left = 80.0
 offset_right = 120.0
 texture = SubResource("AtlasTexture_o1ti1")
 
 [node name="Syringe4" parent="SyringeUI" instance=ExtResource("2_wacw6")]
+layout_mode = 0
 offset_left = 120.0
 offset_right = 160.0
 texture = SubResource("AtlasTexture_fmlg6")
 
 [node name="Syringe5" parent="SyringeUI" instance=ExtResource("2_wacw6")]
+layout_mode = 0
 offset_left = 160.0
 offset_right = 200.0
 texture = SubResource("AtlasTexture_wlwoe")
@@ -178,21 +183,25 @@ grow_horizontal = 0
 scale = Vector2(2, 2)
 
 [node name="FirstArm" type="TextureRect" parent="BodyUI"]
+layout_mode = 0
 offset_right = 64.0
 offset_bottom = 64.0
 texture = ExtResource("5_nyenx")
 
 [node name="FirstLeg" type="TextureRect" parent="BodyUI"]
+layout_mode = 0
 offset_right = 64.0
 offset_bottom = 64.0
 texture = ExtResource("6_3dr35")
 
 [node name="FinalLeg" type="TextureRect" parent="BodyUI"]
+layout_mode = 0
 offset_right = 64.0
 offset_bottom = 64.0
 texture = ExtResource("7_8qsij")
 
 [node name="FinalArm" type="TextureRect" parent="BodyUI"]
+layout_mode = 0
 offset_right = 64.0
 offset_bottom = 64.0
 texture = ExtResource("4_ptgk5")

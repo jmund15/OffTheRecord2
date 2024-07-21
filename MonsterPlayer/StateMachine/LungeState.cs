@@ -35,7 +35,9 @@ public partial class LungeState : State
 	public override void ProcessPhysics(float delta)
 	{
 		base.ProcessPhysics(delta);
-	}
+        Body.Velocity = _monster.GetDesiredDirectionNormalized() * _monster.CalcMovementSpeed() * Monster.LungeSpeed * delta;
+        Body.MoveAndSlide();
+    }
 	public override void HandleInput(InputEvent @event)
 	{
 		base.HandleInput(@event);
@@ -43,7 +45,7 @@ public partial class LungeState : State
     #endregion
     #region STATE_HELPER
     private void OnAnimationFinished()
-     {
+    {
         EmitSignal(SignalName.TransitionState, this, _idleState);
     }
     #endregion

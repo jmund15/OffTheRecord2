@@ -34,7 +34,7 @@ public partial class Global : Node
         SignalBus = GetNode<Events>("/root/Events");
         MainScene = GetNode<MainScene>("/root/MainScene");
         Player = MainScene.GetNode<Player>("Player");
-        //Monster = MainScene.GetNode<Monster>("Monster");
+        Monster = MainScene.GetNode<Monster>("Monster");
     }
     public void FreezeEffect(float freezeTime)
     {

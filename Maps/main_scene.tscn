@@ -1,15 +1,62 @@
-[gd_scene load_steps=5 format=3 uid="uid://cojv8vhqfb1ng"]
+[gd_scene load_steps=10 format=3 uid="uid://cojv8vhqfb1ng"]
 
 [ext_resource type="Script" path="res://Maps/MainScene.cs" id="1_n4sgp"]
 [ext_resource type="PackedScene" uid="uid://b6kfo2gv2y5gu" path="res://Player/player.tscn" id="2_c5ctq"]
 [ext_resource type="PackedScene" uid="uid://bqm6beatqerf" path="res://UI/ui_main.tscn" id="3_jvd76"]
 [ext_resource type="PackedScene" uid="uid://cor37yh614dua" path="res://Environment/syringe.tscn" id="3_qvigc"]
+[ext_resource type="PackedScene" uid="uid://y1h0pfsimpyl" path="res://MonsterPlayer/monster.tscn" id="5_ptm6a"]
+[ext_resource type="Texture2D" uid="uid://b8ftyj8umt8oc" path="res://Environment/placeholder_tiles.png" id="6_h2klo"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_naktp"]
+vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)])
+source_geometry_group_name = &"navigation_polygon_source_group"
+agent_radius = 0.0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0nepk"]
+texture = ExtResource("6_h2klo")
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_naktp")
+1:0/0 = 0
+1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:0/0/physics_layer_0/angular_velocity = 0.0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:0/0 = 0
+2:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:0/0/physics_layer_0/angular_velocity = 0.0
+3:0/0 = 0
+3:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:0/0/physics_layer_0/angular_velocity = 0.0
+4:0/0 = 0
+4:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+4:0/0/physics_layer_0/angular_velocity = 0.0
+2:1/0 = 0
+2:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:1/0/physics_layer_0/angular_velocity = 0.0
+3:1/0 = 0
+3:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:1/0/physics_layer_0/angular_velocity = 0.0
+4:1/0 = 0
+4:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+4:1/0/physics_layer_0/angular_velocity = 0.0
+
+[sub_resource type="TileSet" id="TileSet_iweqt"]
+physics_layer_0/collision_layer = 16
+physics_layer_0/collision_mask = 3
+navigation_layer_0/layers = 1
+sources/0 = SubResource("TileSetAtlasSource_0nepk")
 
 [node name="MainScene" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_n4sgp")
 
 [node name="Player" parent="." instance=ExtResource("2_c5ctq")]
+
+[node name="Monster" parent="." instance=ExtResource("5_ptm6a")]
+position = Vector2(-75, 45)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(5, 5)
@@ -18,16 +65,15 @@ zoom = Vector2(5, 5)
 layer = 100
 
 [node name="UI" parent="CanvasLayer" instance=ExtResource("3_jvd76")]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="MapManager" type="Node2D" parent="."]
 y_sort_enabled = true
 
 [node name="Syringe" parent="MapManager" instance=ExtResource("3_qvigc")]
 position = Vector2(-61, -13)
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_iweqt")
+format = 2
+layer_0/z_index = -1
+layer_0/tile_data = PackedInt32Array(131071, 0, 0, 65535, 0, 0, -1, 0, 0, -65536, 0, 0, 0, 0, 0, 65536, 0, 0, -131076, 0, 0, -65540, 65536, 0, -4, 65536, 0, 65532, 65536, 0, 131068, 0, 0, 196604, 0, 0, 262140, 0, 0, -131075, 0, 0, -65539, 65536, 0, -3, 65536, 0, 65533, 65536, 0, 131069, 0, 0, 196605, 0, 0, 262141, 0, 0, -131074, 0, 0, -65538, 0, 0, -2, 0, 0, 65534, 0, 0, 131070, 0, 0, 196606, 0, 0, 262142, 65536, 0, -131073, 0, 0, -65537, 0, 0, 196607, 0, 0, -196608, 0, 0, -131072, 0, 0, 131072, 0, 0, 196608, 0, 0, -196607, 0, 0, -131071, 0, 0, -65535, 0, 0, 1, 0, 0, 65537, 0, 0, 131073, 65536, 0, 196609, 0, 0, -196606, 0, 0, -131070, 0, 0, -65534, 0, 0, 2, 0, 0, 65538, 0, 0, 131074, 65536, 0, 196610, 0, 0, -196605, 0, 0, -131069, 0, 0, -65533, 0, 0, 3, 0, 0, 65539, 0, 0, 131075, 65536, 0, 196611, 0, 0, -196604, 65536, 0, -131068, 65536, 0, -65532, 0, 0, 4, 0, 0, 65540, 0, 0, 131076, 65536, 0, 196612, 0, 0, -196603, 65536, 0, -131067, 65536, 0, -65531, 0, 0, 5, 0, 0, 65541, 0, 0, 131077, 65536, 0, 196613, 0, 0, -196602, 0, 0, -131066, 0, 0, -65530, 0, 0, 6, 0, 0, 65542, 0, 0, 131078, 0, 0, 196614, 0, 0, -196615, 0, 0, -131079, 0, 0, -65543, 0, 0, -7, 0, 0, 65529, 0, 0, 131065, 0, 0, 196601, 0, 0, 262137, 0, 0, -196614, 0, 0, -131078, 0, 0, -65542, 0, 0, -6, 0, 0, 65530, 0, 0, 131066, 0, 0, 196602, 0, 0, 262138, 0, 0, -196613, 0, 0, -131077, 0, 0, -65541, 0, 0, -5, 0, 0, 65531, 0, 0, 131067, 0, 0, 196603, 0, 0, 262139, 0, 0, -196612, 0, 0, -196611, 0, 0, -196610, 0, 0, -196609, 0, 0, -262144, 0, 0, -262143, 0, 0, -262142, 0, 0, -262141, 0, 0, -262140, 0, 0, -262139, 0, 0, -262138, 0, 0, 262143, 0, 0)

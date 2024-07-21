@@ -7,7 +7,7 @@ public partial class MonsterIdleState : State
 
     private Monster _monster;
     [Export]
-    private WalkState _walkState;
+    private MonsterWalkState _walkState;
     [Export]
     private LungeState _lungeState;
 
@@ -24,7 +24,7 @@ public partial class MonsterIdleState : State
         base.Enter(parallelStates);
         _monster.CanMove = true;
         //AnimSprite = _monster.AnimSprite;
-        AnimSprite.Play(AnimName + _monster.LimbCount + _monster.LimbHealthAnimString[_monster.CurrLimbHealthState]);
+        AnimSprite.Play(AnimName + _monster.LimbCount);
     }
     public override void Exit()
     {
@@ -34,6 +34,7 @@ public partial class MonsterIdleState : State
     {
         base.ProcessFrame(delta);
         _inputDirection = DirectionComponent.GetDesiredDirection();
+        GD.Print("monster input dir: ", _inputDirection);
         if (!_inputDirection.IsZeroApprox())
         {
             EmitSignal(SignalName.TransitionState, this, _walkState);

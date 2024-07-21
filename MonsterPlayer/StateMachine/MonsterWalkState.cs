@@ -11,7 +11,7 @@ public partial class MonsterWalkState : State
     private Monster _monster;
 
     [Export]
-    private IdleState _idleState;
+    private MonsterIdleState _idleState;
     [Export]
     private LungeState _lungeState;
 
@@ -33,7 +33,7 @@ public partial class MonsterWalkState : State
         _inputDirection = DirectionComponent.GetDesiredDirectionNormalized();
         _faceDirection = IDirectionComponent.GetDirectionFromVector(_inputDirection);
 
-        AnimSprite.Play(AnimName + _monster.LimbCount + _monster.LimbHealthAnimString[_monster.CurrLimbHealthState]);
+        AnimSprite.Play(AnimName + _monster.LimbCount);
     }
     public override void Exit()
     {

@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://bcgoqy4qrti0c" path="res://Player/cure_flame_texture.png" id="14_jav7i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cfjgy"]
-size = Vector2(15, 25)
+size = Vector2(10, 12)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jskeu"]
 atlas = ExtResource("4_gmf7r")
@@ -260,8 +260,7 @@ AfflictionRate = 50.0
 SeveredLimbScene = ExtResource("2_o7ou7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(0, 5)
+position = Vector2(0, 11)
 shape = SubResource("RectangleShape2D_cfjgy")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

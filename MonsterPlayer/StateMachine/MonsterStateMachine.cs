@@ -5,7 +5,6 @@ using System;
 public partial class MonsterStateMachine : CompoundState
 {
     private Monster _monster;
-    private HealthComponent _healthComponent;
     private HurtboxComponent _hurtboxComponent;
     private HitboxComponent _hitboxComponent;
 
@@ -13,20 +12,17 @@ public partial class MonsterStateMachine : CompoundState
     private DevourLimbState _devourLimbState;
     [Export(PropertyHint.NodeType, "State")]
     private LungeState _lungeState;
-    public override void Init(CharacterBody2D body, AnimatedSprite2D animPlayer)
+    public override void Init(CharacterBody2D body, AnimatedSprite2D animSprite)
     {
-        base._Ready();
-        if (body is not Player player)
+        if (body is not Monster monster)
         {
-            GD.PrintErr("ROBBER STATE MACHINE INIT ERROR || Body MUST be of type Player!");
-            throw new Exception("ROBBER STATE MACHINE INIT ERROR || Body MUST be of type Player!");
-            //return;
+            GD.PrintErr("MONSTER STATE MACHINE INIT ERROR || Body MUST be of type Monster!");
+            throw new Exception("MONSTER STATE MACHINE INIT ERROR || Body MUST be of type Monster!");
         }
-        _monster = Body as Monster;
-        _healthComponent = player.HealthComponent;
-        _hurtboxComponent = player.HurtboxComponent;
-        _hitboxComponent = player.HitboxComponent;
-        base.Init(body, animPlayer);
+        _monster = body as Monster;
+        _hurtboxComponent = monster.HurtboxComponent;
+        _hitboxComponent = monster.HitboxComponent;
+        base.Init(body, animSprite);
     }
     public override void Enter(Dictionary<State, bool> parallelStates)
     {

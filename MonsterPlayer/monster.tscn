@@ -576,6 +576,8 @@ animations = [{
 [node name="Monster" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 31
+motion_mode = 1
+wall_min_slide_angle = 0.0
 script = ExtResource("1_016xf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -589,20 +591,40 @@ animation = &"lunge3"
 frame = 6
 frame_progress = 1.0
 
-[node name="StateMachine" type="Node2D" parent="."]
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_max_distance = 1000.0
+avoidance_enabled = true
+debug_enabled = true
+debug_use_custom = true
+debug_path_custom_color = Color(1, 0, 0, 1)
+
+[node name="StateMachine" type="Node2D" parent="." node_paths=PackedStringArray("_devourLimbState", "_lungeState", "InitialSubState")]
 script = ExtResource("2_2hh28")
+_devourLimbState = NodePath("DevourLimb")
+_lungeState = NodePath("Lunge")
+InitialSubState = NodePath("Idle")
 
-[node name="Idle" type="Node2D" parent="StateMachine"]
+[node name="Idle" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_walkState", "_lungeState")]
 script = ExtResource("4_jsw28")
+_walkState = NodePath("../Walk")
+_lungeState = NodePath("../Lunge")
+AnimName = "idle"
 
-[node name="Walk" type="Node2D" parent="StateMachine"]
+[node name="Walk" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_idleState", "_lungeState")]
 script = ExtResource("5_ofrq7")
+_idleState = NodePath("../Idle")
+_lungeState = NodePath("../Lunge")
+AnimName = "walk"
 
-[node name="Lunge" type="Node2D" parent="StateMachine"]
+[node name="Lunge" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_idleState")]
 script = ExtResource("5_tcycv")
+_idleState = NodePath("../Idle")
+AnimName = "lunge"
 
-[node name="DevourLimb" type="Node2D" parent="StateMachine"]
+[node name="DevourLimb" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_idleState")]
 script = ExtResource("6_vucin")
+_idleState = NodePath("../Idle")
+AnimName = "devour"
 
 [node name="HitboxComponent" type="Area2D" parent="."]
 collision_layer = 2
@@ -613,3 +635,5 @@ visible = false
 
 [node name="HurtboxComponent" type="Area2D" parent="."]
 script = ExtResource("9_l8tdl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]

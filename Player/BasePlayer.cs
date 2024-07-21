@@ -10,7 +10,7 @@ public abstract partial class BasePlayer : CharacterBody2D, IDirectionComponent
     protected Global Global;
     public int LimbCount { get; set; } = 4;
 
-    protected PlayerStateMachine _stateMachine;
+    protected CompoundState _stateMachine;
     protected Dictionary<State, bool> _parallelStateMachines = new Dictionary<State, bool>();
     public State PrimaryState { get; protected set; }
     public Dictionary<State, bool> ParallelStates { get; protected set; }
@@ -21,12 +21,11 @@ public abstract partial class BasePlayer : CharacterBody2D, IDirectionComponent
     public Sprite2D Shadow { get; protected set; }
     public Vector2 BaseShadowPos { get; protected set; } = new Vector2();
 
-    public HealthComponent HealthComponent { get; protected set; }
     public HurtboxComponent HurtboxComponent { get; protected set; }
     public HitboxComponent HitboxComponent { get; protected set; }
 
 
-    public const float WalkSpeed = 2500f;
+    public const float WalkSpeed = 3000f;
 
     public const float MovementTransitionBufferTime = 0.1f;
     #endregion
@@ -38,7 +37,6 @@ public abstract partial class BasePlayer : CharacterBody2D, IDirectionComponent
         Global = GetNode<Global>("/root/Global");
 
         AnimSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-        HealthComponent = GetNode<HealthComponent>("HealthComponent");
         HurtboxComponent = GetNode<HurtboxComponent>("HurtboxComponent");
         //_hurtboxCapsuleShape = HurtboxComponent.CollisionShape.Shape as CapsuleShape2D;
         HitboxComponent = GetNode<HitboxComponent>("HitboxComponent");
@@ -82,7 +80,7 @@ public abstract partial class BasePlayer : CharacterBody2D, IDirectionComponent
     #region HELPER_FUNCTIONS
     public virtual void InitStateMachine()
     {
-        _stateMachine = GetNode<PlayerStateMachine>("StateMachine");
+        _stateMachine = GetNode<CompoundState>("StateMachine");
         _stateMachine.Init(this, AnimSprite);
         PrimaryState = _stateMachine.InitialSubState;
         ParallelStates = _stateMachine.ParallelSubStates;
@@ -91,6 +89,7 @@ public abstract partial class BasePlayer : CharacterBody2D, IDirectionComponent
     }
     public virtual float CalcMovementSpeed()
     {
+        return 1;
         switch (LimbCount)
         {
             case 4:

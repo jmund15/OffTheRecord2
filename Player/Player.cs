@@ -14,7 +14,7 @@ public partial class Player : BasePlayer, IDirectionComponent
         Joever,
         Monster
     }
-    public int LimbCount { get; set; } = 4;
+    public HealthComponent HealthComponent { get; protected set; }
     public float LimbHealthAmt { get; protected set; }
     public float CurrLimbHealth { get; protected set; }
     public float LimbHealthStateAmt { get; protected set; }
@@ -27,6 +27,7 @@ public partial class Player : BasePlayer, IDirectionComponent
         { LimbHealthState.Joever, "Joever" },
         { LimbHealthState.Monster, "" }
     };
+
 
     [Export]
     public float AfflictionRate { get; protected set; } = 25f;
@@ -87,6 +88,8 @@ public partial class Player : BasePlayer, IDirectionComponent
     public override void _Ready()
     {
         base._Ready();
+        HealthComponent = GetNode<HealthComponent>("HealthComponent");
+
         HurtboxComponent.HitboxEntered += OnHitboxEntered;
 
         CureFlare = GetNode<AnimatedSprite2D>("CureFlare");
@@ -113,7 +116,6 @@ public partial class Player : BasePlayer, IDirectionComponent
     public override void _PhysicsProcess(double delta)
 	{
 		base._PhysicsProcess(delta);
-		
 	}
     public override void _UnhandledInput(InputEvent @event)
     {
