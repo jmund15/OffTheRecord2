@@ -140,15 +140,23 @@ public partial class Monster : BasePlayer
                 if (movingThreshold < 0.0)
                 {
                     movingThreshold = randInRange(10, 15.0); //set movemax time
+                    GD.Print("Move Thresh: ", movingThreshold);
                 }
                 AI_navAgent.TargetPosition = ProtagRef.Position; //Nav to Player
-                //GD.Print("new target pos: ", AI_navAgent.TargetPosition);
+                GD.Print("new target pos: ", AI_navAgent.TargetPosition);
+                
                 //TODO:MOVEMENT
+
                 timeMoving += lastDeltaTime;
+
+                GD.Print("timeMoving: ", timeMoving);
+
                 if (timeMoving >= movingThreshold) //Change to locate if not found
                 {
                     changeSubState((int)AI_SUB_CHASE_STATE.LOCATE);
                 }
+
+                GD.Print("Distance to Player: ", this.Position.DistanceTo(ProtagRef.Position));
 
                 if (this.Position.DistanceTo(ProtagRef.Position)< CHARGE_DIST)
                 {
@@ -162,7 +170,12 @@ public partial class Monster : BasePlayer
                 }
                 //Lunge at player's current location
                 //Handle success and failure and move to juked
-                break;
+                if (this.Velocity.Abs().Length() <= float.Epsilon) //Find when stopped
+                {
+                    GD.Print("Missed Player");
+                    changeSubState((int)AI_SUB_CHASE_STATE.JUKED);
+                }
+                    break;
 
             case (int)AI_SUB_CHASE_STATE.BLOCKED:
                 //AI Can't Nav to player point directly
@@ -412,6 +425,7 @@ public partial class Monster : BasePlayer
 
     private void handleMainAIState() //Run every frame to handle the main state and handle the current input of the AI Player
 	{
+        GD.Print("State: ", currentMainState, currentSubState);
         //Condition for toy with timer
         if (!CanMove)
         {
@@ -430,7 +444,7 @@ public partial class Monster : BasePlayer
             rollAIState();
         }
 
-        //TODO: Add Pounce Roll
+        
         if(ProtagRef.Healing)
         {
             if (Rnd.NextDouble() < 0.1)
@@ -620,6 +634,7 @@ public partial class Monster : BasePlayer
         ProtagRef.LimbDetached += OnLimbDetached;
 
         InitStateMachine();
+        changeMainState(AI_MAIN_BEHAVIOR_STATE.CHASE, (int)AI_SUB_CHASE_STATE.PURSUE);
         //REMEMBER TO DEFINE NAV AGENT AND VIEWPORT REF!!!
     }
 
