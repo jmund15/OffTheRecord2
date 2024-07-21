@@ -23,7 +23,7 @@ public abstract partial class BasePlayer : CharacterBody2D, IDirectionComponent
 
     public HurtboxComponent HurtboxComponent { get; protected set; }
     public HitboxComponent HitboxComponent { get; protected set; }
-
+    [Export]
     public float CurrentSpeed { get; protected set; } = 3000f;
 
     public const float MovementTransitionBufferTime = 0.1f;

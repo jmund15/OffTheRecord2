@@ -43,7 +43,7 @@ public partial class LungeState : State
         //GD.Print("lunge frame: ", AnimSprite.Frame, "\nfreamprog: ", AnimSprite.FrameProgress);
         if (AnimSprite.Frame >= 1 && AnimSprite.Frame <= 3)
         {
-            Body.Velocity = _lungeDir * _monster.CalcMovementSpeed() * Monster.LungeSpeed * delta;
+            Body.Velocity = _lungeDir * _monster.CalcMovementSpeed() * _monster.LungeSpeed * delta;
         }
         else
         {

@@ -31,7 +31,7 @@ public partial class Player : BasePlayer, IDirectionComponent
     [Export]
     public float AfflictionRate { get; protected set; } = 25f;
 
-    private int _curesHeld = 1;
+    private int _curesHeld = 3;
     public int CuresHeld {
         get { return _curesHeld; }
         set
@@ -39,7 +39,7 @@ public partial class Player : BasePlayer, IDirectionComponent
             if (value == _curesHeld) return;
             else
             {
-                _curesHeld = value;
+                _curesHeld = Mathf.Clamp(value, 0, 5);
                 EmitSignal(SignalName.NumCuresChanged, _curesHeld);
             }
         }
@@ -63,6 +63,10 @@ public partial class Player : BasePlayer, IDirectionComponent
     public AnimatedSprite2D CureFlare { get; protected set; }
     public AnimatedSprite2D CureFlareMask { get; protected set; }
     //public const float WalkMinInput = 0.1f;
+
+    [Export]
+    private PackedScene _bloodTrail;
+    private Timer _bloodDropTimer;
     public string LeftInput { get; protected set; } = "Left";
     public string RightInput { get; protected set; } = "Right";
     public string UpInput { get; protected set; } = "Up";
@@ -87,7 +91,7 @@ public partial class Player : BasePlayer, IDirectionComponent
     public override void _Ready()
     {
         base._Ready();
-        LimbCount = 3;
+        LimbCount = 4;
         HealthComponent = GetNode<HealthComponent>("HealthComponent");
 
         HurtboxComponent.HitboxEntered += OnHitboxEntered;
@@ -103,8 +107,36 @@ public partial class Player : BasePlayer, IDirectionComponent
         LimbHealthStateAmt = LimbHealthAmt / 4;
         CurrLimbHealthState = LimbHealthState.Full;
 
+        _bloodDropTimer = GetNode<Timer>("BloodDropTimer");
+        _bloodDropTimer.Timeout += OnBloodDropTimeout;
+        OnBloodDropTimeout();
         InitStateMachine();
     }
+
+    private void OnBloodDropTimeout()
+    {
+        var bloodTrail = _bloodTrail.Instantiate<BloodTrail>();
+        bloodTrail.GlobalPosition = GlobalPosition;
+        Global.MainScene.CallDeferred(MainScene.MethodName.AddChild, bloodTrail);
+
+        float newBloodTime = 0.0f;
+        var bloodD = Global.Rnd.NextDouble();
+        switch (LimbCount)
+        {
+            case 3:
+                newBloodTime = ((float)bloodD * (5f - 2f) + 2f); //Generates double within a range
+                break;
+            case 2:
+                newBloodTime = ((float)bloodD * (4f - 1.5f) + 1.5f); //Generates double within a range
+                break;
+            case 1:
+                newBloodTime = ((float)bloodD * (3f - 1f) + 1f); //Generates double within a range
+                break;
+                default: return;
+        }
+        _bloodDropTimer.Start(newBloodTime);
+    }
+
     public override void _Process(double delta)
     {
         base._Process(delta);

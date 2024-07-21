@@ -1,7 +1,8 @@
-[gd_scene load_steps=49 format=3 uid="uid://b6kfo2gv2y5gu"]
+[gd_scene load_steps=50 format=3 uid="uid://b6kfo2gv2y5gu"]
 
 [ext_resource type="Script" path="res://Player/Player.cs" id="1_rfa52"]
 [ext_resource type="Script" path="res://Player/StateMachine/PlayerStateMachine.cs" id="1_xs2pe"]
+[ext_resource type="PackedScene" uid="uid://beu6iaekhd2i6" path="res://Player/blood_trail.tscn" id="2_2edjb"]
 [ext_resource type="SpriteFrames" uid="uid://d36xhlln23gcg" path="res://Player/player.tres" id="2_cnby8"]
 [ext_resource type="PackedScene" uid="uid://bq0xwc8ndrrl7" path="res://Player/severed_limb.tscn" id="2_o7ou7"]
 [ext_resource type="Script" path="res://Player/StateMachine/IdleState.cs" id="3_umjcd"]
@@ -257,8 +258,11 @@ y_sort_enabled = true
 collision_mask = 31
 motion_mode = 1
 script = ExtResource("1_rfa52")
-AfflictionRate = 10.0
+AfflictionRate = 8.0
+CureSpeed = 100.0
+_bloodTrail = ExtResource("2_2edjb")
 SeveredLimbScene = ExtResource("2_o7ou7")
+CurrentSpeed = 5000.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 11)
@@ -267,17 +271,15 @@ shape = SubResource("RectangleShape2D_cfjgy")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 y_sort_enabled = true
 sprite_frames = ExtResource("2_cnby8")
-animation = &"cure1Joever"
+animation = &"cure3Oof"
 
 [node name="CureFlare" type="AnimatedSprite2D" parent="."]
-visible = false
 clip_children = 1
 z_index = -1
 sprite_frames = SubResource("SpriteFrames_bkhua")
 animation = &"flareIntro"
 
 [node name="CureFlareMask" type="AnimatedSprite2D" parent="CureFlare"]
-visible = false
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_y6i55")
 animation = &"mask"
@@ -337,3 +339,6 @@ script = ExtResource("10_nba4w")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
 visible = false
 shape = SubResource("RectangleShape2D_f1ptl")
+
+[node name="BloodDropTimer" type="Timer" parent="."]
+one_shot = true

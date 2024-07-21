@@ -8,6 +8,22 @@ public partial class UI : Control
 	private Global _global;
 	private Player _player;
 
+    private TextureRect _eyeCounter;
+    public static Rect2 zeroDone = new Rect2(new Vector2(0, 0), new Vector2(64, 32));
+    public static Rect2 oneDone = new Rect2(new Vector2(0, 32), new Vector2(64, 32));
+    public static Rect2 twoDone = new Rect2(new Vector2(0, 64), new Vector2(64, 32));
+    public static Rect2 threeDone = new Rect2(new Vector2(0, 96), new Vector2(64, 32));
+    public static Rect2 fourDone = new Rect2(new Vector2(0, 128), new Vector2(64, 32));
+
+    public Dictionary<int, Rect2> CandleGroupMap = new Dictionary<int, Rect2>()
+    {
+        { 0, zeroDone },
+        { 1, oneDone },
+        { 2, twoDone },
+        { 3, threeDone },
+        { 4, fourDone },
+    };
+
     private Control _bodyTop;
     private TextureRect _finalArm;
     private TextureRect _firstArm;
@@ -20,6 +36,7 @@ public partial class UI : Control
     private Control _syringeTop;
 	private List<AtlasTexture> _syringeUIs = new List<AtlasTexture>();
 
+    
     public static readonly Color fullHex = new Color("7D5D47");
     public static readonly Color OofHex = new Color("928670");
     public static readonly Color UhohHex = new Color("456755");
@@ -41,6 +58,9 @@ public partial class UI : Control
 	{
 		_global = GetNode<Global>("/root/Global");
 		_player = Global.Player;
+
+        _eyeCounter = GetNode<TextureRect>("EyeCounter");
+        _global.CandleGroupComplete += OnCandleGroupComplete;
 
         _bodyTop = GetNode<Control>("BodyUI");
         _firstArm = _bodyTop.GetNode<TextureRect>("FirstArm");
@@ -69,6 +89,12 @@ public partial class UI : Control
         SetCureUIs(_player.CuresHeld);
         _player.NumCuresChanged += SetCureUIs;
 	}
+
+    private void OnCandleGroupComplete()
+    {
+        (_eyeCounter.Texture as AtlasTexture).Region = CandleGroupMap[_global.CandleGroupsCompleted];
+    }
+
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
 	{

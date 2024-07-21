@@ -32,7 +32,9 @@ public partial class InjectState : State
 		base.Exit();
         _player.Healing = false;
         _player.CureFlare.Play("flareEnd");
-	}
+        AnimSprite.AnimationFinished -= OnAnimationFinished;
+
+    }
     public override void ProcessFrame(float delta)
 	{
 		base.ProcessFrame(delta);
@@ -68,8 +70,9 @@ public partial class InjectState : State
 
         _player.Healing = true;
         _player.CuresHeld--;
-
+        GD.Print("lower cures held");
         AnimSprite.AnimationFinished -= OnAnimationFinished;
+
     }
     private void OnFlareAnimationFinished()
     {

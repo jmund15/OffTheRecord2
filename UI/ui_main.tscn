@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bqm6beatqerf"]
+[gd_scene load_steps=30 format=3 uid="uid://bqm6beatqerf"]
 
 [ext_resource type="Script" path="res://UI/UI.cs" id="1_tv74q"]
 [ext_resource type="PackedScene" uid="uid://b2bpc6avlved2" path="res://UI/syringe_ui.tscn" id="2_wacw6"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dqb5wyu80ptqv" path="res://UI/ui_player_2.png" id="6_3dr35"]
 [ext_resource type="Texture2D" uid="uid://uwd5dgdjhnlc" path="res://UI/ui_player_3.png" id="7_8qsij"]
 [ext_resource type="Texture2D" uid="uid://bcgoqy4qrti0c" path="res://Player/cure_flame_texture.png" id="9_0y5h1"]
+[ext_resource type="Texture2D" uid="uid://bal4lx18ynkjn" path="res://UI/eye_counter.png" id="9_xfqgh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yxml8"]
 atlas = ExtResource("3_jpgpp")
@@ -128,6 +129,10 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_5vtof"]
+atlas = ExtResource("9_xfqgh")
+region = Rect2(0, 0, 64, 32)
+
 [node name="UI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -139,12 +144,12 @@ script = ExtResource("1_tv74q")
 
 [node name="SyringeUI" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -200.0
-offset_bottom = 40.0
-grow_horizontal = 0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+offset_right = 400.0
+grow_vertical = 0
 scale = Vector2(2, 2)
 
 [node name="Syringe1" parent="SyringeUI" instance=ExtResource("2_wacw6")]
@@ -212,3 +217,13 @@ y_sort_enabled = true
 position = Vector2(49.5, 3)
 sprite_frames = SubResource("SpriteFrames_i8cjc")
 animation = &"mask"
+
+[node name="EyeCounter" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -128.0
+offset_bottom = 80.0
+grow_horizontal = 0
+texture = SubResource("AtlasTexture_5vtof")

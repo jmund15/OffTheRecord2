@@ -34,7 +34,7 @@ public partial class MonsterIdleState : State
     {
         base.ProcessFrame(delta);
         _inputDirection = DirectionComponent.GetDesiredDirection();
-        GD.Print("monster input dir: ", _inputDirection);
+        //GD.Print("monster input dir: ", _inputDirection);
         if (!_inputDirection.IsZeroApprox())
         {
             EmitSignal(SignalName.TransitionState, this, _walkState);

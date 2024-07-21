@@ -102,10 +102,10 @@ public partial class WalkState : State
         {
             EmitSignal(SignalName.TransitionState, this, _injectState);
         }
-        else if (@event.IsActionPressed(_player.InteractInput))
-        {
-            EmitSignal(SignalName.TransitionState, this, _interactState);
-        }
+        //else if (@event.IsActionPressed(_player.InteractInput))
+        //{
+        //    EmitSignal(SignalName.TransitionState, this, _interactState);
+        //}
     }
     #endregion
     #region STATE_HELPER
