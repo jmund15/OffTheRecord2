@@ -33,24 +33,15 @@ public partial class LoseLimbState : State
 
         _severedLimb = _player.SeveredLimbScene.Instantiate<SeveredLimb>();
 		
-		var limbPos = (_global.Monster.GlobalPosition - _player.GlobalPosition);
-		if (!_global.Monster.AttackedPlayer)
+		var limbPos = (Global.Monster.GlobalPosition - _player.GlobalPosition);
+		if (!Global.Monster.AttackedPlayer)
 		{
 			limbPos = _global.GetRandomDirection().Normalized() * 25f;
         }
         _severedLimb.GlobalPosition = _player.GlobalPosition + (limbPos * 0.25f);
 		_global.MainScene.CallDeferred(MainScene.MethodName.AddChild, _severedLimb);
         //_global.MainScene.AddChild(_severedLimb);
-		switch(_player.LimbCount)
-		{
-			case 3:
-                _severedLimb.LimbSprite.Play("arm"); break;
-            case 2:
-                _severedLimb.LimbSprite.Play("leg1"); break;
-            case 1:
-                _severedLimb.LimbSprite.Play("leg2"); break;
-			default: break;
-        }
+		
 	}
     public override void Exit()
 	{

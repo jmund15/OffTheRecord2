@@ -9,8 +9,8 @@ using System.Linq;
 public partial class Global : Node
 {
     public MainScene MainScene { get; private set; }
-    public Player Player { get; private set; }
-    public Monster Monster { get; private set; }
+    public static Player Player { get; private set; }
+    public static Monster Monster { get; private set; }
 
     public Events SignalBus { get; private set; }
     public readonly Random Rnd = new Random(Guid.NewGuid().GetHashCode());

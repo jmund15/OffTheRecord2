@@ -11,7 +11,7 @@
 [ext_resource type="Script" path="res://BaseComponents/HurtboxComponent.cs" id="9_l8tdl"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_v5rvf"]
-radius = 8.0
+radius = 0.01
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sbbxq"]
 atlas = ExtResource("2_swnib")
@@ -584,14 +584,17 @@ wall_min_slide_angle = 0.0
 script = ExtResource("1_016xf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 8)
+position = Vector2(0, 10)
 shape = SubResource("CircleShape2D_v5rvf")
+disabled = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_hqdpf")
 animation = &"lunge1"
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 3.0
+target_desired_distance = 15.0
 path_max_distance = 1000.0
 path_postprocessing = 1
 debug_enabled = true

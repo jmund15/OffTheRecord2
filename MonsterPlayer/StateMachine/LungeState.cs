@@ -11,7 +11,7 @@ public partial class LungeState : State
     private State _idleState;
 
     private Vector2 _lungeDir;
-    private float _lungeFriction = 10;
+    private float _lungeFriction = 100f;
     #endregion
     #region STATE_UPDATES
     public override void Init(CharacterBody2D body, AnimatedSprite2D animPlayer)
@@ -40,10 +40,15 @@ public partial class LungeState : State
 	public override void ProcessPhysics(float delta)
 	{
 		base.ProcessPhysics(delta);
-        //if (AnimSprite.Frame <= 4)
-        //{
+        //GD.Print("lunge frame: ", AnimSprite.Frame, "\nfreamprog: ", AnimSprite.FrameProgress);
+        if (AnimSprite.Frame >= 1 && AnimSprite.Frame <= 3)
+        {
             Body.Velocity = _lungeDir * _monster.CalcMovementSpeed() * Monster.LungeSpeed * delta;
-        //}
+        }
+        else
+        {
+            Body.Velocity = Vector2.Zero;
+        }
         //else
         //{
         //    Body.Velocity -= Body.Velocity * _monster.CalcMovementSpeed() * _lungeFriction * delta;

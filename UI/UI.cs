@@ -40,7 +40,7 @@ public partial class UI : Control
     public override void _Ready()
 	{
 		_global = GetNode<Global>("/root/Global");
-		_player = _global.Player;
+		_player = Global.Player;
 
         _bodyTop = GetNode<Control>("BodyUI");
         _firstArm = _bodyTop.GetNode<TextureRect>("FirstArm");

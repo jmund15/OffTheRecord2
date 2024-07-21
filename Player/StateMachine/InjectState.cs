@@ -39,6 +39,10 @@ public partial class InjectState : State
         if (_player.Healing)
         {
             _player.HealthComponent.Heal(_player.CureSpeed * delta);
+            if (_player.HealthComponent.Health == _player.HealthComponent.MaxHealth)
+            {
+                EmitSignal(SignalName.TransitionState, this, _idleState);
+            }
         }
     }
 	public override void ProcessPhysics(float delta)

@@ -248,6 +248,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_28tse"]
+radius = 8.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f1ptl"]
 
@@ -256,7 +257,7 @@ y_sort_enabled = true
 collision_mask = 31
 motion_mode = 1
 script = ExtResource("1_rfa52")
-AfflictionRate = 50.0
+AfflictionRate = 10.0
 SeveredLimbScene = ExtResource("2_o7ou7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -327,7 +328,7 @@ collision_mask = 2
 script = ExtResource("9_wp6xo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
-position = Vector2(0, 8)
+position = Vector2(0, 10)
 shape = SubResource("CircleShape2D_28tse")
 
 [node name="HitboxComponent" type="Area2D" parent="."]

@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://y1h0pfsimpyl" path="res://MonsterPlayer/monster.tscn" id="5_ptm6a"]
 [ext_resource type="Texture2D" uid="uid://b8ftyj8umt8oc" path="res://Environment/placeholder_tiles.png" id="6_h2klo"]
 
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_naktp"]
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_uweji"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)])
@@ -19,7 +19,7 @@ texture = ExtResource("6_h2klo")
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0
-0:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_naktp")
+0:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_uweji")
 1:0/0 = 0
 1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 1:0/0/physics_layer_0/angular_velocity = 0.0

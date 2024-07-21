@@ -139,9 +139,12 @@ script = ExtResource("1_tv74q")
 
 [node name="SyringeUI" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 0
-offset_right = 200.0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
 offset_bottom = 40.0
+grow_horizontal = 0
 scale = Vector2(2, 2)
 
 [node name="Syringe1" parent="SyringeUI" instance=ExtResource("2_wacw6")]
@@ -174,12 +177,9 @@ texture = SubResource("AtlasTexture_wlwoe")
 
 [node name="BodyUI" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -128.0
+anchors_preset = 0
+offset_right = 128.0
 offset_bottom = 128.0
-grow_horizontal = 0
 scale = Vector2(2, 2)
 
 [node name="FirstArm" type="TextureRect" parent="BodyUI"]

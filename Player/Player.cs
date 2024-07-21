@@ -171,6 +171,7 @@ public partial class Player : BasePlayer, IDirectionComponent
     }
     private void OnHitboxEntered(HitboxComponent hitbox)
     {
+        if (HurtboxComponent.Invulnerable) { return; }
         LimbCount--;
         if (LimbCount == 0)
         {
@@ -181,6 +182,11 @@ public partial class Player : BasePlayer, IDirectionComponent
         HealthComponent.SetMaxHealth(HealthComponent.MaxHealth - LimbHealthAmt);
         //GD.Print("set max health");
         EmitSignal(SignalName.LoseLimb, LimbCount);
+        HurtboxComponent.Invulnerable = true;
+        GetTree().CreateTimer(2.5f).Timeout += () =>
+        {
+            HurtboxComponent.Invulnerable = false;
+        };
     }
     public override void OnTransitionedState(State oldState, State newState)
     {
