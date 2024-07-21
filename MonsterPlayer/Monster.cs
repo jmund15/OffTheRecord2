@@ -7,10 +7,11 @@ using TimeRobbers.BaseComponents;
 
 public partial class Monster : BasePlayer
 {
+    public bool InitCutscene;
     [Export]
     private PackedScene _bloodTrail;
     private Timer _bloodDropTimer;
-    private Color _bloodColor = new Color("e600e6");
+    private Color _bloodColor = new Color("dc00dc");
 
     private VisibleOnScreenNotifier2D _visibleOnScreenNotifier;
     private Vector2 _preExitScreenDist;
@@ -540,6 +541,7 @@ public partial class Monster : BasePlayer
                 {
                     LimbDevouring = LimbsToDevour[0];
                     EmitSignal(SignalName.DevourLimb, LimbCount);
+                    OnBloodDropTimeout();
                     rollAIState();
                 }
 
@@ -566,6 +568,7 @@ public partial class Monster : BasePlayer
             if (newMove)
             {
                 rollAIState(); //Roll the AI when coming out of a no move state
+                newMove = false;
             }
         }
 
@@ -817,7 +820,6 @@ public partial class Monster : BasePlayer
         _bloodDropTimer = GetNode<Timer>("BloodDropTimer");
         _bloodDropTimer.Timeout += OnBloodDropTimeout;
 
-
         InitStateMachine(); 
         
         //changeMainState(AI_MAIN_BEHAVIOR_STATE.IMPEDE, (int)AI_SUB_IMPEDE_STATE.GET_CLOSE);
@@ -825,11 +827,12 @@ public partial class Monster : BasePlayer
         changeMainState(AI_MAIN_BEHAVIOR_STATE.CHASE, (int)AI_SUB_CHASE_STATE.PURSUE);
         //REMEMBER TO DEFINE NAV AGENT AND VIEWPORT REF!!!
     }
-    private void OnBloodDropTimeout()
+    public void OnBloodDropTimeout()
     {
         var bloodTrail = _bloodTrail.Instantiate<BloodTrail>();
         bloodTrail.GlobalPosition = GlobalPosition;
         bloodTrail.Modulate = _bloodColor;
+        bloodTrail.BloodColor = _bloodColor;
         Global.MainScene.CallDeferred(MainScene.MethodName.AddChild, bloodTrail);
 
         float newBloodTime = 0.0f;
@@ -924,9 +927,16 @@ public partial class Monster : BasePlayer
     {
         if (AttackedPlayer)
         {
+            if (LimbCount == 0)
+            {
+                CanMove = true;
+                newMove = true;
+            }
+
             LimbDevouring = severedLimb;
             //AI_teleportToLocation(severedLimb.GlobalPosition - new Vector2(25, 0));
             EmitSignal(SignalName.DevourLimb, LimbCount);
+            OnBloodDropTimeout();
             AttackedPlayer = false;
         }
         else
@@ -954,12 +964,18 @@ public partial class Monster : BasePlayer
                 return 0.733f;
             case 1:
                 return 0.6f;
+            case 0:
+                return 0.75f;
             default:
                 throw new Exception("LIMB COUNT ERROR");
         }
     }
     public override Vector2 GetDesiredDirection()
     {
+        if (InitCutscene)
+        {
+            return ProtagRef.Position - Position;
+        }
         //GD.Print("target Pos: ", AI_navAgent.TargetPosition, "\nnextpath:", ToLocal(AI_navAgent.GetNextPathPosition()));
         return ToLocal(AI_navAgent.GetNextPathPosition());
     }

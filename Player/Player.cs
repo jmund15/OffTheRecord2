@@ -6,6 +6,7 @@ using TimeRobbers.BaseComponents;
 public partial class Player : BasePlayer, IDirectionComponent
 {
     #region CLASS_VARIALBLES
+    public bool InCutscene = false;
     public enum LimbHealthState
     {
         Full,
@@ -113,7 +114,15 @@ public partial class Player : BasePlayer, IDirectionComponent
         InitStateMachine();
     }
 
-    private void OnBloodDropTimeout()
+    public void DetachFirstLimb()
+    {
+        HealthComponent.Damage(LimbHealthAmt - 100);
+        //LimbCount--;
+        //HealthComponent.SetMaxHealth(HealthComponent.MaxHealth - LimbHealthAmt);
+        //EmitSignal(SignalName.LoseLimb, LimbCount);
+    }
+
+    public void OnBloodDropTimeout()
     {
         var bloodTrail = _bloodTrail.Instantiate<BloodTrail>();
         bloodTrail.GlobalPosition = GlobalPosition;
@@ -198,6 +207,10 @@ public partial class Player : BasePlayer, IDirectionComponent
                     break;
             }
             FlashRed();
+            if (healthUpdate.NewHealth < healthUpdate.PreviousHealth)
+            {
+                OnBloodDropTimeout(); // injured, drop blood
+            }
             EmitSignal(SignalName.LimbHealthStateChange, Variant.From(CurrLimbHealthState));
         }
     }
@@ -214,6 +227,7 @@ public partial class Player : BasePlayer, IDirectionComponent
         HealthComponent.SetMaxHealth(HealthComponent.MaxHealth - LimbHealthAmt);
         //GD.Print("set max health");
         EmitSignal(SignalName.LoseLimb, LimbCount);
+        OnBloodDropTimeout();
         HurtboxComponent.Invulnerable = true;
         GetTree().CreateTimer(2.5f).Timeout += () =>
         {
@@ -281,6 +295,7 @@ public partial class Player : BasePlayer, IDirectionComponent
     //TODO: CHANGE TO RETURN VARIABLE INSTEAD OF CALCULATING EACH TIME FOR OPTIMIZING????
     public override Vector2 GetDesiredDirection()
     {
+        if (InCutscene) { return Vector2.Zero; }
         //GD.Print(Input.GetVector(LeftInput, RightInput, UpInput, DownInput));
         return Input.GetVector(LeftInput, RightInput, UpInput, DownInput);
     }

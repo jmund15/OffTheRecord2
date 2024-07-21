@@ -8,6 +8,7 @@ public partial class Camera : Camera2D
     private Events _signalBus;
     private MainScene _mainScene;
 
+    public bool InCutscene = false;
     public static Rect2 CameraBounds { get; private set; }
 
     [Export]
@@ -22,14 +23,13 @@ public partial class Camera : Camera2D
         _global = GetNode<Global>("/root/Global");
         _signalBus = GetNode<Events>("/root/Events");
         _mainScene = GetNode<MainScene>("/root/MainScene");
-
-        
         
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        if (InCutscene) { return; }
         Position = Global.Player.Position;
         
     }

@@ -26,6 +26,7 @@ public partial class LungeState : State
 
         AnimSprite.Play(AnimName + _monster.LimbCount);
 		AnimSprite.AnimationFinished += OnAnimationFinished;
+        _monster.OnBloodDropTimeout();
     }
     public override void Exit()
 	{
