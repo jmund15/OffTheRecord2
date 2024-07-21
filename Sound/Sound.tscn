@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://d1rek7wpult63"]
+[gd_scene load_steps=42 format=3 uid="uid://d1rek7wpult63"]
 
 [ext_resource type="AudioStream" uid="uid://c6f6svopbxme" path="res://Sound/Music/Area/ES_Light-Footed - Bonnie Grace.wav" id="1_ex3ft"]
 [ext_resource type="AudioStream" uid="uid://caghlkr2j88re" path="res://Sound/Music/Area/ES_Patapsco River - Bonnie Grace.wav" id="2_rltpc"]
@@ -39,6 +39,8 @@
 [ext_resource type="AudioStream" uid="uid://bldfy5lry0fsy" path="res://Sound/SE/Dude/Male, Loud Screams.wav" id="34_17rlt"]
 [ext_resource type="AudioStream" uid="uid://bxeo766xd2ajs" path="res://Sound/SE/Dude/Type 03, Damaged, Combat, Pain, Short, Video Game 03.wav" id="35_t0l8a"]
 [ext_resource type="AudioStream" uid="uid://df2onv0b5lhgx" path="res://Sound/SE/Dude/footsteps_solidground.mp3" id="36_lix4t"]
+[ext_resource type="AudioStream" uid="uid://dkhwg7grayyn6" path="res://Sound/SE/Dude/fire_light.wav" id="37_5dabb"]
+[ext_resource type="AudioStream" uid="uid://deyligsc8jjv6" path="res://Sound/SE/Dude/flame_on.wav" id="38_xcv25"]
 
 [node name="Sound" type="Node"]
 
@@ -161,6 +163,14 @@ stream = ExtResource("35_t0l8a")
 
 [node name="sfx5" type="AudioStreamPlayer" parent="SFXDude"]
 stream = ExtResource("36_lix4t")
+volume_db = -8.433
+
+[node name="sfx6" type="AudioStreamPlayer" parent="SFXDude"]
+stream = ExtResource("37_5dabb")
+volume_db = -8.433
+
+[node name="sfx7" type="AudioStreamPlayer" parent="SFXDude"]
+stream = ExtResource("38_xcv25")
 volume_db = -8.433
 
 [node name="Title" type="Node" parent="."]
