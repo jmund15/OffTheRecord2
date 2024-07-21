@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=3 uid="uid://y1h0pfsimpyl"]
+[gd_scene load_steps=84 format=3 uid="uid://y1h0pfsimpyl"]
 
 [ext_resource type="Script" path="res://MonsterPlayer/Monster.cs" id="1_016xf"]
 [ext_resource type="Script" path="res://MonsterPlayer/StateMachine/MonsterStateMachine.cs" id="2_2hh28"]
@@ -10,8 +10,8 @@
 [ext_resource type="Script" path="res://BaseComponents/HitboxComponent.cs" id="8_vtk1i"]
 [ext_resource type="Script" path="res://BaseComponents/HurtboxComponent.cs" id="9_l8tdl"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_t271m"]
-size = Vector2(25, 15)
+[sub_resource type="CircleShape2D" id="CircleShape2D_v5rvf"]
+radius = 8.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sbbxq"]
 atlas = ExtResource("2_swnib")
@@ -573,6 +573,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_20oim"]
+radius = 12.0
+
 [node name="Monster" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 31
@@ -581,19 +584,16 @@ wall_min_slide_angle = 0.0
 script = ExtResource("1_016xf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(0, 5)
-shape = SubResource("RectangleShape2D_t271m")
+position = Vector2(0, 8)
+shape = SubResource("CircleShape2D_v5rvf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_hqdpf")
-animation = &"lunge3"
-frame = 6
-frame_progress = 1.0
+animation = &"lunge1"
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 path_max_distance = 1000.0
-avoidance_enabled = true
+path_postprocessing = 1
 debug_enabled = true
 debug_use_custom = true
 debug_path_custom_color = Color(1, 0, 0, 1)
@@ -632,8 +632,14 @@ script = ExtResource("8_vtk1i")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
 visible = false
+position = Vector2(0, 8)
+shape = SubResource("CircleShape2D_20oim")
 
 [node name="HurtboxComponent" type="Area2D" parent="."]
 script = ExtResource("9_l8tdl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+
+[node name="PathCalcTimer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true

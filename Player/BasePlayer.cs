@@ -8,7 +8,7 @@ public abstract partial class BasePlayer : CharacterBody2D, IDirectionComponent
 {
     #region CLASS_VARIALBLES
     protected Global Global;
-    public int LimbCount { get; set; } = 4;
+    public int LimbCount { get; set; }
 
     protected CompoundState _stateMachine;
     protected Dictionary<State, bool> _parallelStateMachines = new Dictionary<State, bool>();
@@ -24,8 +24,7 @@ public abstract partial class BasePlayer : CharacterBody2D, IDirectionComponent
     public HurtboxComponent HurtboxComponent { get; protected set; }
     public HitboxComponent HitboxComponent { get; protected set; }
 
-
-    public const float WalkSpeed = 3000f;
+    public float CurrentSpeed { get; protected set; } = 3000f;
 
     public const float MovementTransitionBufferTime = 0.1f;
     #endregion
@@ -54,11 +53,11 @@ public abstract partial class BasePlayer : CharacterBody2D, IDirectionComponent
         base._Process(delta);
         if (CanMove)
         {
-            if (GetDesiredDirection().X < 0)
+            if (GetDesiredDirection().X < -0.1)
             {
                 AnimSprite.FlipH = true;
             }
-            else if (GetDesiredDirection().X > 0)
+            else if (GetDesiredDirection().X > 0.1)
             {
                 AnimSprite.FlipH = false;
             }

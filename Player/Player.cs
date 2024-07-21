@@ -1,6 +1,6 @@
 using Godot;
-using Godot.Collections;
 using System;
+using System.Collections.Generic;
 using TimeRobbers.BaseComponents;
 
 public partial class Player : BasePlayer, IDirectionComponent
@@ -27,7 +27,6 @@ public partial class Player : BasePlayer, IDirectionComponent
         { LimbHealthState.Joever, "Joever" },
         { LimbHealthState.Monster, "" }
     };
-
 
     [Export]
     public float AfflictionRate { get; protected set; } = 25f;
@@ -75,7 +74,7 @@ public partial class Player : BasePlayer, IDirectionComponent
     [Signal]
     public delegate void LoseLimbEventHandler(int newLimbCount);
     [Signal]
-    public delegate void LimbDetachedEventHandler();
+    public delegate void LimbDetachedEventHandler(SeveredLimb limb);
     [Signal]
     public delegate void LimbHealthStateChangeEventHandler(LimbHealthState newLimbHealthState);
     [Signal]
@@ -88,6 +87,7 @@ public partial class Player : BasePlayer, IDirectionComponent
     public override void _Ready()
     {
         base._Ready();
+        LimbCount = 3;
         HealthComponent = GetNode<HealthComponent>("HealthComponent");
 
         HurtboxComponent.HitboxEntered += OnHitboxEntered;

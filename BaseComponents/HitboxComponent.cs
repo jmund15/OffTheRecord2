@@ -39,9 +39,9 @@ public partial class HitboxComponent : Area2D
         BodyEntered += OnBodyEntered;
         BodyExited += OnBodyExited;
 
-        Monitorable = false;
-        Monitoring = false;
-        AttackActive = false;
+        Monitorable = true;
+        Monitoring = true;
+        AttackActive = true;
     }
     public override void _Process(double delta)
     {

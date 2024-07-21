@@ -43,7 +43,7 @@ public partial class MonsterWalkState : State
     public override void ProcessFrame(float delta)
     {
         base.ProcessFrame(delta);
-        _inputDirection = DirectionComponent.GetDesiredDirection();
+        _inputDirection = DirectionComponent.GetDesiredDirectionNormalized();
 
         if (_inputDirection.IsZeroApprox())
         { //BUFFER AFTER MOVEMENT CHANGES
@@ -55,7 +55,7 @@ public partial class MonsterWalkState : State
     public override void ProcessPhysics(float delta)
     {
         base.ProcessPhysics(delta);
-        Body.Velocity = _inputDirection.Normalized() * _monster.CalcMovementSpeed() * Monster.WalkSpeed * delta;
+        Body.Velocity = _inputDirection.Normalized() * _monster.CalcMovementSpeed() * _monster.CurrentSpeed * delta;
         Body.MoveAndSlide();
     }
     #endregion

@@ -77,7 +77,7 @@ public partial class UI : Control
     {
         _bodyMap[_player.LimbCount].Modulate = _bodyColorMap[newLimbHealthState];
     }
-    private void OnLimbDetached()
+    private void OnLimbDetached(SeveredLimb limb)
     {
         _bodyMap[_player.LimbCount + 1].Modulate = GoneHex;
     }

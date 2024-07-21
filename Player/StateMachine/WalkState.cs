@@ -63,7 +63,7 @@ public partial class WalkState : State
     public override void ProcessPhysics(float delta)
     {
         base.ProcessPhysics(delta);
-        Body.Velocity = _inputDirection.Normalized() * _player.CalcMovementSpeed() * Player.WalkSpeed * delta;
+        Body.Velocity = _inputDirection.Normalized() * _player.CalcMovementSpeed() * _player.CurrentSpeed * delta;
         Body.MoveAndSlide();
 
         //var currRunPos = AnimSprite.CurrentAnimation == string.Empty ? 0.0 : AnimSprite.CurrentAnimationPosition;

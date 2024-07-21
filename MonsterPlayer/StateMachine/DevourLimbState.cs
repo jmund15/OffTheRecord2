@@ -44,6 +44,11 @@ public partial class DevourLimbState : State
     #region STATE_HELPER
     private void OnAnimationFinished()
     {
+		_monster.LimbDevouring.QueueFree();
+		if (_monster.LimbsToDevour.Contains(_monster.LimbDevouring))
+		{
+			_monster.LimbsToDevour.Remove(_monster.LimbDevouring);
+		}
         EmitSignal(SignalName.TransitionState, this, _idleState);
     }
     #endregion

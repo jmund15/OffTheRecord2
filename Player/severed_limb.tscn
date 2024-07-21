@@ -43,7 +43,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h6j0l"]
-size = Vector2(20, 9)
+size = Vector2(10, 5)
 
 [node name="SeveredLimb" type="StaticBody2D"]
 y_sort_enabled = true

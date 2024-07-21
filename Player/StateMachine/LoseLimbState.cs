@@ -11,6 +11,8 @@ public partial class LoseLimbState : State
 
 	[Export(PropertyHint.NodeType, "State")]
 	private IdleState _idleState;
+
+	private SeveredLimb _severedLimb;
 	#endregion
 	#region STATE_UPDATES
 	public override void Init(CharacterBody2D body, AnimatedSprite2D animPlayer)
@@ -29,18 +31,24 @@ public partial class LoseLimbState : State
 		_player.AnimSprite.Play(AnimName + _player.LimbCount);
 		_player.AnimSprite.AnimationFinished += OnAnimationFinished;
 
-        var limb = _player.SeveredLimbScene.Instantiate<SeveredLimb>();
-		var rndLimbPos = _global.GetRandomDirection();
-		limb.GlobalPosition = _player.GlobalPosition + (rndLimbPos * 20);
-        _global.MainScene.AddChild(limb);
+        _severedLimb = _player.SeveredLimbScene.Instantiate<SeveredLimb>();
+		
+		var limbPos = (_global.Monster.GlobalPosition - _player.GlobalPosition);
+		if (!_global.Monster.AttackedPlayer)
+		{
+			limbPos = _global.GetRandomDirection().Normalized() * 25f;
+        }
+        _severedLimb.GlobalPosition = _player.GlobalPosition + (limbPos * 0.25f);
+		_global.MainScene.CallDeferred(MainScene.MethodName.AddChild, _severedLimb);
+        //_global.MainScene.AddChild(_severedLimb);
 		switch(_player.LimbCount)
 		{
 			case 3:
-				limb.LimbSprite.Play("arm"); break;
+                _severedLimb.LimbSprite.Play("arm"); break;
             case 2:
-                limb.LimbSprite.Play("leg1"); break;
+                _severedLimb.LimbSprite.Play("leg1"); break;
             case 1:
-                limb.LimbSprite.Play("leg2"); break;
+                _severedLimb.LimbSprite.Play("leg2"); break;
 			default: break;
         }
 	}
@@ -65,7 +73,7 @@ public partial class LoseLimbState : State
     #region STATE_HELPER
     private void OnAnimationFinished()
     {
-		_player.EmitSignal(Player.SignalName.LimbDetached);
+		_player.EmitSignal(Player.SignalName.LimbDetached, _severedLimb);
         EmitSignal(SignalName.TransitionState, this, _idleState);
     }
     #endregion
