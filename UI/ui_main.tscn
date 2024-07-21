@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bqm6beatqerf"]
+[gd_scene load_steps=34 format=3 uid="uid://bqm6beatqerf"]
 
 [ext_resource type="Script" path="res://UI/UI.cs" id="1_tv74q"]
 [ext_resource type="PackedScene" uid="uid://b2bpc6avlved2" path="res://UI/syringe_ui.tscn" id="2_wacw6"]
@@ -9,6 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://uwd5dgdjhnlc" path="res://UI/ui_player_3.png" id="7_8qsij"]
 [ext_resource type="Texture2D" uid="uid://bcgoqy4qrti0c" path="res://Player/cure_flame_texture.png" id="9_0y5h1"]
 [ext_resource type="Texture2D" uid="uid://bal4lx18ynkjn" path="res://UI/eye_counter.png" id="9_xfqgh"]
+[ext_resource type="Texture2D" uid="uid://df31te02bd0sg" path="res://UI/screen_overlays_gameover.png" id="10_flrpg"]
+[ext_resource type="Texture2D" uid="uid://4vb0ddp87ukq" path="res://UI/screen_overlays_win_screen.png" id="11_a6ib1"]
+[ext_resource type="Texture2D" uid="uid://dre00l3wcrlig" path="res://UI/screen_overlays_hit.png" id="11_vfqfc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yxml8"]
 atlas = ExtResource("3_jpgpp")
@@ -133,6 +136,10 @@ animations = [{
 atlas = ExtResource("9_xfqgh")
 region = Rect2(0, 0, 64, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_qcxup"]
+atlas = ExtResource("11_vfqfc")
+region = Rect2(0, 0, 1152, 648)
+
 [node name="UI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -228,7 +235,56 @@ offset_bottom = 80.0
 grow_horizontal = 0
 texture = SubResource("AtlasTexture_5vtof")
 
-[node name="GameOver" type="TextureRect" parent="."]
+[node name="GameOver" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.490196)
+
+[node name="TextureRect" type="TextureRect" parent="GameOver"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+texture = ExtResource("10_flrpg")
+
+[node name="WinGame" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.490196)
+
+[node name="TextureRect" type="TextureRect" parent="WinGame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_a6ib1")
+
+[node name="DamageOverlay" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_qcxup")
+
+[node name="BlackOverlay" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

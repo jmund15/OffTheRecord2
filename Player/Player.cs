@@ -81,11 +81,12 @@ public partial class Player : BasePlayer, IDirectionComponent
     [Signal]
     public delegate void LimbDetachedEventHandler(SeveredLimb limb);
     [Signal]
-    public delegate void LimbHealthStateChangeEventHandler(LimbHealthState newLimbHealthState);
+    public delegate void LimbHealthStateChangeEventHandler(LimbHealthState newLimbHealthState, bool damaged = true);
     [Signal]
     public delegate void NumCuresChangedEventHandler(int curesHeld);
     [Signal]
     public delegate void HealingStateChangeEventHandler(bool isHealing);
+
     #endregion
 
     #region BASE_OVERRIDDEN_GODOT_FUNCTIONS
@@ -110,13 +111,14 @@ public partial class Player : BasePlayer, IDirectionComponent
 
         _bloodDropTimer = GetNode<Timer>("BloodDropTimer");
         _bloodDropTimer.Timeout += OnBloodDropTimeout;
-        OnBloodDropTimeout();
         InitStateMachine();
     }
 
     public void DetachFirstLimb()
     {
-        HealthComponent.Damage(LimbHealthAmt - 100);
+        HealthComponent.Damage(LimbHealthAmt - 50);
+        OnBloodDropTimeout();
+
         //LimbCount--;
         //HealthComponent.SetMaxHealth(HealthComponent.MaxHealth - LimbHealthAmt);
         //EmitSignal(SignalName.LoseLimb, LimbCount);
@@ -207,11 +209,12 @@ public partial class Player : BasePlayer, IDirectionComponent
                     break;
             }
             FlashRed();
-            if (healthUpdate.NewHealth < healthUpdate.PreviousHealth)
+            bool damaged = !(healthUpdate.NewHealth < healthUpdate.PreviousHealth);
+            if (damaged)
             {
                 OnBloodDropTimeout(); // injured, drop blood
             }
-            EmitSignal(SignalName.LimbHealthStateChange, Variant.From(CurrLimbHealthState));
+            EmitSignal(SignalName.LimbHealthStateChange, Variant.From(CurrLimbHealthState), damaged);
         }
     }
     private void OnHitboxEntered(HitboxComponent hitbox)
@@ -266,7 +269,7 @@ public partial class Player : BasePlayer, IDirectionComponent
     }
     public void GameOver()
     {
-        QueueFree();
+        //QueueFree();
     }
     public void UpdateShadowPos()
     {

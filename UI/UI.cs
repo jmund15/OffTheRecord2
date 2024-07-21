@@ -8,6 +8,8 @@ public partial class UI : Control
 	private Global _global;
 	private Player _player;
 
+    public ColorRect BlackOverlay;
+
     private TextureRect _eyeCounter;
     public static Rect2 zeroDone = new Rect2(new Vector2(0, 0), new Vector2(64, 32));
     public static Rect2 oneDone = new Rect2(new Vector2(0, 32), new Vector2(64, 32));
@@ -54,10 +56,60 @@ public partial class UI : Control
     public static Rect2 FullSyringeRegion = new Rect2(new Vector2(32, 0), new Vector2(32, 32));
     public static Rect2 EmptySyringeRegion = new Rect2(new Vector2(0, 0), new Vector2(32, 32));
     // Called when the node enters the scene tree for the first time.
+
+    private ColorRect _gameOver;
+    public ColorRect WinGame;
+
+    private TextureRect _damageOverlay;
+    private AtlasTexture _damageAnim;
+    private float _timePer = 0.1f;
+    private float _timeStay = 0.5f;
+    private float _timeFade = 0.5f;
+
+    private List<Rect2> _damAnimRegions = new List<Rect2>()
+    {
+        new Rect2(new Vector2(0, 0), new Vector2(1152, 648)),
+        new Rect2(new Vector2(1152, 0), new Vector2(1152, 648)),
+        new Rect2(new Vector2(1152 * 2, 0), new Vector2(1152, 648)),
+        new Rect2(new Vector2(1152 * 3, 0), new Vector2(1152, 648))
+    };
+    private List<Rect2> _damHalfAnimRegions = new List<Rect2>()
+    {
+        new Rect2(new Vector2(0, 0), new Vector2(1152, 648)),
+        new Rect2(new Vector2(1152, 0), new Vector2(1152, 648))
+    };
+    private Rect2 _blankReg = new Rect2();
+    public void PlayDamageOverlay()
+    {
+        _damageAnim.Region = _blankReg;
+        _damageOverlay.Modulate = Colors.White;
+        _damageOverlay.Show();
+        var damTween = CreateTween();
+        foreach (var region in _damAnimRegions)
+        {
+            damTween.TweenProperty(_damageAnim, "region", region, 0.0f).SetDelay(_timePer);
+        }
+        damTween.TweenProperty(_damageOverlay, "modulate:a", 0.0f, _timeFade).SetDelay(_timeStay);
+    }
+    public void PlayHalfDamageOverlay()
+    {
+        _damageAnim.Region = _blankReg;
+        _damageOverlay.Modulate = Colors.White;
+        _damageOverlay.Show();
+        var damTween = CreateTween();
+        foreach (var region in _damHalfAnimRegions)
+        {
+            damTween.TweenProperty(_damageAnim, "region", region, 0.0f).SetDelay(_timePer);
+        }
+        damTween.TweenProperty(_damageOverlay, "modulate:a", 0.0f, _timeFade).SetDelay(_timeStay / 2f);
+    }
     public override void _Ready()
 	{
 		_global = GetNode<Global>("/root/Global");
 		_player = Global.Player;
+
+        BlackOverlay = GetNode<ColorRect>("BlackOverlay");
+        BlackOverlay.Hide();
 
         _eyeCounter = GetNode<TextureRect>("EyeCounter");
         _global.CandleGroupComplete += OnCandleGroupComplete;
@@ -79,6 +131,7 @@ public partial class UI : Control
 
         _player.LimbHealthStateChange += OnLimbHealthStateChange;
         _player.LimbDetached += OnLimbDetached;
+        _player.LoseLimb += OnLoseLimb;
 
         _syringeTop = GetNode<Control>("SyringeUI");
 		for (int i = 1; i <= 5; i++)
@@ -88,7 +141,29 @@ public partial class UI : Control
         }
         SetCureUIs(_player.CuresHeld);
         _player.NumCuresChanged += SetCureUIs;
-	}
+
+        _gameOver = GetNode<ColorRect>("GameOver");
+        _gameOver.Hide();
+
+        WinGame = GetNode<ColorRect>("WinGame");
+        WinGame.Hide();
+
+        _damageOverlay = GetNode<TextureRect>("DamageOverlay");
+        _damageAnim = _damageOverlay.Texture as AtlasTexture;
+        _damageOverlay.Hide();
+    }
+
+    private void OnLoseLimb(int newLimbCount)
+    {
+        if (newLimbCount == 0)
+        {
+            _gameOver.Show();
+            GetTree().CreateTimer(1.5f).Timeout += () =>
+            {
+                GetTree().ReloadCurrentScene();
+            };
+        }
+    }
 
     private void OnCandleGroupComplete()
     {
@@ -99,12 +174,14 @@ public partial class UI : Control
     public override void _Process(double delta)
 	{
 	}
-    private void OnLimbHealthStateChange(Player.LimbHealthState newLimbHealthState)
+    private void OnLimbHealthStateChange(Player.LimbHealthState newLimbHealthState, bool damaged)
     {
         _bodyMap[_player.LimbCount].Modulate = _bodyColorMap[newLimbHealthState];
+        if (damaged) { PlayHalfDamageOverlay(); GD.Print("damage overlay"); }
     }
     private void OnLimbDetached(SeveredLimb limb)
     {
+        PlayDamageOverlay();
         _bodyMap[_player.LimbCount + 1].Modulate = GoneHex;
     }
 

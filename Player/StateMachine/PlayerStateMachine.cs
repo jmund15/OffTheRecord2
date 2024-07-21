@@ -50,7 +50,7 @@ public partial class PlayerStateMachine : CompoundState
         GD.Print("transitioning to lose limb");
         TransitionFiniteSubState(PrimarySubState, _loseLimbState);
     }
-    private void OnLimbHealthStateChange(Player.LimbHealthState newLimbHealthState)
+    private void OnLimbHealthStateChange(Player.LimbHealthState newLimbHealthState, bool damaged)
     {
         var animPlaying = AnimSprite.IsPlaying();
         int currAnimFrame = 0;

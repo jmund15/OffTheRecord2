@@ -209,7 +209,7 @@ public partial class Monster : BasePlayer
 
                 //GD.Print("Distance to Player: ", this.Position.DistanceTo(ProtagRef.Position));
 
-                if (AI_navAgent.DistanceToTarget() <= CHARGE_DIST * 3)
+                if (AI_navAgent.DistanceToTarget() <= CHARGE_DIST * 1.5f)
                 {
                     _lunged = false;
                     AI_makePath(ProtagRef.Position);
@@ -499,6 +499,7 @@ public partial class Monster : BasePlayer
         switch (currentSubState)
         {
             case (int)AI_SUB_WANDER_STATE.STAY_OUT_OF_VIEW:
+                rollAIState();
                 if (!AI_isVisible(Position)) { rollAIState(); }
                 CurrentSpeed = _walkSpeed;
 

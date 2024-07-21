@@ -22,7 +22,10 @@ public partial class MainScene : Node2D
 
 	private Vector2 _initCamPos = new Vector2(550, 245);
 
+
 	private Area2D _finalArea;
+	private AnimatedSprite2D _finalCutscene;
+
 	private AnimatedSprite2D _eyeFlame;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -54,13 +57,19 @@ public partial class MainScene : Node2D
         _player.InCutscene = true;
 		_monster.Hide();
 		_player.Hide();
+
+		_finalCutscene = GetNode<AnimatedSprite2D>("FinalCutscene");
+		_finalCutscene.Hide();
     }
 
     private void OnAreaEntered(Area2D area)
     {
         if (area.GetParent() is Monster monster)
 		{
-
+			if (_global.CandleGroupsCompleted == 4)
+			{
+				WonGame();
+            }
 		}
     }
 
@@ -69,6 +78,7 @@ public partial class MainScene : Node2D
 	{
 		if (OnTitle && _playButton.MouseIn && Input.IsMouseButtonPressed(MouseButton.Left))
 		{
+			OnTitle = false;
 			_playButton.Play("play");
 			TitlePlay();
 		}
@@ -90,8 +100,8 @@ public partial class MainScene : Node2D
     }
 	private void StartCutscene()
 	{
+		(_ui.GetParent() as CanvasLayer).FollowViewportEnabled = false;
 		GD.Print("intro cutscene now");
-		OnTitle = false;
 		OnInitCutscene = true;
         _initCutscene.Play("intro");
 		_initCutscene.AnimationFinished += OnInitFinished;
@@ -111,11 +121,45 @@ public partial class MainScene : Node2D
             _player.CanMove = true;
             _player.InCutscene = false;
 			OnInitCutscene = false;
+			_monster.InitCutscene = false;
+			//_global.CandleGroupsCompleted = 4;
         };
     }
 
-    private void FinalCutscene()
+    private void WonGame()
 	{
+		_player.InCutscene = true;
+		_player.CanMove = false;
+		_monster.CanMove = false;
+        _camera.InCutscene = true;
 
+        var endTween = CreateTween();
+		_ui.BlackOverlay.Modulate = new Color("00000000");
+        _ui.BlackOverlay.Show();
+        endTween.TweenProperty(_ui.BlackOverlay, "modulate:a", 1.0f, 1.0f).SetEase(Tween.EaseType.In).SetDelay(0.5f);
+		endTween.TweenProperty(_camera, "position", new Vector2(350, -500), 0.0f);
+		endTween.TweenProperty(_camera, "zoom", new Vector2(2.0f, 2.0f), 0.0f);
+        endTween.TweenProperty(_monster, "visible", true, 0.0f);
+        endTween.TweenProperty(_player, "position", new Vector2(530, 275), 0.0f);
+        endTween.TweenProperty(_finalCutscene, "visible", true, 0.0f).SetDelay(1.0f);
+
+        endTween.TweenProperty(_ui.BlackOverlay, "modulate:a", 0.0f, 1.0f).SetEase(Tween.EaseType.In);
+        endTween.Parallel().TweenProperty(_camera, "position", _initCamPos, 4.0f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.InOut);
+        endTween.Parallel().TweenProperty(_camera, "zoom", new Vector2(5.0f, 5.0f), 4.0f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.InOut);
+        endTween.TweenCallback(Callable.From(FinalCutscene));
 	}
+	private void FinalCutscene()
+	{
+		_finalCutscene.GetNode<EyeFlame>("EyeFlame").StartEyeFlame();
+        _finalCutscene.Play("final");
+		_finalCutscene.AnimationFinished += FinalFinished;
+    }
+    private void FinalFinished()
+    {
+        _ui.WinGame.Show();
+        GetTree().CreateTimer(5.0f).Timeout += () =>
+        {
+            GetTree().ReloadCurrentScene();
+        };
+    }
 }

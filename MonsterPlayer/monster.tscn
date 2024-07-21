@@ -830,6 +830,9 @@ motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_016xf")
 _bloodTrail = ExtResource("2_efn8f")
+LungeSpeed = 11000.0
+_chaseSpeed = 5500.0
+_walkSpeed = 3500.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 10)
