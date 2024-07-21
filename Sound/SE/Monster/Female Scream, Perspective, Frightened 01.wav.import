@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://n78nu3ndmu5"
+path="res://.godot/imported/Female Scream, Perspective, Frightened 01.wav-23244c13b55e5e00af5c2d1f8cb3ccba.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Monster/Female Scream, Perspective, Frightened 01.wav"
+dest_files=["res://.godot/imported/Female Scream, Perspective, Frightened 01.wav-23244c13b55e5e00af5c2d1f8cb3ccba.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

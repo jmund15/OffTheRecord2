@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://chbi5oeoj5gg5"
+path="res://.godot/imported/ES_Ancient Spells - Ruiqi Zhao.wav-9c4a80566f9fa447b3b801c1c93402ff.sample"
+
+[deps]
+
+source_file="res://Sound/Music/End/ES_Ancient Spells - Ruiqi Zhao.wav"
+dest_files=["res://.godot/imported/ES_Ancient Spells - Ruiqi Zhao.wav-9c4a80566f9fa447b3b801c1c93402ff.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dqbt8mcu6aerf"
+path="res://.godot/imported/Animal, Sheep, Group Heavy Breathing.wav-3792553c1d4a5f4480b17e7310f9c65f.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Monster/Animal, Sheep, Group Heavy Breathing.wav"
+dest_files=["res://.godot/imported/Animal, Sheep, Group Heavy Breathing.wav-3792553c1d4a5f4480b17e7310f9c65f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

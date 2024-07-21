@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bth58maof6m4x"
+path="res://.godot/imported/Gorilla, Vocalizations 03.wav-a7daba679ec8cbbfa0bddc5f800af63f.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Monster/Gorilla, Vocalizations 03.wav"
+dest_files=["res://.godot/imported/Gorilla, Vocalizations 03.wav-a7daba679ec8cbbfa0bddc5f800af63f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

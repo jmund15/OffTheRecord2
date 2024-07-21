@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://2hnaym65e1jg"
+path="res://.godot/imported/Underground, Hits, Behind Wall, Longer Reverb, Loop.wav-241f35f4da2b6783fbd92918d3711d77.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Ambient/Underground, Hits, Behind Wall, Longer Reverb, Loop.wav"
+dest_files=["res://.godot/imported/Underground, Hits, Behind Wall, Longer Reverb, Loop.wav-241f35f4da2b6783fbd92918d3711d77.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

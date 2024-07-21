@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ds06erv4b0qdh"
+path="res://.godot/imported/Male In Pain, Squeezing.wav-c9d50e3e89b729bf802f2a7eb9d8478c.sample"
+
+[deps]
+
+source_file="res://Sound/SE/Monster/Male In Pain, Squeezing.wav"
+dest_files=["res://.godot/imported/Male In Pain, Squeezing.wav-c9d50e3e89b729bf802f2a7eb9d8478c.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
