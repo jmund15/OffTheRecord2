@@ -246,9 +246,12 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.490196)
 
 [node name="TextureRect" type="TextureRect" parent="GameOver"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("10_flrpg")
 
 [node name="WinGame" type="ColorRect" parent="."]
@@ -271,6 +274,7 @@ grow_vertical = 2
 texture = ExtResource("11_a6ib1")
 
 [node name="DamageOverlay" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

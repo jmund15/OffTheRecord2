@@ -152,7 +152,16 @@ public partial class UI : Control
         _damageAnim = _damageOverlay.Texture as AtlasTexture;
         _damageOverlay.Hide();
     }
-
+    public void SetPlayerInfo()
+    {
+        _player = Global.Player;
+        _player.LimbHealthStateChange += OnLimbHealthStateChange;
+        _player.LimbDetached += OnLimbDetached;
+        _player.LoseLimb += OnLoseLimb;
+        SetCureUIs(_player.CuresHeld);
+        _player.NumCuresChanged += SetCureUIs;
+        (_eyeCounter.Texture as AtlasTexture).Region = CandleGroupMap[_global.CandleGroupsCompleted];
+    }
     private void OnLoseLimb(int newLimbCount)
     {
         if (newLimbCount == 0)
@@ -160,6 +169,7 @@ public partial class UI : Control
             _gameOver.Show();
             GetTree().CreateTimer(1.5f).Timeout += () =>
             {
+                _global.Reset = true;
                 GetTree().ReloadCurrentScene();
             };
         }

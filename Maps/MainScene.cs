@@ -3,6 +3,7 @@ using System;
 
 public partial class MainScene : Node2D
 {
+
 	public bool OnTitle = true;
 	public bool OnInitCutscene = false;
 	public bool OnEndCutscene = false;
@@ -31,8 +32,14 @@ public partial class MainScene : Node2D
 	public override void _Ready()
 	{
 		_global = GetNode<Global>("/root/Global");
-		_player = Global.Player;
+        if (_global.Reset)
+		{
+			_global._Ready();
+		}
+
+        _player = Global.Player;
 		_monster = Global.Monster;
+		
 
 		_finalArea = GetNode<Area2D>("FinalArea");
 		_finalArea.Monitoring = false;
@@ -40,7 +47,12 @@ public partial class MainScene : Node2D
 
 
 		_ui = GetNode<CanvasLayer>("CanvasLayer").GetNode<UI>("UI");
-		_camera = GetNode<Camera>("Camera2D"); _camera.InCutscene = true;
+        if (_global.Reset)
+        {
+			_monster.SetPlayerInfo();
+			_ui.SetPlayerInfo();
+        }
+        _camera = GetNode<Camera>("Camera2D"); _camera.InCutscene = true;
 		_camera.Position = new Vector2(350, -500);
 		_titleScreen = _ui.GetNode<TitleScreen>("TitleScreen");
 		_playButton = _ui.GetNode<PlayButton>("PlayButton");
@@ -147,6 +159,8 @@ public partial class MainScene : Node2D
 		_player.CanMove = false;
 		_monster.CanMove = false;
         _camera.InCutscene = true;
+        _player.ProcessMode = ProcessModeEnum.Disabled;
+        _monster.ProcessMode = ProcessModeEnum.Disabled; 
 
         var endTween = CreateTween();
 		_ui.BlackOverlay.Modulate = new Color("00000000");
@@ -154,7 +168,7 @@ public partial class MainScene : Node2D
         endTween.TweenProperty(_ui.BlackOverlay, "modulate:a", 1.0f, 1.0f).SetEase(Tween.EaseType.In).SetDelay(0.5f);
 		endTween.TweenProperty(_camera, "position", new Vector2(350, -500), 0.0f);
 		endTween.TweenProperty(_camera, "zoom", new Vector2(2.0f, 2.0f), 0.0f);
-        endTween.TweenProperty(_monster, "visible", true, 0.0f);
+        endTween.TweenProperty(_monster, "visible", false, 0.0f);
         endTween.TweenProperty(_player, "position", new Vector2(530, 275), 0.0f);
         endTween.TweenProperty(_finalCutscene, "visible", true, 0.0f).SetDelay(1.0f);
 
@@ -174,6 +188,7 @@ public partial class MainScene : Node2D
         _ui.WinGame.Show();
         GetTree().CreateTimer(5.0f).Timeout += () =>
         {
+			_global.Reset = true;
             GetTree().ReloadCurrentScene();
         };
     }

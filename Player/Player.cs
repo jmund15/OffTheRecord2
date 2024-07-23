@@ -260,20 +260,20 @@ public partial class Player : BasePlayer, IDirectionComponent
     }
     public override float CalcMovementSpeed()
     {
-        return base.CalcMovementSpeed();
-        //switch (LimbCount)
-        //{
-        //    case 4:
-        //        return 1;
-        //    case 3:
-        //        return 0.8f;
-        //    case 2:
-        //        return 0.6f;
-        //    case 1:
-        //        return 0.4f;
-        //    default:
-        //        throw new Exception("LIMB COUNT ERROR");
-        //}
+        //return base.CalcMovementSpeed();
+        switch (LimbCount)
+        {
+            case 4:
+                return 1;
+            case 3:
+                return 1f;
+            case 2:
+                return 0.9f;
+            case 1:
+                return 0.8f;
+            default:
+                throw new Exception("LIMB COUNT ERROR");
+        }
     }
     public void GameOver()
     {

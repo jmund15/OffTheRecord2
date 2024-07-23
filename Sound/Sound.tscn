@@ -177,6 +177,7 @@ volume_db = -8.433
 
 [node name="TitleMusic" type="AudioStreamPlayer" parent="Title"]
 stream = ExtResource("5_8c2vo")
+volume_db = -17.5
 
 [node name="End" type="Node" parent="."]
 

@@ -28,8 +28,6 @@ public partial class MonsterWalkState : State
     public override void Enter(Dictionary<State, bool> parallelStates)
     {
         base.Enter(parallelStates);
-        _monster.CanMove = true;
-
         _inputDirection = DirectionComponent.GetDesiredDirectionNormalized();
         _faceDirection = IDirectionComponent.GetDirectionFromVector(_inputDirection);
 

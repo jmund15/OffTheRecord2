@@ -62,6 +62,7 @@ public partial class PlayerStateMachine : CompoundState
         //}
 
         //if (!animPlaying) { return; }
+        if (PrimarySubState is LoseLimbState) { return; }
         AnimSprite.Play(PrimarySubState.AnimName + _player.LimbCount + _player.LimbHealthAnimString[newLimbHealthState]);
         AnimSprite.SetFrameAndProgress(currAnimFrame, currAnimFrameProg);
     }

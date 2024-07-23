@@ -102,15 +102,15 @@ public partial class Candle : StaticBody2D
             PointLight.Enabled = true;
 
         }
-        else
-        {
-            _animatedSprite.Play("flameOff");
-            AudioStreamPlayer player = GetTree().Root.GetNode("MainScene").GetNode("Sound").GetNode("SFXDude").GetNode<AudioStreamPlayer>("sfx7");
-            player.Play();
-            CandleOn = false;
-            PointLight.Enabled = false;
+        //else
+        //{
+        //    _animatedSprite.Play("flameOff");
+        //    AudioStreamPlayer player = GetTree().Root.GetNode("MainScene").GetNode("Sound").GetNode("SFXDude").GetNode<AudioStreamPlayer>("sfx7");
+        //    player.Play();
+        //    CandleOn = false;
+        //    PointLight.Enabled = false;
 
-        }
+        //}
     }
     private void CandleOff()
     {
@@ -119,5 +119,6 @@ public partial class Candle : StaticBody2D
         AudioStreamPlayer player = GetTree().Root.GetNode("MainScene").GetNode("Sound").GetNode("SFXDude").GetNode<AudioStreamPlayer>("sfx7");
         player.Play();
         CandleOn = false;
+        PointLight.Enabled = false;
     }
 }

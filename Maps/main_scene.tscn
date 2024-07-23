@@ -1,4 +1,4 @@
-[gd_scene load_steps=95 format=3 uid="uid://cojv8vhqfb1ng"]
+[gd_scene load_steps=97 format=3 uid="uid://cojv8vhqfb1ng"]
 
 [ext_resource type="Script" path="res://Maps/MainScene.cs" id="1_n4sgp"]
 [ext_resource type="PackedScene" uid="uid://d1rek7wpult63" path="res://Sound/Sound.tscn" id="2_3ek6a"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://b8ftyj8umt8oc" path="res://Environment/placeholder_tiles.png" id="6_h2klo"]
 [ext_resource type="Texture2D" uid="uid://b12byxmawgi50" path="res://UI/monster_death.png" id="6_jh2po"]
 [ext_resource type="Texture2D" uid="uid://bxl5mln27fkde" path="res://UI/main_menu_title.png" id="6_smxjr"]
+[ext_resource type="Texture2D" uid="uid://dok881kpltbnp" path="res://Player/drop_shadow.png" id="7_7wtxu"]
 [ext_resource type="Script" path="res://Maps/PlayButton.cs" id="7_si040"]
 [ext_resource type="Texture2D" uid="uid://c1r73ndmbw1ct" path="res://UI/main_menu_play.png" id="7_vg80l"]
 [ext_resource type="Script" path="res://Maps/TitleScreen.cs" id="8_1a8we"]
@@ -21,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://sxfvn2jghq2n" path="res://Environment/map_path1.png" id="11_2cpvp"]
 [ext_resource type="Texture2D" uid="uid://sd4ypfe16mvh" path="res://Environment/map_path2.png" id="12_d038e"]
 [ext_resource type="Texture2D" uid="uid://1qo51h4pt0m0" path="res://Environment/map_path3.png" id="13_bbypd"]
+[ext_resource type="Texture2D" uid="uid://cdrvvs7in0yi" path="res://UI/screen_overlays_controls.png" id="14_emyp2"]
 [ext_resource type="Texture2D" uid="uid://dv2dj0iabjbbe" path="res://Environment/map_path4.png" id="14_v1ahi"]
 [ext_resource type="PackedScene" uid="uid://cee77v5xttuxy" path="res://Environment/spec_candle.tscn" id="15_eufbt"]
 [ext_resource type="PackedScene" uid="uid://dpnqgboxxulsc" path="res://Environment/eye_flame.tscn" id="16_g1i6e"]
@@ -587,6 +589,12 @@ z_index = -1
 position = Vector2(-5, -25)
 scale = Vector2(2.5, 2.5)
 
+[node name="Shadow" type="Sprite2D" parent="FinalCutscene"]
+z_index = -1
+position = Vector2(0, 17)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("7_7wtxu")
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 100
 follow_viewport_enabled = true
@@ -612,12 +620,22 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("6_smxjr")
 script = ExtResource("8_1a8we")
 
+[node name="Controls" type="Sprite2D" parent="CanvasLayer/UI/TitleScreen"]
+position = Vector2(-300, 0)
+texture = ExtResource("14_emyp2")
+
 [node name="TitleMonster" type="AnimatedSprite2D" parent="CanvasLayer/UI"]
-position = Vector2(200, -400)
+position = Vector2(350, -400)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_i1scd")
 autoplay = "default"
 frame_progress = 0.982949
+
+[node name="Shadow" type="Sprite2D" parent="CanvasLayer/UI/TitleMonster"]
+z_index = -1
+position = Vector2(0, 17)
+scale = Vector2(1.5, 1)
+texture = ExtResource("7_7wtxu")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_4q18x")
@@ -677,23 +695,23 @@ position = Vector2(-833, -509)
 [node name="Syringe10" parent="." instance=ExtResource("3_qvigc")]
 position = Vector2(627, 479)
 
-[node name="Map1" type="Sprite2D" parent="."]
+[node name="Map2" type="Sprite2D" parent="."]
 modulate = Color(0.141176, 0.141176, 0.258824, 1)
 z_index = -3
 position = Vector2(8, 0)
 texture = ExtResource("12_d038e")
+
+[node name="Map1" type="Sprite2D" parent="."]
+modulate = Color(0.141176, 0.141176, 0.258824, 1)
+z_index = -3
+position = Vector2(8, 0)
+texture = ExtResource("13_bbypd")
 
 [node name="Map3" type="Sprite2D" parent="."]
 modulate = Color(0.13936, 0.139255, 0.259354, 1)
 z_index = -3
 position = Vector2(8, 0)
 texture = ExtResource("11_2cpvp")
-
-[node name="Map2" type="Sprite2D" parent="."]
-modulate = Color(0.141176, 0.141176, 0.258824, 1)
-z_index = -3
-position = Vector2(8, 0)
-texture = ExtResource("13_bbypd")
 
 [node name="Map4" type="Sprite2D" parent="."]
 modulate = Color(0.141176, 0.141176, 0.258824, 1)
@@ -748,17 +766,17 @@ position = Vector2(474, 567)
 
 [node name="CandleGroup4" type="Node2D" parent="."]
 
-[node name="specCandle" parent="CandleGroup4" instance=ExtResource("15_eufbt")]
-position = Vector2(487, 380)
+[node name="specCandle1" parent="CandleGroup4" instance=ExtResource("15_eufbt")]
+position = Vector2(584, 379)
 _pathNum = 1
 
 [node name="specCandle2" parent="CandleGroup4" instance=ExtResource("15_eufbt")]
-position = Vector2(584, 379)
-_pathNum = 3
-
-[node name="specCandle5" parent="CandleGroup4" instance=ExtResource("15_eufbt")]
-position = Vector2(536, 428)
+position = Vector2(487, 380)
 _pathNum = 2
+
+[node name="specCandle3" parent="CandleGroup4" instance=ExtResource("15_eufbt")]
+position = Vector2(536, 428)
+_pathNum = 3
 
 [node name="Group1Eyes" type="Node2D" parent="."]
 position = Vector2(247, -548)

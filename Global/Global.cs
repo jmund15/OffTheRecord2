@@ -13,67 +13,40 @@ public partial class Global : Node
     public static Monster Monster { get; private set; }
 
 
-    private Dictionary<int, bool> _firstCandleGroupMap = new Dictionary<int, bool>()
-    {
-        { 1, false },
-        { 2, false },
-        { 3, false },
-        { 4, false },
-        { 5, false }
-    };
-    public Dictionary<int, bool> FirstCandleGroupMap
-    {
-        get => _firstCandleGroupMap;
-        set
-        {
-            if (value == _firstCandleGroupMap) { return; }
-            _firstCandleGroupMap = value;
-        }
-    }
-
-
     public Events SignalBus { get; private set; }
     public readonly Random Rnd = new Random(Guid.NewGuid().GetHashCode());
 
     public const float LowestPixelSize = 0.01f;
 
-    public const string LeftAction = "leftPlayer";
-    public const string RightAction = "rightPlayer";
-    public const string UpAction = "upPlayer";
-    public const string DownAction = "downPlayer";
-    public const string AttackAction = "attackPlayer";
-    public const string DefendAction = "defendPlayer";
-    public const string LeapAction = "leapPlayer";
-    public const string ThrowAction = "throwPlayer";
-    public const string ItemAction = "itemPlayer";
 
 
-    public int CandleGroupsCompleted = 0;
+    public int CandleGroupsCompleted;
     private Node2D _candleGroup1;
-    public bool _candle1Fin = false;
+    public bool _candle1Fin;
     private Sprite2D _group1Path;
     private Node2D _candleGroup2;
-    public bool _candle2Fin = false;
+    public bool _candle2Fin;
     private Sprite2D _group2Path;
     private Node2D _candleGroup3;
-    public bool _candle3Fin = false;
+    public bool _candle3Fin;
     private Sprite2D _group3Path;
     private Node2D _candleGroup4;
-    public bool _candle4Fin = false;
+    public bool _candle4Fin;
     private Sprite2D _group4Path;
 
     private Node2D _eyeFlames1;
     private Node2D _eyeFlames2;
     private Node2D _eyeFlames3;
-    private List<EyeFlame> _group1EyeFlames = new List<EyeFlame>();
-    private List<EyeFlame> _group2EyeFlames = new List<EyeFlame>();
-    private List<EyeFlame> _group3EyeFlames = new List<EyeFlame>();
+    private List<EyeFlame> _group1EyeFlames;
+    private List<EyeFlame> _group2EyeFlames;
+    private List<EyeFlame> _group3EyeFlames;
 
-    public List<Candle> Group1Candles { get; private set; } = new List<Candle>();
-    public List<Candle> Group2Candles { get; private set; } = new List<Candle>();
-    public List<Candle> Group3Candles { get; private set; } = new List<Candle>();
-    public List<Candle> Group4Candles { get; private set; } = new List<Candle>();
+    public List<Candle> Group1Candles { get; private set; }
+    public List<Candle> Group2Candles { get; private set; }
+    public List<Candle> Group3Candles { get; private set; } 
+    public List<Candle> Group4Candles { get; private set; }
 
+    public bool Reset = false;
 
     [Signal]
     public delegate void CandleGroupCompleteEventHandler();
@@ -85,6 +58,24 @@ public partial class Global : Node
         MainScene = GetNode<MainScene>("/root/MainScene");
         Player = MainScene.GetNode<Player>("Player");
         Monster = MainScene.GetNode<Monster>("Monster");
+        Monster.ProtagRef = Player;
+
+
+       CandleGroupsCompleted = 0;
+        _candle1Fin = false;
+        _candle2Fin = false;
+        _candle3Fin = false;
+        _candle4Fin = false;
+    
+        _group1EyeFlames = new List<EyeFlame>();
+        _group2EyeFlames = new List<EyeFlame>();
+        _group3EyeFlames = new List<EyeFlame>();
+
+        Group1Candles = new List<Candle>();
+        Group2Candles = new List<Candle>();
+        Group3Candles = new List<Candle>();
+        Group4Candles = new List<Candle>();
+
 
         _candleGroup1 = MainScene.GetNode<Node2D>("CandleGroup1");
         _group1Path = MainScene.GetNode<Sprite2D>("Map1");

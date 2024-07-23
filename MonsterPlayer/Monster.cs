@@ -14,12 +14,15 @@ public partial class Monster : BasePlayer
     private Color _bloodColor = new Color("dc00dc");
 
     private VisibleOnScreenNotifier2D _visibleOnScreenNotifier;
-    private Vector2 _preExitScreenDist;
+    private float _preExitScreenDist;
     public Vector2 StuckTeleport { get; set; } = Vector2.Zero;
+    private bool _setLungeTimer = false;
     private bool _lunged = false;
     private bool _checkedPounce = false;
     [Export]
     public float LungeSpeed = 9000f;
+    [Export]
+    private float _pounceSpeed = 9000f;
     [Export]
     private float _chaseSpeed = 6000f;
     [Export]
@@ -158,7 +161,7 @@ public partial class Monster : BasePlayer
     private double lastDeltaTime = 0.0;
 
     private NavigationAgent2D AI_navAgent;
-    private Player ProtagRef;
+    public Player ProtagRef;
     public bool newMove = false;
     private readonly Random Rnd = new Random(Guid.NewGuid().GetHashCode());
 
@@ -177,10 +180,11 @@ public partial class Monster : BasePlayer
 		switch (currentSubState) 
 		{
 			case (int)AI_SUB_CHASE_STATE.LOCATE:
+                if (!AI_isVisible(Position)) { changeSubState((int)AI_SUB_CHASE_STATE.PURSUE); break; }
                 CurrentSpeed = _walkSpeed;
                 //NO INPUT HERE
                 if (idleThreshold<0.0) {
-                    idleThreshold = randInRange(1.5, 3.0); //set idle time
+                    idleThreshold = randInRange(1, 2.5); //set idle time
                 }
                 timeIdle += lastDeltaTime;
                 if (timeIdle>=idleThreshold)
@@ -190,10 +194,11 @@ public partial class Monster : BasePlayer
 				break;
 
             case (int)AI_SUB_CHASE_STATE.PURSUE:
+                CurrentSpeed = _walkSpeed;
                 //Nav to player point directly using nav agent
                 if (movingThreshold < 0.0)
                 {
-                    movingThreshold = randInRange(5, 10); //set movemax time
+                    movingThreshold = randInRange(2.5, 5); //set movemax time
                 }
                 AI_makePath(ProtagRef.Position);
                 //AI_navAgent.TargetPosition = ProtagRef.Position; //Nav to Player
@@ -222,7 +227,7 @@ public partial class Monster : BasePlayer
             case (int)AI_SUB_CHASE_STATE.CHARGE:
                 if (movingThreshold < 0.0)
                 {
-                    movingThreshold = randInRange(1.5, 4); //set movemax time
+                    movingThreshold = randInRange(1, 2.5); //set movemax time
                 }
                 CurrentSpeed = _chaseSpeed;
                 if (AI_navAgent.DistanceToTarget() <= CHARGE_DIST && !_lunged) { //TODO FIND THE DIST NUMBER TO LUNGE
@@ -253,7 +258,7 @@ public partial class Monster : BasePlayer
 
             case (int)AI_SUB_CHASE_STATE.JUKED:
                 //Did not catch with charge, act confused for a moment, then go
-                if (Velocity.IsZeroApprox() || AI_navAgent.DistanceToTarget() <= 20f) //Find when stopped
+                if (Velocity.IsZeroApprox() || AI_navAgent.DistanceToTarget() <= 25f) //Find when stopped
                 {
                     if (Rnd.NextDouble() <= 0.75) //Flip Coin
                     {
@@ -280,6 +285,7 @@ public partial class Monster : BasePlayer
     private void AI_guardState()
     {
         rollAIState();
+        return;
         switch (currentSubState)
         {
             case (int)AI_SUB_GUARD_STATE.MOVE_TO_GOAL:
@@ -330,9 +336,20 @@ public partial class Monster : BasePlayer
         switch (currentSubState)
         {
             case (int)AI_SUB_IMPEDE_STATE.GET_CLOSE:
+                if (movingThreshold < 0.0)
+                {
+                    movingThreshold = randInRange(5, 7.5); //set movemax time
+                }
+
+                timeMoving += lastDeltaTime;
+
+                if (timeMoving >= movingThreshold) //Change to locate if not found
+                {
+                    rollAIState(); return;
+                }
                 CurrentSpeed = _chaseSpeed;
                 //Nav to general area of player
-                AI_navAgent.TargetPosition = ProtagRef.Position;
+                AI_makePath(ProtagRef.Position);
                 if (AI_navAgent.DistanceToTarget() <= 75) //TODO: Find Impede distance
                 {
                     changeSubState((int)AI_SUB_IMPEDE_STATE.ADJUST);
@@ -342,15 +359,16 @@ public partial class Monster : BasePlayer
 
 
             case (int)AI_SUB_IMPEDE_STATE.ADJUST:
+                if (!AI_isVisible(Position)) { rollAIState(); return; }
                 CurrentSpeed = _walkSpeed;
                 //Move in mirror of player for a bit. 
 
                 if (movingThreshold < 0)
                 {
-                    movingThreshold=randInRange(3.0, 8); // Be in way for 3-10 seconds
+                    movingThreshold=randInRange(2.5, 5); // Be in way for 3-10 seconds
                 }
 
-                AI_navAgent.TargetPosition = ProtagRef.GetDesiredDirection() * 1000;
+                AI_navAgent.TargetPosition = Position + (ProtagRef.GetDesiredDirection() * 10);
                 //protag ref input = AI input
 
                 timeMoving += lastDeltaTime;
@@ -385,7 +403,17 @@ public partial class Monster : BasePlayer
         switch (currentSubState)
         {
             case (int)AI_SUB_POUNCE_STATE.ASSUME_POSITION:
-                CurrentSpeed = _chaseSpeed;
+                if (movingThreshold < 0)
+                {
+                    movingThreshold = randInRange(5, 10); 
+                }
+                timeMoving += lastDeltaTime;
+
+                if (timeMoving > movingThreshold)
+                {
+                    rollAIState(); return;
+                }
+                CurrentSpeed = _pounceSpeed;
                 AI_makePath(ProtagRef.Position);
 
                 //Stand there out of frame until player is out of healing state
@@ -397,16 +425,24 @@ public partial class Monster : BasePlayer
                 else
                 {
                     AI_navAgent.TargetPosition = Position;
-                    _lunged = false;
+                    _lunged = true;
                     changeSubState((int)AI_SUB_POUNCE_STATE.YEET);
                 }
 
                 break;
 
             case (int)AI_SUB_POUNCE_STATE.YEET:
+                if (!_setLungeTimer)
+                {
+                    _setLungeTimer = true;
+                    GetTree().CreateTimer(0.5f).Timeout += () =>
+                    {
+                        _lunged = false;
+                    };
+                }
                 if (!ProtagRef.Healing && !_lunged)
                 {
-                    AI_makePath(ProtagRef.Position);
+                    AI_navAgent.TargetPosition = ProtagRef.Position;
                     //Do the Lunge Thing
                     EmitSignal(SignalName.Lunge);
                     CurrentSpeed = _walkSpeed;
@@ -416,20 +452,21 @@ public partial class Monster : BasePlayer
                 if (Velocity.IsZeroApprox() && _lunged) //Find when stopped
                 {
                     _lunged = false;
+                    _setLungeTimer = false;
                     if (Rnd.NextDouble() <= 0.75) //Flip Coin
                     {
-                        if (Rnd.NextDouble() <= 0.75) //Flip Coin
+                        if (Rnd.NextDouble() <= 0.5) //Flip Coin
                         {
-                            changeSubState((int)AI_SUB_CHASE_STATE.LOCATE); // Look around
+                            changeMainState(AI_MAIN_BEHAVIOR_STATE.CHASE, (int)AI_SUB_CHASE_STATE.LOCATE);
                         }
                         else
                         {
-                            rollAIState(); //re-roll the AI State
+                            changeMainState(AI_MAIN_BEHAVIOR_STATE.CHASE, (int)AI_SUB_CHASE_STATE.PURSUE);
                         }
                     }
                     else
                     {
-                        changeSubState((int)AI_SUB_CHASE_STATE.PURSUE); //Keep Pursuing
+                        changeMainState(AI_MAIN_BEHAVIOR_STATE.CHASE, (int)AI_SUB_CHASE_STATE.JUKED);
                     }
                 }
 
@@ -442,18 +479,19 @@ public partial class Monster : BasePlayer
         switch (currentSubState)
         {
             case (int)AI_SUB_STAND_THERE_MENICINGLY_STATE.BE_SPOOKY:
-                if (!AI_isVisible(Position)) { rollAIState(); }
+                if (!AI_isVisible(Position)) { rollAIState(); return; }
+                AI_navAgent.TargetPosition = Position;
                 //Stand there for a bit, reference timeIdle
                 if (idleThreshold < 0)
                 {
-                    idleThreshold = randInRange(1.5, 5.0);
+                    idleThreshold = randInRange(1, 3);
                 }
 
                 timeIdle += lastDeltaTime;
 
                 if (timeIdle > idleThreshold)
                 {
-                    rollAIState();
+                    rollAIState(); return;
                 }
 
                 break;
@@ -492,18 +530,19 @@ public partial class Monster : BasePlayer
         switch (currentSubState)
         {
             case (int)AI_SUB_WANDER_STATE.STAY_OUT_OF_VIEW:
-                rollAIState();
-                if (!AI_isVisible(Position)) { rollAIState(); }
+                if (!AI_isVisible(Position)) { rollAIState(); return; }
+
+                AI_makePath(Position + Global.GetRandomDirection() * 300);
                 CurrentSpeed = _walkSpeed;
 
                 //Nav to Closest valid point not in the view port
 
                 if (idleThreshold < 0)
                 {
-                    idleThreshold = randInRange(1.5,3);
+                    idleThreshold = randInRange(1.5, 5);
                     //Vector2 posIndex = this.GlobalPosition;
-                    Vector2 wanderPos = Position + (Global.GetRandomDirection() * 50);
-                    AI_makeClosePath(wanderPos);
+                    //Vector2 wanderPos = Position + (Global.GetRandomDirection() * 50);
+                    //AI_makeClosePath(wanderPos);
                 }
                 
                 timeIdle += lastDeltaTime;
@@ -523,20 +562,20 @@ public partial class Monster : BasePlayer
         switch (currentSubState)
         {
             case (int)AI_SUB_FIND_LIMB_STATE.MOVE_TO_LIMB:
-                CurrentSpeed = _chaseSpeed;
+                CurrentSpeed = _pounceSpeed;
                 //Stand there for a bit, reference timeIdle
                 if (idleThreshold < 0)
                 {
                     idleThreshold = 9f;
                 }
-                AI_makePath(LimbsToDevour[0].Position);
+                AI_makePath(LimbsToDevour[0].GlobalPosition);
                 //GD.Print("dist to limb: ", AI_navAgent.DistanceToTarget());
                 if (AI_navAgent.DistanceToTarget() <= 25f)
                 {
                     LimbDevouring = LimbsToDevour[0];
                     EmitSignal(SignalName.DevourLimb, LimbCount);
                     OnBloodDropTimeout();
-                    rollAIState();
+                    rollAIState(); return;
                 }
 
                 timeIdle += lastDeltaTime;
@@ -577,15 +616,15 @@ public partial class Monster : BasePlayer
                 else 
                 {
                     int teleportAt = 0;
-                    while (Position.DistanceTo(ProtagRef.Position) > 260)
+                    while (Position.DistanceTo(ProtagRef.Position) > 260 && DistanceOfNavToPlayer() > 400)
                     {
                         //AI_teleportToLocation(StuckTeleport);
                         AI_teleportToLocation(ProtagRef.Position + (Global.GetRandomDirection().Normalized() * 250));
-                        teleportAt++;
-                        if (teleportAt > 100)
+                        if (teleportAt > 10)
                         {
                             break;
                         }
+                        teleportAt++;
                     }
                     GD.Print("teleported to ", Position, " after ", teleportAt, " attempts");
                     rollAIState();
@@ -600,22 +639,31 @@ public partial class Monster : BasePlayer
 
         if (ProtagRef.Healing)
         {
-            if (Rnd.NextDouble() < 0.1 && !_checkedPounce)
+            if (Rnd.NextDouble() < 0.25 && !_checkedPounce)
             {
                 if (!AI_isVisible(Position))
                 {
-                    if (LimbsToDevour.Count > 0)
-                    {
-                        AI_teleportToLocation(ProtagRef.Position + (Global.GetRandomDirection().Normalized() * 50));
-                    }
+                    //int teleportAt = 0;
+                    //while (Position.DistanceTo(ProtagRef.Position) > 260)
+                    //{
+                    //    //AI_teleportToLocation(StuckTeleport);
+                    //    AI_teleportToLocation(ProtagRef.Position + (Global.GetRandomDirection().Normalized() * 250));
+                    //    if (teleportAt > 100)
+                    //    {
+                    //        break;
+                    //    }
+                    //    teleportAt++;
+                    //}
                 }
                 changeMainState(AI_MAIN_BEHAVIOR_STATE.POUNCE, (int)AI_SUB_POUNCE_STATE.ASSUME_POSITION);
+                _checkedPounce = true;
             }
             else
             {
                 _checkedPounce = true;
             }
         }
+        else { _checkedPounce = false; }
 
 
         //Toy with Code
@@ -828,6 +876,12 @@ public partial class Monster : BasePlayer
         changeMainState(AI_MAIN_BEHAVIOR_STATE.CHASE, (int)AI_SUB_CHASE_STATE.PURSUE);
         //REMEMBER TO DEFINE NAV AGENT AND VIEWPORT REF!!!
     }
+    public void SetPlayerInfo()
+    {
+        ProtagRef = Global.Player;
+        ProtagRef.HealingStateChange += OnHealingStateChange;
+        ProtagRef.LimbDetached += OnLimbDetached;
+    }
     public void OnBloodDropTimeout()
     {
         var bloodTrail = _bloodTrail.Instantiate<BloodTrail>();
@@ -861,40 +915,57 @@ public partial class Monster : BasePlayer
     private void OnScreenExited()
     {
         CurrentSpeed = _chaseSpeed;
-        _preExitScreenDist = Position;
+        _preExitScreenDist = DistanceOfNavToPlayer();
         GetTree().CreateTimer(10f).Timeout += () =>
         {
             if (!_visibleOnScreenNotifier.IsOnScreen())
             {
-                if (Position.DistanceTo(ProtagRef.Position) < Position.DistanceTo(_preExitScreenDist)) //getting closer
-                {
-                    OnScreenExited();
-                }
+                var currDistToPlayer = DistanceOfNavToPlayer();
                 if (LimbsToDevour.Count > 0)
                 {
                     AI_teleportToLocation(LimbsToDevour[0].Position);
                     changeMainState(AI_MAIN_BEHAVIOR_STATE.FIND_LIMB, (int)AI_SUB_FIND_LIMB_STATE.MOVE_TO_LIMB);
+                    GD.Print("teleporting to limb, taking too long...");
+                }
+                else if (currDistToPlayer < _preExitScreenDist || currDistToPlayer < 350) //getting closer
+                {
+                    GD.Print("new dist of ", currDistToPlayer, " shorter than 350 or prev dist of ", _preExitScreenDist, ", so not teleporting.");
+                    OnScreenExited();
                 }
                 else
                 {
+                    GD.Print("new dist of ", currDistToPlayer, " longer than 350 and prev dist of ", _preExitScreenDist, ", so teleporting.");
                     int teleportAt = 0;
-                    while (Position.DistanceTo(ProtagRef.Position) > 260)
+                    while (Position.DistanceTo(ProtagRef.Position) > 260 && DistanceOfNavToPlayer() > 400)
                     {
                         //AI_teleportToLocation(StuckTeleport);
                         AI_teleportToLocation(ProtagRef.Position + (Global.GetRandomDirection().Normalized() * 250));
-                        if (teleportAt > 100)
+                        if (teleportAt > 15)
                         {
                             break;
                         }
                         teleportAt++;
                     }
+                    //var origPos = Position;
+                    ////while (Position.DistanceTo(ProtagRef.Position) > 260)
+                    //while (currDistToPlayer < DistanceOfNavToPlayer())
+                    //{
+                    //    //AI_teleportToLocation(StuckTeleport);
+                    //    AI_teleportToLocation(ProtagRef.Position + (Global.GetRandomDirection().Normalized() * 250));
+                    //    teleportAt++;
+                    //    if (teleportAt > 10)
+                    //    {
+                    //        break;
+                    //    }
+                    //    GD.Print("curr dist to player: ", currDistToPlayer, "\nafter teleport: ", DistanceOfNavToPlayer());
+                    //}
                     GD.Print("teleported to ", Position, " after ", teleportAt, " attempts");
-                    changeMainState(AI_MAIN_BEHAVIOR_STATE.POUNCE, (int)AI_SUB_POUNCE_STATE.ASSUME_POSITION);
+                    changeMainState(AI_MAIN_BEHAVIOR_STATE.CHASE, (int)AI_SUB_CHASE_STATE.PURSUE);
                 }
-            }
-            if (!_visibleOnScreenNotifier.IsOnScreen())
-            {
-                OnScreenExited();
+                if (!_visibleOnScreenNotifier.IsOnScreen())
+                {
+                    OnScreenExited();
+                }
             }
         };
     }
@@ -907,11 +978,22 @@ public partial class Monster : BasePlayer
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
 	{
-        base._Process(delta);
+        if (CanMove)
+        {
+            if (GetDesiredDirection().X < -0.1 && AI_navAgent.DistanceToTarget() > 15f)
+            {
+                AnimSprite.FlipH = true;
+            }
+            else if (GetDesiredDirection().X > 0.1 && AI_navAgent.DistanceToTarget() > 15f)
+            {
+                AnimSprite.FlipH = false;
+            }
+        }
+        _stateMachine.ProcessFrame((float)delta);
         //GD.Print("Ai is visible: ", AI_isVisible(Position));
-        lastDeltaTime=delta;
-        //GD.Print("current AI state: ", currentMainState, " \ntargetpos: ", AI_navAgent.TargetPosition);
-        handleMainAIState();
+        
+        
+
         //AI_navAgent.TargetPosition = ProtagRef.Position; //Nav to Player
         //AI_makePath(ProtagRef.Position);
         //GD.Print("new target pos: ", AI_navAgent.TargetPosition);
@@ -923,11 +1005,24 @@ public partial class Monster : BasePlayer
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
+        lastDeltaTime = delta;
+        //GD.Print("current AI state: ", currentMainState, " \ntargetpos: ", AI_navAgent.TargetPosition);
+        handleMainAIState();
+        if (DistanceOfNavToPlayer() > 350)
+        {
+            CurrentSpeed = _pounceSpeed;
+            //GD.Print("dist ", DistanceOfNavToPlayer(), ", so chasing");
+        }
+        else if (DistanceOfNavToPlayer() > 200)
+        {
+            CurrentSpeed = _chaseSpeed;
+        }
     }
     private void OnLimbDetached(SeveredLimb severedLimb)
     {
-        if (AttackedPlayer)
+        if (AttackedPlayer || !CanMove)
         {
+            
             if (LimbCount == 0)
             {
                 CanMove = true;
@@ -958,15 +1053,15 @@ public partial class Monster : BasePlayer
         switch (LimbCount)
         {
             case 4:
-                return 1;
+                return 1f;
             case 3:
-                return 0.866f;
+                return 1f;
             case 2:
-                return 0.733f;
+                return 0.85f;
             case 1:
-                return 0.6f;
+                return 0.7f;
             case 0:
-                return 0.75f;
+                return 2.0f;
             default:
                 throw new Exception("LIMB COUNT ERROR");
         }
@@ -977,6 +1072,7 @@ public partial class Monster : BasePlayer
         {
             return ProtagRef.Position - Position;
         }
+        else if (!CanMove) { return Vector2.Zero; }
         //GD.Print("target Pos: ", AI_navAgent.TargetPosition, "\nnextpath:", ToLocal(AI_navAgent.GetNextPathPosition()));
         return ToLocal(AI_navAgent.GetNextPathPosition());
     }
@@ -984,4 +1080,31 @@ public partial class Monster : BasePlayer
     {
         return GetDesiredDirection().Normalized();
     }
+
+    private float DistanceOfNavToPlayer()
+    {
+        var currTargetPos = AI_navAgent.TargetPosition;
+        AI_navAgent.TargetPosition = ProtagRef.Position;
+        var navBuff = AI_navAgent.GetNextPathPosition();
+        var navPath = AI_navAgent.GetCurrentNavigationPath();
+        if (navPath.Length == 0) { return 0f; }
+        var currNavPos = navPath[AI_navAgent.GetCurrentNavigationPathIndex()];
+        var currNavIdx = 0;
+        var dist = 0.0f;
+
+        foreach (var navPoint in navPath)
+        {
+            if (currNavIdx <= AI_navAgent.GetCurrentNavigationPathIndex())
+            {
+                currNavIdx++;
+                continue;
+            }
+            dist += currNavPos.DistanceTo(navPoint);
+            currNavPos = navPoint;
+        }
+        AI_navAgent.TargetPosition = currTargetPos;
+        return dist;
+    }
+
+    
 }

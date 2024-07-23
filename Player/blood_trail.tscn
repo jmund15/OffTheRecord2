@@ -138,6 +138,7 @@ animations = [{
 
 [node name="BloodTrail" type="AnimatedSprite2D"]
 modulate = Color(0.862745, 0, 0.862745, 1)
+z_index = -2
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_phn66")
 animation = &"blood1"

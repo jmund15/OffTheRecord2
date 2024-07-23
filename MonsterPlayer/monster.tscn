@@ -1,9 +1,10 @@
-[gd_scene load_steps=118 format=3 uid="uid://y1h0pfsimpyl"]
+[gd_scene load_steps=119 format=3 uid="uid://y1h0pfsimpyl"]
 
 [ext_resource type="Script" path="res://MonsterPlayer/Monster.cs" id="1_016xf"]
 [ext_resource type="Script" path="res://MonsterPlayer/StateMachine/MonsterStateMachine.cs" id="2_2hh28"]
 [ext_resource type="PackedScene" uid="uid://beu6iaekhd2i6" path="res://Player/blood_trail.tscn" id="2_efn8f"]
 [ext_resource type="Texture2D" uid="uid://dxgknq5oe8ss1" path="res://MonsterPlayer/monster.png" id="2_swnib"]
+[ext_resource type="Texture2D" uid="uid://dok881kpltbnp" path="res://Player/drop_shadow.png" id="3_3am1t"]
 [ext_resource type="Script" path="res://MonsterPlayer/StateMachine/MonsterIdleState.cs" id="4_jsw28"]
 [ext_resource type="Script" path="res://MonsterPlayer/StateMachine/MonsterWalkState.cs" id="5_ofrq7"]
 [ext_resource type="Script" path="res://MonsterPlayer/StateMachine/LungeState.cs" id="5_tcycv"]
@@ -830,7 +831,8 @@ motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_016xf")
 _bloodTrail = ExtResource("2_efn8f")
-LungeSpeed = 11000.0
+LungeSpeed = 10000.0
+_pounceSpeed = 7500.0
 _chaseSpeed = 5500.0
 _walkSpeed = 3500.0
 
@@ -844,6 +846,12 @@ sprite_frames = SubResource("SpriteFrames_hqdpf")
 animation = &"devour0"
 frame = 24
 frame_progress = 1.0
+
+[node name="Shadow" type="Sprite2D" parent="."]
+z_index = -2
+y_sort_enabled = true
+position = Vector2(2, 16)
+texture = ExtResource("3_3am1t")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 path_desired_distance = 3.0

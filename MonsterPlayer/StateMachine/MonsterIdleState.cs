@@ -22,7 +22,6 @@ public partial class MonsterIdleState : State
     public override void Enter(Dictionary<State, bool> parallelStates)
     {
         base.Enter(parallelStates);
-        _monster.CanMove = true;
         //AnimSprite = _monster.AnimSprite;
         AnimSprite.Play(AnimName + _monster.LimbCount);
     }

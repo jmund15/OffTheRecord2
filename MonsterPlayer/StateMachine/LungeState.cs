@@ -22,6 +22,11 @@ public partial class LungeState : State
 	public override void Enter(Dictionary<State, bool> parallelStates)
 	{
 		base.Enter(parallelStates);
+        if (!_monster.CanMove)
+        {
+            EmitSignal(SignalName.TransitionState, this, _idleState);
+            return;
+        }
         _lungeDir = DirectionComponent.GetDesiredDirectionNormalized();
 
         AnimSprite.Play(AnimName + _monster.LimbCount);
@@ -42,7 +47,7 @@ public partial class LungeState : State
 	{
 		base.ProcessPhysics(delta);
         //GD.Print("lunge frame: ", AnimSprite.Frame, "\nfreamprog: ", AnimSprite.FrameProgress);
-        if (AnimSprite.Frame >= 1 && AnimSprite.Frame <= 3)
+        if (AnimSprite.Frame >= 1 && AnimSprite.Frame <= 4)
         {
             Body.Velocity = _lungeDir * _monster.CalcMovementSpeed() * _monster.LungeSpeed * delta;
         }
