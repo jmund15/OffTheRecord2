@@ -6,6 +6,8 @@ using TimeRobbers.BaseComponents;
 public partial class Player : BasePlayer, IDirectionComponent
 {
     #region CLASS_VARIALBLES
+    public Vector2 PreZeroInput;
+
     public bool InCutscene = false;
     public enum LimbHealthState
     {
@@ -159,6 +161,10 @@ public partial class Player : BasePlayer, IDirectionComponent
     public override void _PhysicsProcess(double delta)
 	{
 		base._PhysicsProcess(delta);
+        if (!GetDesiredDirection().IsZeroApprox())
+        {
+            PreZeroInput = GetDesiredDirectionNormalized();
+        }
 	}
     public override void _UnhandledInput(InputEvent @event)
     {

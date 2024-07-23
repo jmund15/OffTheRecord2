@@ -8,6 +8,8 @@ using TimeRobbers.BaseComponents;
 public partial class Monster : BasePlayer
 {
     public bool InitCutscene;
+
+    private Timer _screenExitedTimer;
     [Export]
     private PackedScene _bloodTrail;
     private Timer _bloodDropTimer;
@@ -42,6 +44,10 @@ public partial class Monster : BasePlayer
     public bool AttackedPlayer { get; set; } = false;
     public List<SeveredLimb> LimbsToDevour { get; set; } = new List<SeveredLimb>();
     public SeveredLimb LimbDevouring { get; set; }
+
+    private AnimatedSprite2D _toyWithMonster;
+    private bool _flickerDone = true;
+    private bool _toyDone = false;
     #region AI_STATES
     enum AI_MAIN_BEHAVIOR_STATE
 	{
@@ -501,16 +507,53 @@ public partial class Monster : BasePlayer
 
     private void AI_toyWithState()
     {
-        bool toyDone = false;
         switch (currentSubState)
         {
+            case (int)AI_SUB_TOY_WITH_STATE.BE_IN_FRONT_OF:
+                if (!_flickerDone || _toyDone) { break; }
+                if (AI_isVisible(Position))
+                {
+                    changeSubState((int)AI_SUB_TOY_WITH_STATE.MAKE_SOUND); return;
+                }
+                AI_makePath(Position);
+                if (ProtagRef.GetDesiredDirection().IsZeroApprox())
+                {
+                    _toyWithMonster.GlobalPosition = ProtagRef.Position + (ProtagRef.PreZeroInput * (float)randInRange(50, 100));
+                }
+                else
+                {
+                    _toyWithMonster.GlobalPosition = ProtagRef.Position + (ProtagRef.GetDesiredDirectionNormalized() * (float)randInRange(50, 100));
+                }
+                _toyWithMonster.Show();
+                ToyWithFront();
+                AI_Audio(Rnd.Next(1, 25));
+                GD.Print("TOY IN FRONT OF");
+                break;
+            case (int)AI_SUB_TOY_WITH_STATE.SHAPE_FLICKER:
+                if (!_flickerDone || _toyDone) { break; }
+                if (AI_isVisible(Position))
+                {
+                    changeSubState((int)AI_SUB_TOY_WITH_STATE.MAKE_SOUND); return;
+                }
+                AI_makePath(Position);
+                _toyWithMonster.GlobalPosition = ProtagRef.Position + ((Global.GetRandomDirection().Normalized() * (float)randInRange(75, 125)));
+                _toyWithMonster.Show();
+                ToyWithFlicker();
+                AI_Audio(Rnd.Next(1, 25));
+                GD.Print("TOY FLICKER");
+                break;
             case (int)AI_SUB_TOY_WITH_STATE.MAKE_SOUND:
+                if (!AI_isVisible(Position))
+                {
+                    changeSubState(Rnd.Next(0,2)); return;
+                }
                 //Play Audio clip
                 AI_Audio(Rnd.Next(1,25));
-                toyDone = true; //Set ToyDone since effect is good
+                _toyDone = true; //Set ToyDone since effect is good
                 break;
+            
         }
-        if (toyDone) 
+        if (_toyDone) 
         {
             //Resume last action or re-roll
             if (lastMainState == AI_MAIN_BEHAVIOR_STATE.TOY_WITH)
@@ -658,6 +701,11 @@ public partial class Monster : BasePlayer
                 changeMainState(AI_MAIN_BEHAVIOR_STATE.POUNCE, (int)AI_SUB_POUNCE_STATE.ASSUME_POSITION);
                 _checkedPounce = true;
             }
+            else if (Rnd.NextDouble() < 0.25f && !_checkedPounce)
+            {
+                changeMainState(AI_MAIN_BEHAVIOR_STATE.TOY_WITH, Rnd.Next(0,2));
+                _checkedPounce = true;
+            }
             else
             {
                 _checkedPounce = true;
@@ -675,15 +723,14 @@ public partial class Monster : BasePlayer
         if (nextToyWithTime < toyWithTimer)
         {
             //Store States
-            nextToyWithTime = randInRange(20.0, 30.0); ; //make next timer
+            nextToyWithTime = randInRange(15.0, 30.0); ; //make next timer
             toyWithTimer = 0.0;// reset timer
 
             storeMainState = CurrentMainState;
             storeSubState = currentSubState;
 
             //Change to a toy state
-            changeMainState(AI_MAIN_BEHAVIOR_STATE.TOY_WITH, 2);
-
+            changeMainState(AI_MAIN_BEHAVIOR_STATE.TOY_WITH, Rnd.Next(0,3));
         }
         switch (CurrentMainState)
         {
@@ -736,7 +783,7 @@ public partial class Monster : BasePlayer
     private void rollAIState()
     {
         AI_MAIN_BEHAVIOR_STATE main = (AI_MAIN_BEHAVIOR_STATE)Rnd.Next(0, 6);
-        int subState = (int)main == 2 ? 2 : 0; //Randomize if toy with
+        int subState = (int)main == 2 ? Rnd.Next(0,3) : 0; //Randomize if toy with
         if (main == AI_MAIN_BEHAVIOR_STATE.TOY_WITH) { lastMainState = main; }
         changeMainState(main, subState);
     }
@@ -755,6 +802,7 @@ public partial class Monster : BasePlayer
         timeInSubBehavior = 0.0;
 
         toy = (CurrentMainState == AI_MAIN_BEHAVIOR_STATE.TOY_WITH); //Set toy if this is a swap to toy_with state
+        if (toy) { _toyDone = false; }
     }
 
     private void changeSubState(int newState)
@@ -860,6 +908,8 @@ public partial class Monster : BasePlayer
         _visibleOnScreenNotifier = GetNode<VisibleOnScreenNotifier2D>("VisibleOnScreenNotifier2D");
         _visibleOnScreenNotifier.ScreenExited += OnScreenExited;
         _visibleOnScreenNotifier.ScreenEntered += OnScreenEntered;
+        _screenExitedTimer = GetNode<Timer>("ScreenExitedTimer");
+        _screenExitedTimer.Timeout += PostScreenExitCheck;
 
         _pathCalcTimer = GetNode<Timer>("PathCalcTimer");
         _pathCalcTimer.Timeout += OnPathTimeout;
@@ -868,6 +918,9 @@ public partial class Monster : BasePlayer
 
         _bloodDropTimer = GetNode<Timer>("BloodDropTimer");
         _bloodDropTimer.Timeout += OnBloodDropTimeout;
+
+        _toyWithMonster = GetNode<AnimatedSprite2D>("ToyWithMonster");
+        _toyWithMonster.Hide();
 
         InitStateMachine(); 
         
@@ -910,64 +963,66 @@ public partial class Monster : BasePlayer
     private void OnScreenEntered()
     {
         CurrentSpeed = _walkSpeed;
+        _screenExitedTimer.Stop();
     }
 
     private void OnScreenExited()
     {
-        CurrentSpeed = _chaseSpeed;
+        if (_screenExitedTimer.TimeLeft > 0) { return; }
         _preExitScreenDist = DistanceOfNavToPlayer();
-        GetTree().CreateTimer(10f).Timeout += () =>
+        _screenExitedTimer.Start(10.0f);
+    }
+    private void PostScreenExitCheck()
+    {
+        if (!_visibleOnScreenNotifier.IsOnScreen())
         {
+            var currDistToPlayer = DistanceOfNavToPlayer();
+            if (LimbsToDevour.Count > 0)
+            {
+                AI_teleportToLocation(LimbsToDevour[0].Position);
+                changeMainState(AI_MAIN_BEHAVIOR_STATE.FIND_LIMB, (int)AI_SUB_FIND_LIMB_STATE.MOVE_TO_LIMB);
+                GD.Print("teleporting to limb, taking too long...");
+            }
+            else if (currDistToPlayer < _preExitScreenDist || currDistToPlayer < 350) //getting closer
+            {
+                GD.Print("new dist of ", currDistToPlayer, " shorter than 350 or prev dist of ", _preExitScreenDist, ", so not teleporting.");
+                OnScreenExited();
+            }
+            else
+            {
+                GD.Print("new dist of ", currDistToPlayer, " longer than 350 and prev dist of ", _preExitScreenDist, ", so teleporting.");
+                int teleportAt = 0;
+                while (Position.DistanceTo(ProtagRef.Position) > 260 && DistanceOfNavToPlayer() > 400)
+                {
+                    //AI_teleportToLocation(StuckTeleport);
+                    AI_teleportToLocation(ProtagRef.Position + (Global.GetRandomDirection().Normalized() * 250));
+                    if (teleportAt > 15)
+                    {
+                        break;
+                    }
+                    teleportAt++;
+                }
+                //var origPos = Position;
+                ////while (Position.DistanceTo(ProtagRef.Position) > 260)
+                //while (currDistToPlayer < DistanceOfNavToPlayer())
+                //{
+                //    //AI_teleportToLocation(StuckTeleport);
+                //    AI_teleportToLocation(ProtagRef.Position + (Global.GetRandomDirection().Normalized() * 250));
+                //    teleportAt++;
+                //    if (teleportAt > 10)
+                //    {
+                //        break;
+                //    }
+                //    GD.Print("curr dist to player: ", currDistToPlayer, "\nafter teleport: ", DistanceOfNavToPlayer());
+                //}
+                GD.Print("teleported to ", Position, " after ", teleportAt, " attempts");
+                changeMainState(AI_MAIN_BEHAVIOR_STATE.CHASE, (int)AI_SUB_CHASE_STATE.PURSUE);
+            }
             if (!_visibleOnScreenNotifier.IsOnScreen())
             {
-                var currDistToPlayer = DistanceOfNavToPlayer();
-                if (LimbsToDevour.Count > 0)
-                {
-                    AI_teleportToLocation(LimbsToDevour[0].Position);
-                    changeMainState(AI_MAIN_BEHAVIOR_STATE.FIND_LIMB, (int)AI_SUB_FIND_LIMB_STATE.MOVE_TO_LIMB);
-                    GD.Print("teleporting to limb, taking too long...");
-                }
-                else if (currDistToPlayer < _preExitScreenDist || currDistToPlayer < 350) //getting closer
-                {
-                    GD.Print("new dist of ", currDistToPlayer, " shorter than 350 or prev dist of ", _preExitScreenDist, ", so not teleporting.");
-                    OnScreenExited();
-                }
-                else
-                {
-                    GD.Print("new dist of ", currDistToPlayer, " longer than 350 and prev dist of ", _preExitScreenDist, ", so teleporting.");
-                    int teleportAt = 0;
-                    while (Position.DistanceTo(ProtagRef.Position) > 260 && DistanceOfNavToPlayer() > 400)
-                    {
-                        //AI_teleportToLocation(StuckTeleport);
-                        AI_teleportToLocation(ProtagRef.Position + (Global.GetRandomDirection().Normalized() * 250));
-                        if (teleportAt > 15)
-                        {
-                            break;
-                        }
-                        teleportAt++;
-                    }
-                    //var origPos = Position;
-                    ////while (Position.DistanceTo(ProtagRef.Position) > 260)
-                    //while (currDistToPlayer < DistanceOfNavToPlayer())
-                    //{
-                    //    //AI_teleportToLocation(StuckTeleport);
-                    //    AI_teleportToLocation(ProtagRef.Position + (Global.GetRandomDirection().Normalized() * 250));
-                    //    teleportAt++;
-                    //    if (teleportAt > 10)
-                    //    {
-                    //        break;
-                    //    }
-                    //    GD.Print("curr dist to player: ", currDistToPlayer, "\nafter teleport: ", DistanceOfNavToPlayer());
-                    //}
-                    GD.Print("teleported to ", Position, " after ", teleportAt, " attempts");
-                    changeMainState(AI_MAIN_BEHAVIOR_STATE.CHASE, (int)AI_SUB_CHASE_STATE.PURSUE);
-                }
-                if (!_visibleOnScreenNotifier.IsOnScreen())
-                {
-                    OnScreenExited();
-                }
+                OnScreenExited();
             }
-        };
+        }
     }
 
     private void OnHealingStateChange(bool isHealing)
@@ -1106,5 +1161,29 @@ public partial class Monster : BasePlayer
         return dist;
     }
 
-    
+    private void ToyWithFlicker()
+    {
+        if (!_flickerDone) { return; }
+        _flickerDone = false;
+        var shapeFlickerTween = CreateTween();
+        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.1,0.3));
+        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", true, 0.0f).SetDelay((float)randInRange(0.1, 0.4));
+        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.1, 0.3));
+        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", true, 0.0f).SetDelay((float)randInRange(0.1, 0.4));
+        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.1, 0.3));
+        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", true, 0.0f).SetDelay((float)randInRange(0.1, 0.4));
+        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.1, 0.3));
+        shapeFlickerTween.TweenProperty(this, PropertyName._flickerDone.ToString(), true, 0.0f);
+        shapeFlickerTween.TweenProperty(this, PropertyName._toyDone.ToString(), true, 0.0f);
+    }
+    private void ToyWithFront()
+    {
+        if (!_flickerDone) { return; }
+        _flickerDone = false;
+        var shapeFlickerTween = CreateTween();
+        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.1, 0.5));
+        shapeFlickerTween.TweenProperty(this, PropertyName._flickerDone.ToString(), true, 0.0f);
+        shapeFlickerTween.TweenProperty(this, PropertyName._toyDone.ToString(), true, 0.0f);
+    }
+
 }

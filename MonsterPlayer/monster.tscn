@@ -1,4 +1,4 @@
-[gd_scene load_steps=119 format=3 uid="uid://y1h0pfsimpyl"]
+[gd_scene load_steps=123 format=3 uid="uid://y1h0pfsimpyl"]
 
 [ext_resource type="Script" path="res://MonsterPlayer/Monster.cs" id="1_016xf"]
 [ext_resource type="Script" path="res://MonsterPlayer/StateMachine/MonsterStateMachine.cs" id="2_2hh28"]
@@ -824,6 +824,35 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_20oim"]
 radius = 12.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ihky"]
+atlas = ExtResource("2_swnib")
+region = Rect2(0, 144, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4w76"]
+atlas = ExtResource("2_swnib")
+region = Rect2(36, 144, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hsqoq"]
+atlas = ExtResource("2_swnib")
+region = Rect2(72, 144, 36, 36)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_q10gr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ihky")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h4w76")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hsqoq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 25.0
+}]
+
 [node name="Monster" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 31
@@ -913,3 +942,14 @@ position = Vector2(2, 11)
 scale = Vector2(1, 0.6)
 
 [node name="BloodDropTimer" type="Timer" parent="."]
+
+[node name="ToyWithMonster" type="AnimatedSprite2D" parent="."]
+top_level = true
+z_index = 1
+sprite_frames = SubResource("SpriteFrames_q10gr")
+autoplay = "default"
+frame = 2
+frame_progress = 0.0507271
+
+[node name="ScreenExitedTimer" type="Timer" parent="."]
+one_shot = true

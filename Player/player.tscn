@@ -263,7 +263,7 @@ AfflictionRate = 8.0
 CureSpeed = 100.0
 _bloodTrail = ExtResource("2_2edjb")
 SeveredLimbScene = ExtResource("2_o7ou7")
-CurrentSpeed = 5000.0
+CurrentSpeed = 5250.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
