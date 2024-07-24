@@ -1202,12 +1202,12 @@ public partial class Monster : BasePlayer
         var shapeFlickerTween = CreateTween();
         for (int i = 0; i < flashes; i++)
         {
-            shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.05, 0.2));
+            shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.05, 0.15));
             shapeFlickerTween.TweenProperty(_toyWithMonster, "position",
                 ProtagRef.Position + (ProtagRef.PreZeroInput * (float)randInRange(50, 80)), 0.0f);
-            shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", true, 0.0f).SetDelay((float)randInRange(0.1, 0.15));
+            shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", true, 0.0f).SetDelay((float)randInRange(0.05, 0.15));
         }
-        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.05, 0.2));
+        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.05, 0.15));
         shapeFlickerTween.TweenProperty(this, PropertyName._flickerDone.ToString(), true, 0.0f);
         shapeFlickerTween.TweenProperty(this, PropertyName._toyDone.ToString(), true, 0.0f);
     }
