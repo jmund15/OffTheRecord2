@@ -822,7 +822,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_20oim"]
-radius = 12.0
+radius = 9.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ihky"]
 atlas = ExtResource("2_swnib")
@@ -860,8 +860,8 @@ motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_016xf")
 _bloodTrail = ExtResource("2_efn8f")
-LungeSpeed = 10000.0
-_pounceSpeed = 7500.0
+LungeSpeed = 10500.0
+_pounceSpeed = 8000.0
 _chaseSpeed = 5500.0
 _walkSpeed = 3500.0
 
@@ -877,8 +877,8 @@ frame = 24
 frame_progress = 1.0
 
 [node name="Shadow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.784314)
 z_index = -2
-y_sort_enabled = true
 position = Vector2(2, 16)
 texture = ExtResource("3_3am1t")
 
@@ -924,8 +924,7 @@ collision_mask = 9
 script = ExtResource("8_vtk1i")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
-visible = false
-position = Vector2(0, 8)
+position = Vector2(0, 12)
 shape = SubResource("CircleShape2D_20oim")
 
 [node name="HurtboxComponent" type="Area2D" parent="."]

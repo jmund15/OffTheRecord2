@@ -511,7 +511,7 @@ public partial class Monster : BasePlayer
         {
             case (int)AI_SUB_TOY_WITH_STATE.BE_IN_FRONT_OF:
                 if (!_flickerDone || _toyDone) { break; }
-                if (AI_isVisible(Position))
+                if (AI_isVisible(Position) && (Global.CandleGroupsCompleted <= 3 && ProtagRef.LimbCount > 1))
                 {
                     changeSubState((int)AI_SUB_TOY_WITH_STATE.MAKE_SOUND); return;
                 }
@@ -522,23 +522,23 @@ public partial class Monster : BasePlayer
                 }
                 else
                 {
-                    _toyWithMonster.GlobalPosition = ProtagRef.Position + (ProtagRef.GetDesiredDirectionNormalized() * (float)randInRange(50, 100));
+                    _toyWithMonster.GlobalPosition = ProtagRef.Position + (ProtagRef.GetDesiredDirectionNormalized() * (float)randInRange(50, 80));
                 }
                 _toyWithMonster.Show();
-                ToyWithFront();
+                ToyWithFront(Rnd.Next(1, 4));
                 AI_Audio(Rnd.Next(1, 25));
                 GD.Print("TOY IN FRONT OF");
                 break;
             case (int)AI_SUB_TOY_WITH_STATE.SHAPE_FLICKER:
                 if (!_flickerDone || _toyDone) { break; }
-                if (AI_isVisible(Position))
+                if (AI_isVisible(Position) && (Global.CandleGroupsCompleted <= 3 && ProtagRef.LimbCount > 1))
                 {
                     changeSubState((int)AI_SUB_TOY_WITH_STATE.MAKE_SOUND); return;
                 }
                 AI_makePath(Position);
-                _toyWithMonster.GlobalPosition = ProtagRef.Position + ((Global.GetRandomDirection().Normalized() * (float)randInRange(75, 125)));
+                _toyWithMonster.GlobalPosition = ProtagRef.Position + ((Global.GetRandomDirection().Normalized() * (float)randInRange(70, 125)));
                 _toyWithMonster.Show();
-                ToyWithFlicker();
+                ToyWithFlicker(Rnd.Next(1,11)); 
                 AI_Audio(Rnd.Next(1, 25));
                 GD.Print("TOY FLICKER");
                 break;
@@ -701,9 +701,9 @@ public partial class Monster : BasePlayer
                 changeMainState(AI_MAIN_BEHAVIOR_STATE.POUNCE, (int)AI_SUB_POUNCE_STATE.ASSUME_POSITION);
                 _checkedPounce = true;
             }
-            else if (Rnd.NextDouble() < 0.25f && !_checkedPounce)
+            else if (Rnd.NextDouble() < 0.3f && !_checkedPounce)
             {
-                changeMainState(AI_MAIN_BEHAVIOR_STATE.TOY_WITH, Rnd.Next(0,2));
+                changeMainState(AI_MAIN_BEHAVIOR_STATE.TOY_WITH, (int)AI_SUB_TOY_WITH_STATE.BE_IN_FRONT_OF);
                 _checkedPounce = true;
             }
             else
@@ -723,7 +723,14 @@ public partial class Monster : BasePlayer
         if (nextToyWithTime < toyWithTimer)
         {
             //Store States
-            nextToyWithTime = randInRange(15.0, 30.0); ; //make next timer
+            if ((Global.CandleGroupsCompleted > 3 || ProtagRef.LimbCount == 1))
+            {
+                nextToyWithTime = randInRange(3, 7); //make next timer
+            } else
+            {
+                nextToyWithTime = randInRange(10, 20); ; //make next timer
+            }
+
             toyWithTimer = 0.0;// reset timer
 
             storeMainState = CurrentMainState;
@@ -782,7 +789,13 @@ public partial class Monster : BasePlayer
 
     private void rollAIState()
     {
-        AI_MAIN_BEHAVIOR_STATE main = (AI_MAIN_BEHAVIOR_STATE)Rnd.Next(0, 6);
+        AI_MAIN_BEHAVIOR_STATE main = (AI_MAIN_BEHAVIOR_STATE)Rnd.Next(0, 7);
+        if (main == AI_MAIN_BEHAVIOR_STATE.POUNCE) { 
+            if (Rnd.NextDouble() < 0.5)
+            {
+                rollAIState(); // Pounce rare
+            }
+        }
         int subState = (int)main == 2 ? Rnd.Next(0,3) : 0; //Randomize if toy with
         if (main == AI_MAIN_BEHAVIOR_STATE.TOY_WITH) { lastMainState = main; }
         changeMainState(main, subState);
@@ -1072,6 +1085,10 @@ public partial class Monster : BasePlayer
         {
             CurrentSpeed = _chaseSpeed;
         }
+        else if (Global.CandleGroupsCompleted == 4)
+        {
+            CurrentSpeed = _chaseSpeed;
+        }
     }
     private void OnLimbDetached(SeveredLimb severedLimb)
     {
@@ -1161,27 +1178,36 @@ public partial class Monster : BasePlayer
         return dist;
     }
 
-    private void ToyWithFlicker()
+    private void ToyWithFlicker(int flashes)
     {
         if (!_flickerDone) { return; }
         _flickerDone = false;
         var shapeFlickerTween = CreateTween();
-        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.1,0.3));
-        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", true, 0.0f).SetDelay((float)randInRange(0.1, 0.4));
-        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.1, 0.3));
-        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", true, 0.0f).SetDelay((float)randInRange(0.1, 0.4));
-        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.1, 0.3));
-        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", true, 0.0f).SetDelay((float)randInRange(0.1, 0.4));
-        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.1, 0.3));
+        for (int i =  0; i < flashes; i++)
+        {
+            shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.1, 0.2));
+            shapeFlickerTween.TweenProperty(_toyWithMonster, "position",
+                ProtagRef.Position + (Global.GetRandomDirection() * (float)randInRange(70, 125)), 0.0f);
+            shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", true, 0.0f).SetDelay((float)randInRange(0.1, 0.3));
+        }
+        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.1, 0.2));
         shapeFlickerTween.TweenProperty(this, PropertyName._flickerDone.ToString(), true, 0.0f);
         shapeFlickerTween.TweenProperty(this, PropertyName._toyDone.ToString(), true, 0.0f);
     }
-    private void ToyWithFront()
+    private void ToyWithFront(int flashes)
     {
         if (!_flickerDone) { return; }
+        
         _flickerDone = false;
         var shapeFlickerTween = CreateTween();
-        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.1, 0.5));
+        for (int i = 0; i < flashes; i++)
+        {
+            shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.05, 0.2));
+            shapeFlickerTween.TweenProperty(_toyWithMonster, "position",
+                ProtagRef.Position + (ProtagRef.PreZeroInput * (float)randInRange(50, 80)), 0.0f);
+            shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", true, 0.0f).SetDelay((float)randInRange(0.1, 0.15));
+        }
+        shapeFlickerTween.TweenProperty(_toyWithMonster, "visible", false, 0.0f).SetDelay((float)randInRange(0.05, 0.2));
         shapeFlickerTween.TweenProperty(this, PropertyName._flickerDone.ToString(), true, 0.0f);
         shapeFlickerTween.TweenProperty(this, PropertyName._toyDone.ToString(), true, 0.0f);
     }

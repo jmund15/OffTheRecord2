@@ -263,7 +263,7 @@ AfflictionRate = 8.0
 CureSpeed = 100.0
 _bloodTrail = ExtResource("2_2edjb")
 SeveredLimbScene = ExtResource("2_o7ou7")
-CurrentSpeed = 5250.0
+CurrentSpeed = 5500.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -287,8 +287,8 @@ sprite_frames = SubResource("SpriteFrames_y6i55")
 animation = &"mask"
 
 [node name="Shadow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.784314)
 z_index = -2
-y_sort_enabled = true
 position = Vector2(-1, 17)
 texture = ExtResource("7_bneh6")
 

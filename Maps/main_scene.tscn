@@ -649,7 +649,7 @@ position = Vector2(8, 0)
 texture = ExtResource("8_yjrqj")
 
 [node name="Floors" type="Sprite2D" parent="."]
-z_index = -2
+z_index = -3
 position = Vector2(8, 0)
 texture = ExtResource("9_i1feh")
 
@@ -697,25 +697,25 @@ position = Vector2(627, 479)
 
 [node name="Map2" type="Sprite2D" parent="."]
 modulate = Color(0.141176, 0.141176, 0.258824, 1)
-z_index = -3
+z_index = -4
 position = Vector2(8, 0)
 texture = ExtResource("12_d038e")
 
 [node name="Map1" type="Sprite2D" parent="."]
 modulate = Color(0.141176, 0.141176, 0.258824, 1)
-z_index = -3
+z_index = -4
 position = Vector2(8, 0)
 texture = ExtResource("13_bbypd")
 
 [node name="Map3" type="Sprite2D" parent="."]
 modulate = Color(0.13936, 0.139255, 0.259354, 1)
-z_index = -3
+z_index = -4
 position = Vector2(8, 0)
 texture = ExtResource("11_2cpvp")
 
 [node name="Map4" type="Sprite2D" parent="."]
 modulate = Color(0.141176, 0.141176, 0.258824, 1)
-z_index = -3
+z_index = -4
 position = Vector2(8, 0)
 texture = ExtResource("14_v1ahi")
 
