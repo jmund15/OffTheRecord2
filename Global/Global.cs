@@ -12,6 +12,8 @@ public partial class Global : Node
     public static Player Player { get; private set; }
     public static Monster Monster { get; private set; }
 
+    public static WorldEnvironment WorldEnv { get; private set; }
+
 
     public Events SignalBus { get; private set; }
     public readonly Random Rnd = new Random(Guid.NewGuid().GetHashCode());
@@ -33,6 +35,7 @@ public partial class Global : Node
     private Node2D _candleGroup4;
     public bool _candle4Fin;
     private Sprite2D _group4Path;
+    private ColorRect _finalAreaGlow;
 
     private Node2D _eyeFlames1;
     private Node2D _eyeFlames2;
@@ -59,6 +62,7 @@ public partial class Global : Node
         Player = MainScene.GetNode<Player>("Player");
         Monster = MainScene.GetNode<Monster>("Monster");
         Monster.ProtagRef = Player;
+        WorldEnv = MainScene.GetNode<WorldEnvironment>("WorldEnvironment");
 
 
        CandleGroupsCompleted = 0;
@@ -105,6 +109,8 @@ public partial class Global : Node
 
         _candleGroup4 = MainScene.GetNode<Node2D>("CandleGroup4");
         _group4Path = MainScene.GetNode<Sprite2D>("Map4");
+        _finalAreaGlow = _group4Path.GetNode<ColorRect>("ColorRect");
+        _finalAreaGlow.Hide();
         foreach (var child in _candleGroup4.GetChildren())
         {
             Group4Candles.Add(child as Candle);
@@ -232,6 +238,7 @@ public partial class Global : Node
                     CandleGroupsCompleted++;
                     _candle4Fin = true;
                     _group4Path.Modulate = new Color("570627");
+                    _finalAreaGlow.Show();
                     EmitSignal(SignalName.CandleGroupComplete);
                     foreach (var candle in Group4Candles)
                     {

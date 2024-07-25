@@ -44,6 +44,7 @@ public partial class MonsterStateMachine : CompoundState
 
     private void OnLunge()
     {
+        if (PrimarySubState is DevourLimbState) { return; }
         TransitionFiniteSubState(PrimarySubState, _lungeState);
     }
     private void OnDevourLimb(int newLimbCount)

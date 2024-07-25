@@ -28,6 +28,7 @@ public partial class MainScene : Node2D
 	private AnimatedSprite2D _finalCutscene;
 
 	private AnimatedSprite2D _eyeFlame;
+	private Tween _bloomTween;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -75,7 +76,38 @@ public partial class MainScene : Node2D
         AudioStreamPlayer player = GetNode("Sound").GetNode("Title").GetNode<AudioStreamPlayer>("TitleMusic");
 		player.Play();
 
+
+		_player.HealingStateChange += OnHealStateChange;
     }
+
+    private void OnHealStateChange(bool isHealing)
+    {
+        if (isHealing)
+		{
+			Global.WorldEnv.Environment.GlowBloom = 0.75f;
+			Global.WorldEnv.Environment.GlowBlendMode = Godot.Environment.GlowBlendModeEnum.Replace;
+			BloomPulse();
+		}
+        else
+        {
+			_bloomTween.Kill();
+            Global.WorldEnv.Environment.GlowBloom = 0.0f;
+            Global.WorldEnv.Environment.GlowBlendMode = Godot.Environment.GlowBlendModeEnum.Additive;
+        }
+    }
+	private void BloomPulse()
+	{
+		if (!_player.Healing)
+        {
+            Global.WorldEnv.Environment.GlowBloom = 0.0f;
+            return; }
+        _bloomTween = CreateTween();
+		_bloomTween.TweenProperty(Global.WorldEnv.Environment, "glow_bloom", 0.1f, 0.1f).SetEase(Tween.EaseType.InOut);//.SetTrans(Tween.TransitionType.Quad);
+        _bloomTween.TweenInterval(0.6f);
+		_bloomTween.TweenProperty(Global.WorldEnv.Environment, "glow_bloom", 0.75f, 0.1f).SetEase(Tween.EaseType.InOut);//.SetTrans(Tween.TransitionType.Quad);
+        _bloomTween.TweenInterval(0.3f);
+         _bloomTween.TweenCallback(Callable.From(BloomPulse));
+	}
 
     private void OnAreaEntered(Area2D area)
     {

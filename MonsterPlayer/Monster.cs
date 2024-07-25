@@ -438,6 +438,14 @@ public partial class Monster : BasePlayer
                 break;
 
             case (int)AI_SUB_POUNCE_STATE.YEET:
+                //if (AI_navAgent.DistanceToTarget() >= CHARGE_DIST * 1.5f)
+                //{
+                //    AI_navAgent.TargetPosition = ProtagRef.Position;
+                //    //Do the Lunge Thing
+                //    EmitSignal(SignalName.Lunge);
+                //    CurrentSpeed = _walkSpeed;
+                //    _lunged = true;
+                //}
                 if (!_setLungeTimer)
                 {
                     _setLungeTimer = true;
@@ -485,7 +493,7 @@ public partial class Monster : BasePlayer
         switch (currentSubState)
         {
             case (int)AI_SUB_STAND_THERE_MENICINGLY_STATE.BE_SPOOKY:
-                if (!AI_isVisible(Position)) { rollAIState(); return; }
+                if (!AI_isVisible(Position) || Global.CandleGroupsCompleted == 4) { rollAIState(); return; }
                 AI_navAgent.TargetPosition = Position;
                 //Stand there for a bit, reference timeIdle
                 if (idleThreshold < 0)
@@ -562,6 +570,10 @@ public partial class Monster : BasePlayer
             }
             else
             {
+                if (lastMainState == AI_MAIN_BEHAVIOR_STATE.POUNCE)
+                {
+                    lastSubState = (int)AI_SUB_POUNCE_STATE.ASSUME_POSITION;
+                }
                 changeMainState(lastMainState, lastSubState);
             }
             toy = false;
@@ -798,6 +810,7 @@ public partial class Monster : BasePlayer
         }
         int subState = (int)main == 2 ? Rnd.Next(0,3) : 0; //Randomize if toy with
         if (main == AI_MAIN_BEHAVIOR_STATE.TOY_WITH) { lastMainState = main; }
+        if (main == AI_MAIN_BEHAVIOR_STATE.POUNCE) { subState = (int)AI_SUB_POUNCE_STATE.ASSUME_POSITION; }
         changeMainState(main, subState);
     }
 

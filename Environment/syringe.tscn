@@ -74,14 +74,17 @@ animations = [{
 radius = 20.0
 
 [node name="Syringe" type="StaticBody2D"]
+self_modulate = Color(2, 2, 2, 1)
 y_sort_enabled = true
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_fsf63")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_ernl0")
 
 [node name="PickupSprite" type="AnimatedSprite2D" parent="."]
+self_modulate = Color(1.2, 1.2, 1.2, 1)
 sprite_frames = SubResource("SpriteFrames_5eebm")
 autoplay = "default"
 frame = 2
@@ -92,4 +95,5 @@ collision_layer = 8
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea"]
+visible = false
 shape = SubResource("CircleShape2D_1pl4j")

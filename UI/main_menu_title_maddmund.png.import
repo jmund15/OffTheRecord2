@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7os6blci07mc"
-path="res://.godot/imported/map_walls.png-c829c0533b4d9ffbdc8a2c2585e06d56.ctex"
+uid="uid://b85ndkfii2fvd"
+path="res://.godot/imported/main_menu_title_maddmund.png-c842fa1b1bc343bfe864c2161e4323a7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Environment/map_walls.png"
-dest_files=["res://.godot/imported/map_walls.png-c829c0533b4d9ffbdc8a2c2585e06d56.ctex"]
+source_file="res://UI/main_menu_title_maddmund.png"
+dest_files=["res://.godot/imported/main_menu_title_maddmund.png-c842fa1b1bc343bfe864c2161e4323a7.ctex"]
 
 [params]
 
