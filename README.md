@@ -1,11 +1,11 @@
 # OffTheRecord2
-Internal Game Jam team name.
+Internal game jam team name.
 
 ## Affliction Info
 This game was made for the Summer 2024 ICT Game Jam (Website [here](https://itch.io/jam/ict-game-jam-summer-2024))
 
 Affliction was rewarded first place out of 20+ participants.
-Please locate our game [here](https://maddmundstudios.itch.io/affliction)
+Please locate our game [here](https://maddmundstudios.itch.io/affliction)!
 
 
 
@@ -15,4 +15,4 @@ Lorant M - Graphic Designer (Art & Animations)
 Joel A - Programmer (Enemy AI & Music)
 
 
-Affliction is a creation of [MaddMund Studios](https://maddmundstudios.itch.io/)
+Affliction is a proud creation of [MaddMund Studios](https://maddmundstudios.itch.io/)
