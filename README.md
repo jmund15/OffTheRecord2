@@ -8,7 +8,7 @@ Please locate our game [here](https://maddmundstudios.itch.io/affliction)!
 
 
 ## Credits
-* Jacob M - Programmer (Game Architecture, Foundation, Enmey AI, & Mechanics)
+* Jacob M - Programmer (Game Architecture, Foundation, Enemy AI, & Mechanic Design)
 * Lorant M - Graphic Designer (Art & Animations)
 * Joel A - Programmer (Enemy AI & Music)
 
